@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arkivio – Décrivez votre maison, obtenez vos plans</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="logo/favicon-32.png">
+<link rel="apple-touch-icon" href="logo/apple-touch-icon.png">
+<meta name="theme-color" content="#0c4a6e">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Arkivio"><meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Arkivio – Vos plans de maison, dessinés en discutant">
+<meta property="og:description" content="Décrivez votre projet : l’assistant pose les bonnes questions, puis génère des plans cotés en PDF, SVG et IFC.">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Arkivio – Vos plans de maison, dessinés en discutant">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Arkivio","applicationCategory":"DesignApplication","operatingSystem":"Web","inLanguage":"fr","description":"Assistant qui génère des plans de maison cotés en PDF, SVG et IFC."}</script>
+<meta name="description" content="Décrivez votre projet de maison à Arkivio : l’assistant vous pose les bonnes questions, puis génère vos plans en PDF, SVG et IFC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script>
+  // Adresse du backend (étape 2). Laisser vide si le backend sert aussi ce fichier.
+  window.ARKIVIO_API_URL = "";
+  // Destination du bouton final.
+  window.CIVILESTIMATOR_URL = "https://civilestimator-archinova.store";
+</script>
+<style>
+:root{--ink:#0d1b24;--paper:#f1f6f8;--muted:#5a6f7b;--line:#dbe6ea;--ls:#c3d3d9;--mbg:#e8f0f3;--p:#0c4a6e;--pd:#082f49;--ps:#e3f1f8;--l:#0f9d8f;--ld:#0b7a70;--ls2:#e1f5f2;--amb:#b45309;--ambs:#fef3c7;--err:#b42318;--errs:#fdeceb;
+--disp:"Space Grotesk",Inter,system-ui,sans-serif;--sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--sh:0 6px 22px -10px rgba(13,27,36,.22)}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;font:15px/1.5 var(--sans);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;background:var(--paper)}
+h1,h2,h3{font-family:var(--disp);letter-spacing:-.01em;margin:0}
+::selection{background:var(--p);color:#fff}:focus-visible{outline:3px solid var(--l);outline-offset:2px}
+[hidden]{display:none!important}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,3vw,32px);width:100%}
+.top{background:#fff;border-bottom:1px solid var(--line)}.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;padding-bottom:12px}
+.brand{display:flex;align-items:center;gap:12px;line-height:1.15;color:inherit;text-decoration:none}
+.brand b{font:700 17px var(--disp)}.brand b span{color:var(--ld)}.brand small{display:block;font-size:11.5px;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:600;background:var(--mbg);color:var(--muted)}.chip i{width:8px;height:8px;border-radius:50%;background:#8aa0ab}
+.chip[data-s=ok]{background:var(--ls2);color:var(--ld)}.chip[data-s=ok] i{background:var(--l)}.chip[data-s=err]{background:var(--errs);color:var(--err)}.chip[data-s=err] i{background:var(--err)}
+.hero{position:relative;overflow:hidden;color:#fff;background:linear-gradient(125deg,#082f49,#0c4a6e 40%,#0b7a70 85%,#0f9d8f);background-size:220% 220%;animation:dr 18s ease-in-out infinite}
+.hero::before{content:"";position:absolute;inset:0;opacity:.35;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);background-size:46px 46px}
+.hero .wrap{position:relative;padding-top:clamp(36px,7vw,72px);padding-bottom:clamp(40px,7vw,72px);text-align:center}
+.hero h1{font-size:clamp(28px,5vw,50px);line-height:1.08;max-width:17em;margin:0 auto}.hero p.sub{margin:14px auto 0;max-width:50ch;color:#dcecf2;font-size:clamp(15px,2vw,17px)}
+@keyframes dr{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
+.comp{display:flex;gap:10px;align-items:flex-end;background:#fff;border-radius:16px;padding:10px;box-shadow:0 18px 40px -16px rgba(0,0,0,.45);color:var(--ink)}
+.hero .comp{max-width:680px;margin:28px auto 0;text-align:left}
+.comp textarea{flex:1;border:0;resize:none;font:inherit;font-size:16px;padding:10px;min-height:48px;max-height:160px;background:transparent;color:var(--ink)}.comp textarea:focus{outline:none}
+.send{flex:none;min-height:46px;padding:0 20px;border:0;border-radius:11px;color:#fff;font:700 14.5px var(--sans);cursor:pointer;background:linear-gradient(135deg,var(--p),var(--ld))}.send:hover{filter:brightness(1.1)}.send[disabled]{opacity:.5;cursor:wait}
+.ex{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+.ex button{border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;padding:7px 14px;font:500 13px var(--sans);cursor:pointer}.ex button:hover{background:rgba(255,255,255,.2)}
+.sec{padding:clamp(32px,5vw,56px) 0}.sec h2{font-size:clamp(22px,3vw,30px);text-align:center;margin-bottom:24px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--sh);position:relative}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--ps);color:var(--p);font:700 15px var(--disp);margin-bottom:12px}
+.steps h3{font-size:17px;margin-bottom:4px}.steps p{margin:0;color:var(--muted);font-size:14px}
+.card{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh);overflow:hidden}.card::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,var(--p),var(--l))}
+main{flex:1}.app{padding:28px 0 48px}
+.m{max-width:85%;padding:10px 14px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere}.m.u{align-self:flex-end;background:var(--p);color:#fff;border-bottom-right-radius:4px}
+.m.a{align-self:flex-start;background:var(--mbg);border-bottom-left-radius:4px}.m.bad{background:var(--errs);color:var(--err)}.m.wait{color:var(--muted);font-style:italic}
+.ready{margin:0 20px 8px;padding:14px;border-radius:12px;background:var(--ls2);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}.ready b{font-family:var(--disp);color:var(--ld)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 20px;border:0;border-radius:11px;color:#fff;font:700 14.5px var(--sans);cursor:pointer;text-decoration:none;background:linear-gradient(135deg,var(--p),var(--ld));box-shadow:0 14px 30px -14px rgba(12,74,110,.6)}.btn:hover{filter:brightness(1.1)}.btn[disabled]{opacity:.5}
+.btn.o{background:#fff;color:var(--ink);border:1px solid var(--ls);box-shadow:none}.btn.o:hover{border-color:var(--p);color:var(--p);filter:none}
+.form{max-width:760px;margin:0 auto;padding:26px 24px 24px}.form h2{font-size:22px}.form>p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.note{margin:16px 0 0;padding:12px 14px;border-radius:10px;background:var(--ps);color:var(--pd);font-size:14px}
+fieldset{border:0;border-top:1px solid var(--line);margin:18px 0 0;padding:14px 0 0}legend{padding:0 8px 0 0;font:600 14px var(--disp);color:var(--p)}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:11px 0 4px}
+select,input{width:100%;font:inherit;font-size:14.5px;color:var(--ink);background:#fff;border:1px solid var(--ls);border-radius:10px;padding:9px 12px;min-height:44px}select:focus,input:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(12,74,110,.18)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.res h2{font-size:24px;text-align:center}.res>p{text-align:center;color:var(--muted);margin:4px 0 22px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.plan .v{padding:14px;display:grid;place-items:center;min-height:240px;background:#fff linear-gradient(#e6eef1 1px,transparent 1px) 0 0/24px 24px}.plan .v img{max-width:100%;max-height:340px;border:1px solid var(--line);background:#fff}
+.plan .t{padding:14px 16px;border-top:1px solid var(--line)}.plan h3{font-size:16px}.plan .i{margin:2px 0 10px;color:var(--muted);font-size:13px}
+.dl{display:flex;gap:8px;flex-wrap:wrap}.dl a{padding:7px 12px;border:1px solid var(--ls);border-radius:9px;color:var(--ink);font:600 13px var(--sans);text-decoration:none}.dl a:hover{border-color:var(--p);color:var(--p);background:var(--ps)}
+.al{margin:10px 0 0;padding:8px 10px 8px 26px;border-radius:8px;background:var(--ambs);color:var(--amb);font-size:12.5px}
+.cta{margin-top:28px;padding:clamp(22px,4vw,34px);border-radius:16px;color:#fff;text-align:center;background:linear-gradient(125deg,#082f49,#0c4a6e 50%,#0b7a70)}
+.cta h2{font-size:clamp(20px,3vw,27px)}.cta p{margin:8px auto 18px;max-width:52ch;color:#dcecf2}.cta .btn{background:#fff;color:var(--pd);box-shadow:none}
+.spin{display:inline-block;width:15px;height:15px;border:2px solid #fff;border-right-color:transparent;border-radius:50%;vertical-align:-3px;margin-right:8px;animation:rt .8s linear infinite}.plan .v .spin{border-color:var(--p);border-right-color:transparent;margin:0}
+@keyframes rt{to{transform:rotate(360deg)}}
+footer{padding:18px clamp(16px,3vw,32px);font-size:12.5px;color:var(--muted);text-align:center;border-top:1px solid var(--line);background:#fff}
+@media (max-width:600px){.brand small{display:none}.comp{flex-direction:column;align-items:stretch}.send{width:100%}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important}}
+.hero .wrap.two{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;text-align:left}.hero .two h1{margin:0}.hero .two p.sub{margin:14px 0 0}
+.cr{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}.hero .btn.start{background:#fff;color:var(--pd);box-shadow:none}.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.55);box-shadow:none}.btn.sm{min-height:38px;padding:0 16px;font-size:13.5px}
+.mock{background:#fff;color:var(--ink);border-radius:16px;padding:18px;box-shadow:0 18px 40px -16px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:10px;font-size:14px}
+.sec.alt{background:#fff;border-block:1px solid var(--line)}.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;list-style:none;margin:0;padding:0}
+.feat li{padding:20px;border-radius:14px;background:var(--paper);border:1px solid var(--line)}.feat h3{font-size:16px;margin-bottom:4px;color:var(--p)}.feat p{margin:0;color:var(--muted);font-size:14px}
+.chat{max-width:760px;margin:0 auto;display:flex;flex-direction:column;min-height:calc(100vh - 170px)}.msgs{flex:1;display:flex;flex-direction:column;gap:18px;padding:8px 0 16px}
+.m.a{background:none;border-radius:0;padding:2px 0 2px 42px;position:relative;max-width:100%}.m.bad{padding:10px 14px}
+.mock .m.a{padding-left:42px}.welcome{text-align:center;padding:clamp(24px,8vh,80px) 0 8px}.welcome h2{font-size:clamp(24px,4vw,34px)}.welcome p{color:var(--muted);margin:8px 0 0}
+.welcome .ex button{color:var(--ink);border-color:var(--ls);background:#fff}.welcome .ex button:hover{border-color:var(--p);color:var(--p);background:var(--ps)}
+.chat .comp{position:sticky;bottom:14px;margin:8px 0 0;border:1px solid var(--ls);box-shadow:0 10px 30px -14px rgba(13,27,36,.35)}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(13,27,36,.55);display:grid;place-items:center;padding:16px}
+.dlg{background:#fff;border-radius:16px;width:100%;max-width:620px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+.dh{padding:22px 24px 12px}.dh h2{font-size:21px}.dh p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+.db{overflow:auto;padding:4px 24px 12px;border-block:1px solid var(--line)}.db h3{font-size:14px;margin:14px 0 2px}.db p{margin:0;font-size:13.5px;color:var(--muted)}
+.df{padding:14px 24px 20px}.ck{display:flex;gap:10px;align-items:flex-start;margin:0 0 4px;font-size:14px;font-weight:500;color:var(--ink);cursor:pointer}.ck input{width:20px;height:20px;min-height:0;flex:none;margin-top:1px;accent-color:var(--p)}
+footer a{color:var(--p);font-weight:600}
+@media (max-width:820px){.hero .wrap.two{grid-template-columns:1fr}}
+.av{display:inline-grid;place-items:center;flex:none;width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#082f49,#0c4a6e 55%,#14b8a6);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}.av svg{width:80%;height:80%}
+.av.lg{width:40px;height:40px;border-radius:11px;filter:drop-shadow(0 8px 16px rgba(12,74,110,.35))}.av.xl{width:72px;height:72px;border-radius:20px;box-shadow:0 20px 40px -16px rgba(12,74,110,.65),inset 0 0 0 1px rgba(255,255,255,.2)}
+.m.a>.av{position:absolute;left:0;top:0}.welcome>.av{display:grid;margin:0 auto 16px}
+.wait .ln{transform-box:fill-box;transform-origin:center;animation:ln 1.3s ease-in-out infinite}.wait .t1{animation:t1 1.3s ease-in-out infinite}.wait .t2{animation:t2 1.3s ease-in-out infinite}
+@keyframes ln{50%{transform:scaleX(.45)}}@keyframes t1{50%{transform:translateX(3.2px)}}@keyframes t2{50%{transform:translateX(-3.2px)}}
+
+/* ===== Niveau de présentation « CivilEstimator » ===== */
+:root{--sun:#fbbf24;--sh2:0 14px 40px -16px rgba(12,74,110,.45)}
+body{background-color:var(--paper);background-image:radial-gradient(60vw 60vw at 12% -8%,rgba(251,191,36,.10),transparent 60%),radial-gradient(55vw 55vw at 102% 4%,rgba(15,157,143,.12),transparent 60%),radial-gradient(70vw 70vw at 50% 120%,rgba(12,74,110,.08),transparent 60%);background-attachment:fixed}
+h1{font-weight:700}
+#splash{display:none;position:fixed;inset:0;z-index:99999;background:linear-gradient(125deg,#082f49,#0c4a6e 40%,#0b7a70 85%,#0f9d8f);background-size:220% 220%;align-items:center;justify-content:center;flex-direction:column;gap:18px;transition:opacity .55s,visibility .55s}
+.splash-on #splash{display:flex;animation:sd 3s ease-in-out 1 alternate forwards,ssafe 0s linear 10s forwards}
+#splash.out{opacity:0;visibility:hidden}@keyframes ssafe{to{opacity:0;visibility:hidden}}@keyframes sd{from{background-position:0 30%}to{background-position:100% 70%}}
+#splash .sl{position:relative;display:grid;place-items:center}#splash .sh{position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.28),transparent 66%);animation:sp 2.4s ease-in-out infinite}
+#splash .av{width:104px;height:104px;border-radius:28px;position:relative;animation:spop .6s cubic-bezier(.2,.9,.3,1.25) both;box-shadow:0 24px 50px -16px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.3)}
+#splash .w{font:700 28px var(--disp);color:#fff;letter-spacing:-.02em;opacity:0;animation:sup .5s ease-out .9s forwards}#splash .w b{color:var(--sun)}
+#splash .t{font:500 12.5px var(--sans);color:rgba(255,255,255,.88);margin-top:-6px;opacity:0;animation:sup .5s ease-out 1.2s forwards}
+@keyframes sp{50%{transform:scale(1.1);opacity:.7}}@keyframes spop{from{transform:scale(.55) rotate(-8deg);opacity:0}}@keyframes sup{from{transform:translateY(8px)}to{opacity:1;transform:none}}
+.top{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.btn,.send{transition:filter .2s,transform .2s,box-shadow .2s}.btn:active,.send:active{transform:scale(.97)}.btn:not(.o):hover{box-shadow:var(--sh2)}
+.hero{animation:dr 14s ease-in-out infinite}.hero .wrap{padding-bottom:clamp(56px,8vw,88px)}
+.hero::before{animation:gp 8s linear infinite}@keyframes gp{to{background-position:46px 46px}}
+.decor i{position:absolute;pointer-events:none;animation:fl 7s ease-in-out infinite}
+.decor i:nth-child(1){top:40px;right:8%;width:96px;height:96px;border-radius:20px;border:2px solid rgba(255,255,255,.2);transform:rotate(12deg)}
+.decor i:nth-child(2){bottom:70px;right:24%;width:56px;height:56px;border-radius:14px;background:rgba(251,191,36,.25);animation-duration:9s;animation-direction:reverse}
+.decor i:nth-child(3){top:48%;left:5%;width:64px;height:64px;border-radius:50%;border:2px solid rgba(255,255,255,.15);animation-duration:9s}
+.decor i:nth-child(4){bottom:60px;left:22%;width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.1);transform:rotate(45deg)}
+@keyframes fl{50%{translate:0 -18px;rotate:6deg}}
+.wave{position:absolute;left:0;bottom:-1px;width:100%;height:40px;color:var(--paper);display:block}
+.eyebrow{font:700 11px var(--sans);letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.8);margin:0 0 12px}
+.hero h1 em{font-style:normal;color:var(--sun)}
+.hero .wrap.two>*{animation:up .7s cubic-bezier(.16,1,.3,1) both}.hero .mock{animation-delay:.2s}
+@keyframes up{from{opacity:0;transform:translateY(14px)}}
+.mock{border:1px solid rgba(255,255,255,.5);backdrop-filter:blur(6px)}.mock .m.u{background:linear-gradient(135deg,var(--p),var(--ld))}
+.sec h2{position:relative;padding-bottom:14px}.sec h2::after{content:"";position:absolute;left:50%;bottom:0;width:44px;height:4px;margin-left:-22px;border-radius:4px;background:linear-gradient(90deg,var(--p),var(--l),var(--sun))}
+.steps li,.feat li,.plan{transition:transform .3s,box-shadow .3s,border-color .3s}
+.steps li:hover,.feat li:hover,.plan:hover{transform:translateY(-4px);box-shadow:var(--sh2);border-color:var(--ls)}
+.steps li::before{background:linear-gradient(135deg,var(--p),var(--l));color:#fff;box-shadow:0 8px 18px -8px rgba(12,74,110,.6)}
+.feat .ic{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;color:#fff;margin-bottom:12px;background:linear-gradient(135deg,var(--p),var(--l));box-shadow:0 10px 22px -10px rgba(12,74,110,.6)}
+.feat li:nth-child(2) .ic{background:linear-gradient(135deg,var(--l),#14b8a6)}.feat li:nth-child(3) .ic{background:linear-gradient(135deg,#d97706,var(--sun))}.feat li:nth-child(4) .ic{background:linear-gradient(135deg,var(--pd),var(--p))}
+.feat .ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cta{position:relative;overflow:hidden;box-shadow:var(--sh2)}.cta::before{content:"";position:absolute;inset:0;opacity:.3;background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);background-size:46px 46px;pointer-events:none}.cta>*{position:relative}
+.chat .m.u{background:linear-gradient(135deg,var(--p),var(--ld));box-shadow:0 8px 20px -10px rgba(12,74,110,.6)}
+.comp{transition:box-shadow .2s,border-color .2s}.chat .comp:focus-within{border-color:var(--p);box-shadow:0 0 0 3px rgba(12,74,110,.15),0 10px 30px -14px rgba(13,27,36,.35)}
+.welcome .av.xl{animation:fl 7s ease-in-out infinite}
+.app>section:not([hidden]){animation:up .45s cubic-bezier(.16,1,.3,1) both}
+.chip{border:1px solid var(--line)}.chip[data-s=ok] i{animation:pr 2s ease-out infinite}@keyframes pr{0%{box-shadow:0 0 0 0 rgba(15,157,143,.45)}70%,100%{box-shadow:0 0 0 8px transparent}}
+.rv{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s cubic-bezier(.16,1,.3,1)}.rv.in{opacity:1;transform:none}
+footer{background:rgba(255,255,255,.65);padding:0}.fw{max-width:1180px;margin:0 auto;padding:20px clamp(16px,3vw,32px);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+.fb{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink)}.fb .av{width:24px;height:24px;border-radius:7px}.fc{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.bd{padding:4px 11px;border-radius:999px;background:var(--ps);color:var(--p);font-weight:600;border:1px solid rgba(12,74,110,.2)}
+.fd{margin:0;padding:10px clamp(16px,3vw,32px);border-top:1px solid var(--line);font-size:12px}
+.hero .wrap.two,.hero .wrap{position:relative}
+@media (max-width:820px){.decor i:nth-child(n+3){display:none}}
+
+/* ===== v2 : logo de réflexion, plans qui défilent, animations ===== */
+:root{--d:.4s}.splash-on{--d:2.9s}
+.chat .m.a .av svg>path{stroke:var(--p)}.chat .m.a .av svg g{stroke:var(--l)}
+.chat .m.a>.av{display:none}
+.chat .m.a{padding-left:0}
+.chat .m.a.wait{padding-left:52px;min-height:40px;display:flex;align-items:center}
+.chat .m.a.wait>.av{display:grid;width:38px;height:38px;border-radius:0;background:none;box-shadow:none;top:0;bottom:0;margin:auto 0;animation:lgin .6s cubic-bezier(.2,.9,.3,1.3) both,lgp 1.6s ease-in-out .6s infinite}
+.chat .m.a.wait>.av::before{content:"";position:absolute;inset:-12px;border-radius:50%;background:radial-gradient(circle,rgba(15,157,143,.32),transparent 68%);animation:lgh 1.6s ease-in-out infinite;z-index:-1}
+.chat .m.a.wait>.av svg{width:100%;height:100%;overflow:visible}
+@keyframes lgin{from{opacity:0;transform:scale(.3) rotate(-18deg)}}@keyframes lgp{50%{transform:scale(1.12) rotate(3deg)}}@keyframes lgh{50%{transform:scale(1.3);opacity:.5}}
+#v-home .sec{position:relative;overflow:hidden;isolation:isolate}
+#v-home .sec.alt{background:rgba(255,255,255,.6)}
+#v-home .sec::before,#v-home .sec::after{content:"";position:absolute;inset:-10% 0;z-index:-1;pointer-events:none;background-repeat:repeat;-webkit-mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent)}
+#v-home .sec::before{background-image:var(--pa);background-size:480px 340px;opacity:.17;animation:pn1 45s linear infinite}
+#v-home .sec::after{background-image:var(--pb);background-size:520px 340px;background-position:0 170px;opacity:.12;animation:pn2 60s linear infinite}
+@keyframes pn1{to{background-position:-480px 0}}@keyframes pn2{from{background-position:0 170px}to{background-position:520px 170px}}
+@keyframes pr2{0%{box-shadow:0 0 0 0 rgba(15,157,143,.5)}70%,100%{box-shadow:0 0 0 13px transparent}}
+.steps li:not(:last-child)::after{content:"";position:absolute;top:38px;left:calc(100% + 1px);width:16px;height:2px;background:repeating-linear-gradient(90deg,var(--l) 0 5px,transparent 5px 9px);animation:dsh 1s linear infinite}
+@keyframes dsh{to{background-position:9px 0}}
+.mock>.m{opacity:0;animation:up .6s cubic-bezier(.16,1,.3,1) both}
+.mock>.m:nth-child(1){animation-delay:calc(var(--d) + .2s)}.mock>.m:nth-child(2){animation-delay:calc(var(--d) + 1.2s)}.mock>.m:nth-child(3){animation-delay:calc(var(--d) + 2.2s)}.mock>.m:nth-child(4){animation-delay:calc(var(--d) + 3.2s)}
+.hero .btn.start{position:relative;overflow:hidden}.hero .btn.start::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(15,157,143,.28),transparent 70%);transform:translateX(-120%);animation:shm 2.8s ease-in-out infinite}
+@keyframes shm{to{transform:translateX(220%)}}
+@media (max-width:820px){.steps li:not(:last-child)::after{display:none}}
+
+/* ===== v3 : démo en boucle, header/footer selon l'écran ===== */
+.chat{min-height:calc(100vh - 80px)}
+.hb{display:flex;align-items:center;gap:10px;margin-bottom:18px;font:700 21px var(--disp)}.hb .av{width:38px;height:38px;border-radius:11px}.hb span:not(.av){color:var(--sun)}
+.dst{display:flex;gap:6px;font-size:12px;font-weight:600}.dst span{flex:1;text-align:center;padding:6px 4px;border-radius:999px;background:var(--mbg);color:var(--muted);transition:background .3s,color .3s}
+.dst span.on{background:linear-gradient(135deg,var(--p),var(--ld));color:#fff}
+.dbody{position:relative;height:292px}
+.dsc{position:absolute;inset:0;display:flex;flex-direction:column;gap:10px;opacity:0;transform:translateY(8px);transition:opacity .45s,transform .45s;pointer-events:none}.dsc.on{opacity:1;transform:none}
+.dm,.dfr,.dbtn,.dout,.dgen{opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s}.dm.on,.dfr.on,.dbtn.on,.dout.on,.dgen.on{opacity:1;transform:none}
+.dt{font:700 16px var(--disp)}
+.dfr{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--ls);border-radius:10px;padding:9px 12px;font-size:13.5px}.dfr small{color:var(--muted);font-weight:600}.dfr span{font-weight:600;color:var(--p)}
+.dbtn{margin-top:auto;text-align:center;padding:12px;border-radius:11px;color:#fff;font-weight:700;font-size:14px;background:linear-gradient(135deg,var(--p),var(--ld))}.dbtn.on{animation:pr2 1.4s ease-out infinite}
+.dgen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--muted);font-weight:600}.dgen .spin{border-color:var(--p);border-right-color:transparent;margin:0;width:28px;height:28px}
+.dout{position:absolute;inset:0;display:flex;flex-direction:column;gap:10px}
+.dpl{flex:1;min-height:0;display:grid;place-items:center;border:1px solid var(--line);border-radius:10px;background:#fff linear-gradient(#e6eef1 1px,transparent 1px) 0 0/20px 20px}.dpl svg{width:90%;height:100%}
+.dr{stroke-dasharray:1;stroke-dashoffset:1}.dout.on .dr{animation:drw 1.1s ease-out var(--t,0s) forwards}.dtx{opacity:0;font:700 9px Inter,sans-serif;fill:#b45309;stroke:none}.dout.on .dtx{animation:fi .5s ease-out 1.9s forwards}@keyframes fi{to{opacity:1}}
+@keyframes drw{to{stroke-dashoffset:0}}
+.dch{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12.5px;font-weight:600}.dch span{padding:5px 11px;border:1px solid var(--ls);border-radius:9px}.dch em{font-style:normal;margin-left:auto;color:var(--ld)}
+
+/* ===== v4 : composer avec pièces jointes ===== */
+.chat .comp{flex-direction:column;align-items:stretch;gap:6px}.crow{display:flex;gap:8px;align-items:flex-end}
+.plus,.chat .send{flex:none;width:46px;height:46px;min-height:46px;padding:0;display:grid;place-items:center;border-radius:50%}
+.plus{border:1px solid var(--ls);background:#fff;color:var(--p);cursor:pointer;transition:background .2s,border-color .2s,transform .2s}.plus:hover{background:var(--ps);border-color:var(--p)}.plus:active{transform:scale(.94)}
+.plus svg,.send svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.atts{display:flex;flex-wrap:wrap;gap:6px;padding:2px 4px 0}.att{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:4px 4px 4px 10px;border-radius:999px;background:var(--ps);color:var(--pd);font:600 12.5px var(--sans)}
+.att img{width:22px;height:22px;border-radius:6px;object-fit:cover}.att button{border:0;background:rgba(12,74,110,.15);color:var(--pd);width:20px;height:20px;border-radius:50%;cursor:pointer;line-height:1;font-size:14px}.att button:hover{background:rgba(12,74,110,.3)}
+.aerr{margin:0;padding:0 6px;font-size:12.5px;color:var(--err)}
+.fl{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.fl span{background:rgba(255,255,255,.22);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600}
+
+/* ===== v5 : logo de réflexion dans la démo ===== */
+.mock .m.a{padding-left:0}.mock .m.a>.av{display:none}
+.mock .m.a .av svg>path{stroke:var(--p)}.mock .m.a .av svg g{stroke:var(--l)}
+.mock .m.a .th{display:none;color:var(--muted);font-style:italic}
+.mock .m.a.wait{padding-left:52px;min-height:40px;display:flex;align-items:center}.mock .m.a.wait .th{display:inline}.mock .m.a.wait .tx{display:none}
+.mock .m.a.wait>.av{display:grid;position:absolute;left:0;top:0;bottom:0;margin:auto 0;width:38px;height:38px;border-radius:0;background:none;box-shadow:none;animation:lgin .6s cubic-bezier(.2,.9,.3,1.3) both,lgp 1.6s ease-in-out .6s infinite}
+.mock .m.a.wait>.av::before{content:"";position:absolute;inset:-12px;border-radius:50%;background:radial-gradient(circle,rgba(15,157,143,.32),transparent 68%);animation:lgh 1.6s ease-in-out infinite;z-index:-1}
+.mock .m.a.wait>.av svg{width:100%;height:100%;overflow:visible}
+</style>
+</head>
+<body>
+<script>(function(){if(/bot|crawl|spider|lighthouse|headless/i.test(navigator.userAgent))return;var t0=Date.now(),M=matchMedia("(prefers-reduced-motion: reduce)").matches?450:2600;document.documentElement.className+=" splash-on";window.__hideSplash=function(){var e=document.getElementById("splash");if(!e)return;setTimeout(function(){e.className+=" out";setTimeout(function(){e.remove()},700)},Math.max(0,M-(Date.now()-t0)))}})()</script>
+<div id="splash" aria-hidden="true"><div class="sl"><div class="sh"></div><span class="av" data-gl></span></div><div class="w">Arki<b>vio</b></div><div class="t">Plans de maisons · PDF, SVG, IFC</div></div>
+<header class="top" id="hdr" hidden><div class="wrap">
+  <a class="brand" href="">
+    <span class="av lg" role="img" aria-label="Arkivio"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M17 47 32 15l15 32" fill="none" stroke="#fff" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/><g stroke="#8ff5e2" stroke-width="2.2" stroke-linecap="round"><path class="ln" d="M25 41h14"/><path class="t1" d="M25 37.5v7"/><path class="t2" d="M39 37.5v7"/></g></svg></span>
+    <div><b>Arki<span>vio</span></b><small>Plans de maisons</small></div>
+  </a>
+  <button class="btn sm start" id="hstart" type="button">Commencer</button>
+  <div class="chip" id="status" data-s="wait" role="status"><i></i><span id="st">Connexion…</span></div>
+</div></header>
+
+<main>
+<div id="v-home">
+  <section class="hero"><div class="decor" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="wrap two">
+    <div>
+      <div class="hb"><span class="av" data-gl></span><b>Arki<span>vio</span></b></div>
+      <p class="eyebrow">Assistant de plans · PDF · SVG · IFC</p>
+      <h1>Vos plans de maison, <em>dessinés en discutant</em></h1>
+      <p class="sub">Parlez de votre projet à l’assistant Arkivio. Il pose les bonnes questions, puis génère des plans cotés, prêts à imprimer.</p>
+      <div class="cr"><button class="btn start" type="button">Commencer</button><a class="btn ghost" href="#how">Comment ça marche</a></div>
+    </div>
+    <div class="mock" id="demo" aria-hidden="true">
+      <div class="dst"><span>1 · Décrire</span><span>2 · Ajuster</span><span>3 · Exporter</span></div>
+      <div class="dbody">
+        <div class="dsc">
+          <div class="m u dm">Une maison F3 de plain-pied pour quatre personnes.</div>
+          <div class="m a dm"><span class="av" data-gl></span><span class="tx">Très bien. Souhaitez-vous un standing standard ou confort ?</span><span class="th">Arkivio réfléchit…</span></div>
+          <div class="m u dm">Confort, avec une grande cuisine.</div>
+          <div class="m a dm"><span class="av" data-gl></span><span class="tx">Parfait, j’ai ce qu’il faut. Vérifiez les valeurs, puis je génère vos plans.</span><span class="th">Arkivio réfléchit…</span></div>
+        </div>
+        <div class="dsc">
+          <b class="dt">Vérifiez votre projet</b>
+          <div class="dfr"><small>Type de maison</small><span>F3 plain-pied</span></div>
+          <div class="dfr"><small>Standing</small><span>Confort</span></div>
+          <div class="dfr"><small>Format · Échelle</small><span>Automatique</span></div>
+          <div class="dbtn">Valider et générer les plans</div>
+        </div>
+        <div class="dsc">
+          <div class="dgen"><span class="spin"></span>Génération des plans…</div>
+          <div class="dout"><b class="dt">Vos plans sont prêts</b>
+            <div class="dpl"><svg viewBox="-6 0 246 142" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path class="dr" pathLength="1" stroke="#0c4a6e" stroke-width="3" d="M30 110V10H60M95 10H165M195 10H220V30M220 55V110H150M120 110H30"/>
+              <path class="dr" pathLength="1" stroke="#0c4a6e" stroke-width="2" style="--t:.4s" d="M110 10V70M30 70H78M104 70H220M165 70V110"/>
+              <path class="dr" pathLength="1" stroke="#0f9d8f" stroke-width="1.2" style="--t:.8s" d="M60 8H95M60 10H95M60 12H95M165 8H195M165 10H195M165 12H195M218 30V55M220 30V55M222 30V55"/>
+              <path class="dr" pathLength="1" stroke="#0c4a6e" stroke-width="1.4" style="--t:1.1s" d="M78 70V96M78 96A26 26 0 0 0 104 70M120 110V80M120 80A30 30 0 0 1 150 110"/>
+              <path class="dr" pathLength="1" stroke="#b45309" stroke-width="1.1" style="--t:1.4s" d="M30 130H220M30 125V135M220 125V135M12 10V110M7 10H17M7 110H17"/>
+              <text class="dtx" x="125" y="126" text-anchor="middle">X · 12,00 m</text>
+              <text class="dtx" transform="translate(6 60) rotate(-90)" text-anchor="middle">Y · 8,00 m</text></svg></div>
+            <div class="dch"><span>PDF</span><span>SVG</span><span>IFC</span><em>puis le devis →</em></div></div>
+        </div>
+      </div>
+    </div>
+  </div><svg class="wave" viewBox="0 0 1440 48" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0,32 C240,48 480,8 720,16 C960,24 1200,48 1440,28 L1440,48 L0,48 Z"/></svg></section>
+  <section class="sec" id="how"><div class="wrap">
+    <h2>Comment ça marche</h2>
+    <ol class="steps">
+      <li><h3>Vous décrivez</h3><p>En quelques phrases, dans vos mots. L’assistant demande ce qui manque.</p></li>
+      <li><h3>Vous ajustez</h3><p>Un formulaire pré-rempli s’ouvre : vous corrigez les valeurs avant de valider.</p></li>
+      <li><h3>Vous exportez</h3><p>Tous les plans du modèle sont générés, à télécharger en PDF, SVG ou IFC.</p></li>
+    </ol>
+  </div></section>
+  <section class="sec alt"><div class="wrap">
+    <h2>Ce que vous obtenez</h2>
+    <ul class="feat">
+      <li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V8l7-5 7 5v13M10 21v-6h4v6"/></svg></span><h3>Des plans cotés</h3><p>Pièces, surfaces, ouvertures, cotes et cartouche complet.</p></li>
+      <li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg></span><h3>Mise en page automatique</h3><p>Du A5 au A0, de l’échelle 1/50 au 1/1000, choisis pour que tout tienne.</p></li>
+      <li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 19h16"/></svg></span><h3>Trois formats d’export</h3><p>PDF pour imprimer, SVG pour retoucher, IFC pour les logiciels BIM.</p></li>
+      <li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 9h8M8 13h5M8 17h3"/></svg></span><h3>Du plan au devis</h3><p>Continuez avec CivilEstimator pour le métré et le devis estimatif.</p></li>
+    </ul>
+  </div></section>
+  <section class="sec"><div class="wrap"><div class="cta"><h2>Prêt à dessiner votre maison ?</h2><p>Décrivez votre projet, l’assistant s’occupe du reste.</p><button class="btn start" type="button">Commencer</button></div></div></section>
+</div>
+
+<div class="wrap app" id="app" hidden>
+  <section id="v-chat" class="chat" hidden aria-label="Discussion avec l’assistant">
+    <div class="welcome" id="welcome"><span class="av xl" aria-hidden="true"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M17 47 32 15l15 32" fill="none" stroke="#fff" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/><g stroke="#8ff5e2" stroke-width="2.2" stroke-linecap="round"><path class="ln" d="M25 41h14"/><path class="t1" d="M25 37.5v7"/><path class="t2" d="M39 37.5v7"/></g></svg></span><h2>Que souhaitez-vous construire ?</h2><p>Décrivez votre projet, je vous guide jusqu’aux plans.</p><div class="ex" id="ex"></div></div>
+    <div class="msgs" id="msgs" aria-live="polite"></div>
+    <div class="ready" id="ready" hidden><div><b>Votre projet est cadré.</b><br>Vérifiez les valeurs avant de générer les plans.</div><button class="btn" id="open" type="button">Ouvrir le formulaire</button></div>
+    <form class="comp" data-send><div class="atts" id="atts" hidden></div><p class="aerr" id="aerr" role="alert" hidden></p>
+      <div class="crow"><button class="plus" type="button" id="plus" aria-label="Joindre un fichier (PDF ou image)" title="Joindre un PDF ou une image"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><input type="file" id="file" accept="application/pdf,image/*" multiple hidden>
+      <textarea id="q2" rows="1" placeholder="Décrivez votre projet…" aria-label="Votre message"></textarea><button class="send" type="submit" aria-label="Envoyer" title="Envoyer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button></div></form>
+  </section>
+
+  <section id="v-form" class="card form" hidden>
+    <h2>Vérifiez votre projet</h2><p>Ajustez les valeurs, puis validez pour générer les plans.</p>
+    <p class="note" id="resume" hidden></p>
+    <form id="f" novalidate>
+      <fieldset><legend>Maison</legend><div class="row">
+        <div><label for="gabarit">Type de maison</label><select id="gabarit"></select></div>
+        <div><label for="standing">Standing</label><select id="standing"></select></div></div></fieldset>
+      <fieldset><legend>Mise en page</legend><div class="row">
+        <div><label for="format">Format</label><select id="format"><option value="auto">Automatique</option><option>A5</option><option>A4</option><option>A3</option><option>A2</option><option>A1</option><option>A0</option></select></div>
+        <div><label for="echelle">Échelle</label><select id="echelle"><option value="auto">Automatique</option><option value="50">1/50</option><option value="100">1/100</option><option value="200">1/200</option><option value="500">1/500</option><option value="1000">1/1000</option></select></div>
+        <div><label for="orientation">Orientation</label><select id="orientation"><option value="auto">Automatique</option><option value="portrait">Portrait</option><option value="paysage">Paysage</option></select></div></div></fieldset>
+      <fieldset><legend>Cartouche</legend>
+        <label for="projet">Nom du projet</label><input id="projet" autocomplete="off">
+        <label for="titre">Titre du plan</label><input id="titre" autocomplete="off">
+        <div class="row"><div><label for="phase">Phase</label><input id="phase" autocomplete="off" placeholder="APS"></div><div><label for="planche">Planche</label><input id="planche" autocomplete="off" placeholder="A-01"></div><div><label for="date">Date</label><input id="date" type="date"></div></div>
+        <div class="row"><div><label for="moa">Maître d’ouvrage</label><input id="moa" autocomplete="off"></div><div><label for="moe">Maître d’œuvre</label><input id="moe" autocomplete="off"></div></div></fieldset>
+      <div class="acts"><button class="btn" type="submit">Valider et générer les plans</button><button class="btn o" type="button" id="back">Retour à la discussion</button></div>
+    </form>
+  </section>
+
+  <section id="v-res" class="res" hidden>
+    <h2>Vos plans sont prêts</h2><p id="rsub"></p>
+    <div class="plans" id="plans"></div>
+    <div class="cta"><h2>Vous voulez obtenir le devis de votre projet ?</h2><p>Passez des plans au métré et au devis estimatif en francs CFA, directement dans CivilEstimator.</p>
+      <a class="btn" id="civil" href="#">Continuer avec CivilEstimator</a></div>
+    <div class="acts" style="justify-content:center"><button class="btn o" type="button" id="edit">Modifier les valeurs</button></div>
+  </section>
+</div>
+</main>
+<footer id="ftr"><div class="fw"><span class="fb"><span class="av" data-gl></span>Arkivio · Plans de maisons</span><span class="fc"><span class="bd">PDF · SVG · IFC</span><a href="#" id="flink">Conditions d’utilisation</a></span></div>
+<p class="fd">Les plans générés sont indicatifs et doivent être validés par un professionnel avant toute construction. © 2026 Arkivio</p></footer>
+
+<div class="modal" id="terms" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="tt">
+  <div class="dh"><h2 id="tt">Conditions d’utilisation</h2><p>Version 1.0 · mise à jour le 21 novembre 2026</p></div>
+  <div class="db">
+    <h3>1. Le service</h3><p>Arkivio est un assistant qui vous aide à définir un projet de maison, puis génère des plans à partir de modèles prédéfinis.</p>
+    <h3>2. Plans indicatifs</h3><p>Les plans sont des documents indicatifs, non contractuels. Ils ne remplacent ni l’étude d’un architecte ou d’un bureau d’études, ni les autorisations nécessaires. Faites-les valider par un professionnel avant toute construction.</p>
+    <h3>3. Assistant IA</h3><p>Les réponses sont produites par une intelligence artificielle (Claude, d’Anthropic) et peuvent comporter des erreurs. Vérifiez les valeurs proposées dans le formulaire avant de valider.</p>
+    <h3>4. Vos données</h3><p>Vos messages et les informations du cartouche sont transmis à un service d’intelligence artificielle pour produire les réponses et les plans. N’y saisissez pas d’informations sensibles (pièces d’identité, coordonnées bancaires).</p>
+    <h3>5. Utilisation acceptable</h3><p>Vous vous engagez à utiliser Arkivio de façon licite, sans perturber le service ni en extraire les modèles de plans en masse.</p>
+    <h3>6. Responsabilité</h3><p>Arkivio est fourni en l’état. L’éditeur ne peut être tenu responsable des décisions ou des travaux fondés sur des plans non validés par un professionnel.</p>
+    <h3>7. Modifications</h3><p>Ces conditions peuvent évoluer. Une nouvelle version vous sera demandée à votre prochaine visite.</p>
+  </div>
+  <div class="df"><label class="ck" id="acc-row"><input type="checkbox" id="cgu"> J’ai lu les conditions d’utilisation et je les accepte.</label>
+    <div class="acts"><button class="btn" id="t-ok" type="button" disabled>Accepter et continuer</button><button class="btn o" type="button" data-close>Fermer</button></div></div>
+</div></div>
+
+<script>
+const API=(window.ARKIVIO_API_URL||"").replace(/\/$/,""),$=id=>document.getElementById(id);
+let cat=[],hist=[],proj={},urls=[],busy=false;
+const VIEWS=["v-chat","v-form","v-res"];
+function show(v){const home=v==="home";$("v-home").hidden=!home;$("app").hidden=home;$("hstart").hidden=!home;VIEWS.forEach(i=>$(i).hidden=i!==v);$("hdr").hidden=home||v==="v-chat";$("ftr").hidden=v==="v-chat";window.scrollTo({top:0})}
+function setSt(s,t){$("status").dataset.s=s;$("st").textContent=t}
+function fill(sel,items,val){sel.innerHTML=items.map(i=>`<option value="${i.v}">${i.t}</option>`).join("");if(val&&items.some(i=>i.v===val))sel.value=val}
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+function standings(g){const o=[];(g?g.variantes:[]).forEach(v=>v.standings.forEach(s=>{if(!o.includes(s))o.push(s)}));return o}
+
+async function init(){
+  $("civil").href=window.CIVILESTIMATOR_URL;$("date").value=new Date().toISOString().slice(0,10);
+  ["Une maison F3 de plain-pied, standing standard","Un plan F4 confort pour une famille de cinq personnes","Je ne sais pas encore : j’ai besoin de conseils"].forEach(t=>{const b=document.createElement("button");b.type="button";b.textContent=t;b.onclick=()=>send(t);$("ex").appendChild(b)});
+  try{const r=await fetch(API+"/api/gabarits");if(!r.ok)throw 0;cat=await r.json();if(!cat.length)throw 0;setSt("ok","Serveur connecté")}
+  catch(e){setSt("err","Serveur injoignable")}
+}
+
+const GL='<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M17 47 32 15l15 32" fill="none" stroke="#fff" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/><g stroke="#8ff5e2" stroke-width="2.2" stroke-linecap="round"><path class="ln" d="M25 41h14"/><path class="t1" d="M25 37.5v7"/><path class="t2" d="M39 37.5v7"/></g></svg>';
+function addMsg(c,t){const d=document.createElement("div");d.className="m "+c;if(c[0]==="a")d.innerHTML=`<span class="av">${GL}</span><span class="tx"></span>`;else d.innerHTML='<span class="tx"></span>';d.lastChild.textContent=t;$("msgs").appendChild(d);d.scrollIntoView({block:"end",behavior:"smooth"});return d}
+async function send(text,files){
+  text=(text||"").trim();files=files||[];if((!text&&!files.length)||busy)return;busy=true;$("ready").hidden=true;$("welcome").hidden=true;show("v-chat");
+  const um=addMsg("u",text);if(files.length){const c=document.createElement("div");c.className="fl";files.forEach(f=>{const x=document.createElement("span");x.textContent=(f.type==="application/pdf"?"PDF · ":"Image · ")+f.name;c.appendChild(x)});um.appendChild(c)}hist.push({role:"user",content:text||"Voici mes fichiers."});const th=addMsg("a wait","Arkivio réfléchit…");
+  document.querySelectorAll(".send").forEach(b=>b.disabled=true);
+  try{
+    const enc=await Promise.all(files.map(b64f));const r=await fetch(API+"/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:hist,fichiers:enc})});
+    const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.erreur||"L’assistant est indisponible (code "+r.status+").");
+    th.className="m a";th.lastChild.textContent=d.reponse;hist.push({role:"assistant",content:d.reponse});
+    if(d.pret&&d.projet){proj=d.projet;$("ready").hidden=false;$("ready").scrollIntoView({block:"end",behavior:"smooth"})}
+  }catch(e){th.className="m bad";th.textContent=/fetch|network/i.test(e.message)?"Connexion au serveur impossible. Réessayez dans un instant.":e.message;hist.pop()}
+  finally{busy=false;document.querySelectorAll(".send").forEach(b=>b.disabled=false);$("q2").focus()}
+}
+document.querySelectorAll("[data-send]").forEach(f=>f.addEventListener("submit",e=>{e.preventDefault();const t=f.querySelector("textarea");if(busy)return;const v=t.value,fl=pf;t.value="";pf=[];renderAtts();send(v,fl)}));
+document.querySelectorAll(".comp textarea").forEach(t=>t.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();t.form.requestSubmit()}}));
+
+function openForm(){
+  if(!cat.length){alert("Le serveur ne répond pas : impossible d’ouvrir le formulaire.");return}
+  fill($("gabarit"),cat.map(g=>({v:g.id,t:g.libelle})),proj.gabarit);onG(proj.standing);
+  ["projet","titre","phase","planche","moa","moe"].forEach(k=>{if(proj[k])$(k).value=proj[k]});
+  ["format","echelle","orientation"].forEach(k=>{if(proj[k])$(k).value=String(proj[k])});
+  $("resume").hidden=!proj.resume;$("resume").textContent=proj.resume||"";show("v-form")
+}
+function onG(val){const g=cat.find(x=>x.id===$("gabarit").value);fill($("standing"),standings(g).map(s=>({v:s,t:cap(s)})),val)}
+$("gabarit").addEventListener("change",()=>onG());
+$("open").onclick=openForm;$("edit").onclick=()=>show("v-form");$("back").onclick=()=>show("v-chat");
+
+function blobUrl(d,t){const u=URL.createObjectURL(new Blob([d],{type:t}));urls.push(u);return u}
+function b64(b){const s=atob(b),a=new Uint8Array(s.length);for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i);return a}
+async function genAll(ev){
+  ev.preventDefault();urls.forEach(URL.revokeObjectURL);urls=[];
+  const base={};["gabarit","standing","format","echelle","orientation","projet","titre","phase","planche","moa","moe","date"].forEach(k=>{const v=$(k).value.trim();if(v)base[k]=v});
+  const g=cat.find(x=>x.id===base.gabarit),vars=(g?g.variantes:[]).filter(v=>v.standings.includes(base.standing));
+  $("rsub").textContent=`${g?g.libelle:""}, standing ${base.standing} : ${vars.length} plan${vars.length>1?"s":""}`;
+  const box=$("plans");box.innerHTML="";show("v-res");
+  vars.forEach(async v=>{
+    const c=document.createElement("article");c.className="card plan";c.innerHTML=`<div class="v"><span class="spin"></span></div><div class="t"><h3>Variante ${v.id}</h3><p class="i">Génération…</p></div>`;box.appendChild(c);
+    const vw=c.querySelector(".v"),info=c.querySelector(".i");
+    try{
+      const r=await fetch(API+"/api/plan",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...base,variante:v.id})});
+      const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.erreur||"Échec ("+r.status+")");
+      const su=blobUrl(d.svg,"image/svg+xml"),img=new Image();img.src=su;img.alt="Plan variante "+v.id;vw.innerHTML="";vw.appendChild(img);
+      info.textContent=`${d.page.format} ${d.page.orientation}, échelle 1/${d.page.echelle}`;
+      const dl=document.createElement("div");dl.className="dl";const nm=`arkivio_${base.gabarit}_${v.id}_${base.standing}`;
+      [["PDF",blobUrl(b64(d.pdf),"application/pdf"),".pdf"],["SVG",su,".svg"],["IFC",blobUrl(d.ifc,"application/octet-stream"),".ifc"]].forEach(([n,u,x])=>{const a=document.createElement("a");a.href=u;a.download=nm+x;a.textContent=n;dl.appendChild(a)});
+      info.after(dl);
+      if((d.alertes||[]).length){const ul=document.createElement("ul");ul.className="al";d.alertes.forEach(t=>{const li=document.createElement("li");li.textContent=t;ul.appendChild(li)});dl.after(ul)}
+    }catch(e){vw.textContent="";info.textContent=e.message;info.style.color="var(--err)"}
+  });
+}
+$("f").addEventListener("submit",genAll);
+const CGU="1.0";
+function accepted(){try{return localStorage.getItem("arkivio_cgu")===CGU}catch(e){return false}}
+function enter(){show("v-chat");$("q2").focus()}
+function openTerms(acc){const t=$("terms");t.hidden=false;$("acc-row").hidden=!acc;$("t-ok").hidden=!acc;$("cgu").checked=false;$("t-ok").disabled=true;t.querySelector(".db").scrollTop=0;(acc?$("cgu"):t.querySelector("[data-close]")).focus()}
+function closeTerms(){$("terms").hidden=true}
+document.querySelectorAll(".start").forEach(b=>b.addEventListener("click",()=>accepted()?enter():openTerms(true)));
+$("flink").addEventListener("click",e=>{e.preventDefault();openTerms(false)});
+$("cgu").addEventListener("change",()=>$("t-ok").disabled=!$("cgu").checked);
+$("t-ok").addEventListener("click",()=>{try{localStorage.setItem("arkivio_cgu",CGU)}catch(e){}closeTerms();enter()});
+document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeTerms));
+$("terms").addEventListener("click",e=>{if(e.target===$("terms"))closeTerms()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("terms").hidden)closeTerms()});
+const PL=(w,b,d)=>`url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='340' viewBox='0 0 ${w} 340' fill='none' stroke='#0c4a6e' stroke-linecap='round' stroke-linejoin='round'>${b}<g stroke-width='1'><path d='M30 322H${w-30}M30 316V328M${w-30} 316V328'/></g><text x='${w/2}' y='314' font-size='11' fill='#0c4a6e' stroke='none' text-anchor='middle' font-family='sans-serif'>${d}</text></svg>`)}")`;
+document.documentElement.style.setProperty("--pa",PL(480,"<path stroke-width='6' d='M30 40H450V290H30Z'/><path stroke-width='3' d='M200 40V180M30 180H330M330 180V290M330 115H450'/><path stroke-width='1.2' d='M200 140a40 40 0 0 1 40-40M200 140V100M330 240a36 36 0 0 0-36-36M330 240V204M90 36H160M90 44H160M370 290H430M370 286H430M80 220h50v40H80zM380 150a14 14 0 1 0 .1 0'/>","12,00 m"));
+document.documentElement.style.setProperty("--pb",PL(520,"<path stroke-width='6' d='M30 50H300V150H490V290H30Z'/><path stroke-width='3' d='M170 50V290M170 190H490M330 150V190'/><path stroke-width='1.2' d='M170 120a34 34 0 0 1 34-34M170 120V86M330 175a30 30 0 0 0-30 30M330 175H300M60 46H130M60 54H130M60 290H120M380 146H450M380 154H450M200 230h70v34h-70zM400 220a18 18 0 1 0 .1 0'/>","13,50 m"));
+(function(){const d=$("demo"),sc=[...d.querySelectorAll(".dsc")],st=[...d.querySelectorAll(".dst span")],ms=[...d.querySelectorAll(".dm")],fr=[...d.querySelectorAll(".dfr")],btn=d.querySelector(".dbtn"),gen=d.querySelector(".dgen"),out=d.querySelector(".dout");
+const on=(e,v=true)=>e.classList.toggle("on",v);let T=[];const at=(t,f)=>T.push(setTimeout(f,t));
+const scene=i=>{sc.forEach((e,k)=>on(e,k===i));st.forEach((e,k)=>on(e,k===i))};
+function run(){T.forEach(clearTimeout);T=[];[...ms,...fr,btn,out,gen].forEach(e=>on(e,false));ms.forEach(m=>m.classList.remove("wait"));scene(0);
+ms.forEach((m,i)=>at([500,1500,3800,4800][i],()=>{on(m);if(i%2){m.classList.add("wait");at(1400,()=>m.classList.remove("wait"))}}));
+at(6600,()=>scene(1));fr.forEach((f,i)=>at(7000+i*450,()=>on(f)));at(8600,()=>on(btn));
+at(10000,()=>{scene(2);on(gen)});at(11600,()=>{on(gen,false);on(out)});at(17100,run)}
+if(matchMedia("(prefers-reduced-motion: reduce)").matches){scene(2);on(out)}else setTimeout(run,document.getElementById("splash")?2400:200)})();
+let pf=[],et;
+const b64f=f=>new Promise((ok,ko)=>{const r=new FileReader();r.onload=()=>ok({nom:f.name,type:f.type,donnees:String(r.result).split(",")[1]});r.onerror=ko;r.readAsDataURL(f)});
+function aerr(t){const e=$("aerr");e.textContent=t;e.hidden=!t;clearTimeout(et);if(t)et=setTimeout(()=>e.hidden=true,5000)}
+function renderAtts(){const b=$("atts");b.hidden=!pf.length;b.innerHTML="";pf.forEach((f,i)=>{const c=document.createElement("span");c.className="att";if(f.type.startsWith("image/")){const im=new Image();im.src=URL.createObjectURL(f);im.alt="";urls.push(im.src);c.appendChild(im)}c.appendChild(document.createTextNode(f.name));const x=document.createElement("button");x.type="button";x.textContent="×";x.setAttribute("aria-label","Retirer "+f.name);x.onclick=()=>{pf.splice(i,1);renderAtts()};c.appendChild(x);b.appendChild(c)})}
+$("plus").onclick=()=>$("file").click();
+$("file").onchange=e=>{const er=[];[...e.target.files].forEach(f=>{if(!(f.type==="application/pdf"||f.type.startsWith("image/")))er.push(f.name+" : format non pris en charge (PDF ou image)");else if(f.size>10485760)er.push(f.name+" : plus de 10 Mo");else if(pf.length>=5)er.push("5 fichiers maximum");else pf.push(f)});e.target.value="";renderAtts();aerr(er.join(" · "))};
+document.querySelectorAll("[data-gl]").forEach(e=>e.innerHTML=GL);
+const io="IntersectionObserver"in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12}):null;
+document.querySelectorAll(".steps li,.feat li,#v-home .cta").forEach((e,i)=>{if(!io)return;e.classList.add("rv");e.style.transitionDelay=(i%4)*70+"ms";io.observe(e)});
+init().finally(()=>window.__hideSplash&&window.__hideSplash());
+</script>
+</body>
+</html>

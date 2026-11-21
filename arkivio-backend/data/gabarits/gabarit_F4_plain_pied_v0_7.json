@@ -1,0 +1,2071 @@
+{
+  "meta": {
+    "id": "F4_PLAIN_PIED",
+    "version": "0.7",
+    "libelle": "F4 - 3 chambres-salon, plain-pied",
+    "appellation_locale": "3 chambres-salon",
+    "explication_type": "Le chiffre après le F compte les pièces de vie principales (salon + chambres). La cuisine, la douche et les WC ne comptent pas. Un F4 comprend donc un salon et trois chambres.",
+    "pays": "BJ",
+    "monnaie": "FCFA",
+    "convention": "Valeurs marquées a_confirmer = hypothèses à valider avec des plans béninois réels",
+    "changelog": [
+      "v0.2 : ajout du cartouche et des pages de garde (conventions du dossier Parakou)",
+      "v0.2 : nouvelles planches (plan d'ensemble, plan aménagé, façades, climatisation conditionnelle), planches rangées en sections",
+      "v0.2 : légendes plomberie / électricité / climatisation et règles d'équipement",
+      "v0.2 : programme local ajouté (gardien, terrasses, paillote et garage complets) ; option niveaux (R+1 prévu, non disponible)",
+      "v0.2 : valeurs techniques confirmées sur 1 source (bâtiment public) séparées des hypothèses ; fondations, dallage, escalier, ouvertures ajoutés",
+      "v0.2 : corrections (garage incomplet, pente 4 pentes harmonisée à 10 %, id placards, retraits à renseigner, contrôle étage futur sur toit-terrasse)",
+      "v0.2 : bloc layout déclaré a_definir, en attente de plans de maisons individuelles cotés",
+      "v0.3 : option sanitaires attachés aux chambres (3 plans sur 5 maisons) ; règle d'organisation rendue conditionnelle",
+      "v0.3 : murs par type (extérieur 15, cloison 12) ; doublon terrasses fusionné dans l'option véranda ; option boutiques ; exemple de retraits observés",
+      "v0.3 : bloc exports (pdf, svg, ifc) ; layout de la variante A du F3 défini",
+      "v0.3 : F4 économique abaissé de 65 à 58 m² utiles (repère 6 x 11 m)",
+      "v0.4 : layout de la variante A défini (bande jour au sud, couloir central, trois chambres au fond) ; emprise standard 9,3 x 10,4 m",
+      "v0.4 : alertes_connues ajoutées au layout (écarts par standing relevés par le validateur)",
+      "v0.5 : F4-A économique défini séparément (surcharge de standing) : emprise 9,2 x 7,8 m",
+      "v0.5 : variante D (allongé) définie, emprise standard 7,35 x 12,3 m",
+      "v0.6 : F4-A couloir raccourci (0,20 à 0,80), placards aux extrémités ; F4-D couloir arrêté à y=0,78 et dressing en bout ; D économique déclaré indisponible ; cible couloir éco 3 -> 5 m²",
+      "v0.7 : mise en page automatique des plans (format A5 à A0, portrait ou paysage, échelle 1/50 à 1/1000 selon l'emprise) ; cartouche Arkivio refait ; hiérarchie des tailles de texte (titre > libellés > cotes) ; libellés sans chevauchement"
+    ],
+    "perimetre": "maison individuelle (immeuble locatif exclu)",
+    "sources_analyse": [
+      "dossier Parakou (bâtiment public) : conventions, structure, légendes",
+      "plan aménagé d'une maison (texte extrait uniquement) : programme local",
+      "plans Plan_001, Jodfern_002, Exercice_01_DAO, plan aménagé : agencement, murs, retraits"
+    ],
+    "note_couloir": "Eco : trois portes de chambres imposent au moins 5,3 m de couloir, cible portée de 3 à 5 m²."
+  },
+  "champs_obligatoires": [
+    {
+      "id": "terrain_largeur_m",
+      "libelle": "Largeur du terrain (m)",
+      "aide": "Mesurez le côté du terrain qui donne sur la rue."
+    },
+    {
+      "id": "terrain_longueur_m",
+      "libelle": "Longueur du terrain (m)",
+      "aide": "Mesurez la profondeur du terrain, de la rue vers le fond."
+    },
+    {
+      "id": "standing",
+      "libelle": "Niveau de finition",
+      "aide": "Il détermine la taille des pièces. Choisissez « Standard » si vous hésitez."
+    }
+  ],
+  "standing": {
+    "defaut": "standard",
+    "choix": [
+      {
+        "id": "economique",
+        "libelle": "Économique",
+        "aide": "Pièces de taille réduite, adaptées à un budget serré."
+      },
+      {
+        "id": "standard",
+        "libelle": "Standard",
+        "aide": "Dimensions courantes pour une famille."
+      },
+      {
+        "id": "confort",
+        "libelle": "Confort",
+        "aide": "Pièces plus spacieuses.",
+        "a_confirmer": true
+      }
+    ]
+  },
+  "pieces": [
+    {
+      "id": "salon",
+      "libelle": "Salon-séjour",
+      "surface_m2": {
+        "economique": 16,
+        "standard": 22,
+        "confort": 28
+      },
+      "largeur_min_m": 3.5
+    },
+    {
+      "id": "chambre_parentale",
+      "libelle": "Chambre parentale",
+      "surface_m2": {
+        "economique": 11,
+        "standard": 15,
+        "confort": 18
+      },
+      "largeur_min_m": 3.0
+    },
+    {
+      "id": "chambre_2",
+      "libelle": "Chambre 2",
+      "surface_m2": {
+        "economique": 9,
+        "standard": 12,
+        "confort": 14
+      },
+      "largeur_min_m": 3.0
+    },
+    {
+      "id": "chambre_3",
+      "libelle": "Chambre 3",
+      "surface_m2": {
+        "economique": 9,
+        "standard": 12,
+        "confort": 14
+      },
+      "largeur_min_m": 3.0
+    },
+    {
+      "id": "cuisine",
+      "libelle": "Cuisine",
+      "surface_m2": {
+        "economique": 6,
+        "standard": 10,
+        "confort": 12
+      }
+    },
+    {
+      "id": "sanitaires",
+      "libelle": "Douche et WC",
+      "surface_m2": {
+        "economique": 4,
+        "standard": 5,
+        "confort": 6
+      }
+    },
+    {
+      "id": "couloir",
+      "libelle": "Couloir",
+      "surface_m2": {
+        "economique": 5,
+        "standard": 6,
+        "confort": 8
+      }
+    },
+    {
+      "id": "rangement",
+      "libelle": "Placard",
+      "surface_m2": {
+        "economique": 2.0,
+        "standard": 2.1,
+        "confort": 2.4
+      }
+    },
+    {
+      "id": "rangement_2",
+      "libelle": "Placard",
+      "surface_m2": {
+        "economique": 2.0,
+        "standard": 2.1,
+        "confort": 2.4
+      }
+    },
+    {
+      "id": "dressing",
+      "libelle": "Dressing",
+      "surface_m2": {
+        "economique": 0,
+        "standard": 3.5,
+        "confort": 4.3
+      }
+    }
+  ],
+  "options": [
+    {
+      "id": "sanitaires_config",
+      "libelle": "Douche et WC",
+      "aide": "Choisissez si la douche et les WC sont dans la même pièce ou dans deux pièces séparées.",
+      "defaut": "groupes",
+      "choix": [
+        {
+          "id": "groupes",
+          "libelle": "Dans la même pièce",
+          "aide": "Solution la plus courante et la plus économique : une seule pièce d'eau, une seule évacuation."
+        },
+        {
+          "id": "separes",
+          "libelle": "Séparés",
+          "aide": "Deux pièces distinctes : une personne peut se doucher pendant qu'une autre utilise les toilettes. Un peu plus d'espace et de plomberie.",
+          "effets": {
+            "pieces": [
+              {
+                "id": "sanitaires",
+                "remplacer_par": [
+                  {
+                    "id": "douche",
+                    "libelle": "Douche",
+                    "surface_m2": {
+                      "economique": 3.5,
+                      "standard": 4.5,
+                      "confort": 5
+                    }
+                  },
+                  {
+                    "id": "wc",
+                    "libelle": "WC",
+                    "surface_m2": {
+                      "economique": 2.5,
+                      "standard": 3,
+                      "confort": 3.5
+                    }
+                  }
+                ]
+              }
+            ],
+            "plomberie": "un regard supplémentaire possible",
+            "a_confirmer": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "sanitaires_chambres",
+      "libelle": "Sanitaires attachés aux chambres",
+      "aide": "Fréquent dans les plans analysés : une toilette ou douche dans chaque chambre.",
+      "defaut": "aucun",
+      "choix": [
+        {
+          "id": "aucun",
+          "libelle": "Non",
+          "aide": "Les sanitaires restent communs."
+        },
+        {
+          "id": "parentale",
+          "libelle": "Dans la chambre parentale",
+          "aide": "Toilette ou douche attachée.",
+          "effets": {
+            "ajoute_piece": {
+              "id": "sanitaire_attache",
+              "libelle": "Toilette attachée",
+              "surface_m2": {
+                "economique": 3,
+                "standard": 4,
+                "confort": 5
+              },
+              "quantite": 1
+            },
+            "a_confirmer": true
+          }
+        },
+        {
+          "id": "chaque_chambre",
+          "libelle": "Dans chaque chambre",
+          "aide": "Toilette ou douche attachée.",
+          "effets": {
+            "ajoute_piece": {
+              "id": "sanitaire_attache",
+              "libelle": "Toilette attachée",
+              "surface_m2": {
+                "economique": 3,
+                "standard": 4,
+                "confort": 5
+              },
+              "quantite": "nb_chambres"
+            },
+            "a_confirmer": true
+          }
+        }
+      ],
+      "source": "Plan_001, plan aménagé, villa 10 x 15 m"
+    },
+    {
+      "id": "douche_parentale",
+      "libelle": "Douche dans la chambre parentale",
+      "aide": "Une petite salle d'eau accessible directement depuis la chambre des parents, en plus de la douche commune. C'est la disposition habituelle pour un F4.",
+      "defaut": "oui",
+      "choix": [
+        {
+          "id": "oui",
+          "libelle": "Oui, attachée à la chambre parentale",
+          "aide": "Les parents ont leur douche (avec ou sans WC) sans traverser la maison.",
+          "effets": {
+            "ajoute_piece": {
+              "id": "douche_parentale",
+              "libelle": "Douche parentale",
+              "surface_m2": {
+                "economique": 3,
+                "standard": 4,
+                "confort": 5
+              }
+            },
+            "plomberie": "un point d'eau et une évacuation supplémentaires",
+            "a_confirmer": true
+          }
+        },
+        {
+          "id": "non",
+          "libelle": "Non, douche commune seulement",
+          "aide": "Toute la famille utilise la douche et les WC communs : un peu moins de surface et de plomberie."
+        }
+      ]
+    },
+    {
+      "id": "cuisine_config",
+      "libelle": "Cuisine",
+      "aide": "Choisissez si la cuisine est une pièce fermée ou ouverte sur le salon.",
+      "defaut": "fermee",
+      "choix": [
+        {
+          "id": "fermee",
+          "libelle": "Fermée",
+          "aide": "Pièce séparée du salon par un mur : les odeurs et la chaleur restent dans la cuisine."
+        },
+        {
+          "id": "ouverte",
+          "libelle": "Ouverte sur le salon",
+          "aide": "Pas de mur entre cuisine et salon, souvent avec un comptoir : l'espace paraît plus grand, mais les odeurs circulent.",
+          "effets": {
+            "supprime_cloison": [
+              "cuisine",
+              "salon"
+            ],
+            "surface_totale": "à peu près inchangée"
+          }
+        }
+      ]
+    },
+    {
+      "id": "veranda",
+      "libelle": "Terrasse couverte (véranda)",
+      "aide": "Une véranda est un espace couvert et ouvert devant la maison, où l'on peut s'asseoir à l'ombre.",
+      "defaut": "sans",
+      "choix": [
+        {
+          "id": "sans",
+          "libelle": "Sans véranda",
+          "aide": "L'entrée donne directement sur le salon."
+        },
+        {
+          "id": "avec",
+          "libelle": "Avec véranda couverte en façade",
+          "aide": "Ajoute un espace d'accueil à l'ombre devant l'entrée.",
+          "effets": {
+            "ajoute_piece": {
+              "id": "veranda",
+              "libelle": "Véranda",
+              "surface_m2": {
+                "economique": 8,
+                "standard": 12,
+                "confort": 16
+              }
+            },
+            "a_confirmer": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "wc_visiteurs",
+      "libelle": "WC visiteurs",
+      "aide": "Des toilettes séparées pour les invités, accessibles sans traverser les chambres.",
+      "defaut": "non",
+      "choix": [
+        {
+          "id": "non",
+          "libelle": "Non",
+          "aide": "Les visiteurs utilisent la douche et les WC de la maison."
+        },
+        {
+          "id": "oui",
+          "libelle": "Oui",
+          "aide": "Ajoute de petits WC près du salon.",
+          "effets": {
+            "ajoute_piece": {
+              "id": "wc_visiteurs",
+              "libelle": "WC visiteurs",
+              "surface_m2": {
+                "economique": 2,
+                "standard": 2,
+                "confort": 2.5
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "cellier",
+      "libelle": "Cellier (réserve)",
+      "aide": "Une petite pièce pour ranger les provisions et le matériel d'entretien.",
+      "defaut": "non",
+      "a_confirmer": true,
+      "choix": [
+        {
+          "id": "non",
+          "libelle": "Non",
+          "aide": "Pas de pièce de rangement dédiée."
+        },
+        {
+          "id": "oui",
+          "libelle": "Oui",
+          "aide": "Ajoute une réserve, de préférence à côté de la cuisine.",
+          "effets": {
+            "ajoute_piece": {
+              "id": "cellier",
+              "libelle": "Cellier",
+              "surface_m2": {
+                "economique": 3,
+                "standard": 4,
+                "confort": 6
+              }
+            },
+            "a_confirmer": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "abri_vehicule",
+      "libelle": "Abri pour véhicule",
+      "aide": "Un espace couvert pour garer une voiture ou une moto.",
+      "defaut": "aucun",
+      "choix": [
+        {
+          "id": "aucun",
+          "libelle": "Aucun",
+          "aide": "Le véhicule reste dans la cour."
+        },
+        {
+          "id": "paillote",
+          "libelle": "Paillote",
+          "aide": "Abri léger couvert, ouvert sur les côtés.",
+          "effets": {
+            "ajoute_piece": {
+              "id": "paillote",
+              "libelle": "Paillote",
+              "surface_m2": {
+                "economique": 12,
+                "standard": 15,
+                "confort": 18
+              },
+              "ouverte_sur_cotes": true
+            },
+            "a_confirmer": true
+          }
+        },
+        {
+          "id": "garage",
+          "libelle": "Garage",
+          "aide": "Abri fermé, accolé à la maison ou séparé.",
+          "effets": {
+            "ajoute_piece": {
+              "id": "garage",
+              "libelle": "Garage",
+              "surface_m2": {
+                "economique": 15,
+                "standard": 18,
+                "confort": 22
+              }
+            },
+            "a_confirmer": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "toiture_forme",
+      "libelle": "Forme du toit",
+      "aide": "La forme du toit détermine l'écoulement de la pluie, l'aspect de la maison et le coût de la charpente.",
+      "defaut": "deux_pentes",
+      "a_confirmer": true,
+      "choix": [
+        {
+          "id": "monopente",
+          "libelle": "Toit à 1 pente",
+          "aide": "Un seul versant incliné, d'un côté vers l'autre : simple et économique, d'allure moderne.",
+          "pente": {
+            "defaut": "moyenne",
+            "choix": [
+              {
+                "id": "faible",
+                "libelle": "Pente faible",
+                "pente_pct": 10,
+                "aide": "Toit presque plat : économique, mais l'eau s'écoule plus lentement."
+              },
+              {
+                "id": "moyenne",
+                "libelle": "Pente moyenne",
+                "pente_pct": 20,
+                "aide": "Bon compromis entre écoulement de la pluie et coût."
+              },
+              {
+                "id": "forte",
+                "libelle": "Pente forte",
+                "pente_pct": 30,
+                "aide": "Évacue vite la pluie, mais demande plus de charpente et de couverture."
+              }
+            ],
+            "a_confirmer": true
+          }
+        },
+        {
+          "id": "deux_pentes",
+          "libelle": "Toit à 2 pentes",
+          "aide": "Deux versants qui se rejoignent au sommet (le faîtage), comme un « V » inversé : la forme la plus courante.",
+          "pente": {
+            "defaut": "moyenne",
+            "choix": [
+              {
+                "id": "faible",
+                "libelle": "Pente faible",
+                "pente_pct": 10,
+                "aide": "Toit peu incliné : économique, écoulement plus lent."
+              },
+              {
+                "id": "moyenne",
+                "libelle": "Pente moyenne",
+                "pente_pct": 20,
+                "aide": "Bon compromis entre écoulement de la pluie et coût."
+              },
+              {
+                "id": "forte",
+                "libelle": "Pente forte",
+                "pente_pct": 30,
+                "aide": "Évacue vite la pluie, volume sous toiture plus important."
+              }
+            ],
+            "a_confirmer": true
+          }
+        },
+        {
+          "id": "quatre_pentes",
+          "libelle": "Toit à 4 pentes",
+          "aide": "Le toit descend sur les quatre côtés : meilleure protection des murs contre le soleil et la pluie, un peu plus coûteux.",
+          "pente": {
+            "defaut": "moyenne",
+            "choix": [
+              {
+                "id": "faible",
+                "libelle": "Pente faible",
+                "pente_pct": 10,
+                "aide": "Toit peu incliné."
+              },
+              {
+                "id": "moyenne",
+                "libelle": "Pente moyenne",
+                "pente_pct": 20,
+                "aide": "Bon compromis."
+              },
+              {
+                "id": "forte",
+                "libelle": "Pente forte",
+                "pente_pct": 30,
+                "aide": "Évacue vite la pluie, charpente plus importante."
+              }
+            ],
+            "a_confirmer": true
+          }
+        },
+        {
+          "id": "terrasse",
+          "libelle": "Toit-terrasse (dalle plate)",
+          "aide": "Dalle en béton presque plate avec attique et débord, très présente dans les plans publics analysés. Une très légère inclinaison guide l'eau vers les évacuations.",
+          "pente": {
+            "defaut": "legere",
+            "choix": [
+              {
+                "id": "legere",
+                "libelle": "Légère inclinaison",
+                "pente_pct": 1.5,
+                "aide": "Suffit pour évacuer l'eau de pluie vers les descentes."
+              }
+            ],
+            "a_confirmer": true
+          },
+          "effets": {
+            "attique_cm": 40,
+            "debord": "coté depuis le nu du mur",
+            "a_confirmer": true
+          },
+          "note": "À confirmer sur des maisons individuelles avant d'en faire un choix par défaut."
+        }
+      ],
+      "note": "Pente faible des 4 pentes harmonisée à 10 % (v0.2) ; à confirmer."
+    },
+    {
+      "id": "toiture_couverture",
+      "libelle": "Couverture du toit",
+      "aide": "Le matériau posé sur la charpente pour protéger de la pluie et du soleil.",
+      "visible_si": {
+        "toiture_forme": [
+          "monopente",
+          "deux_pentes",
+          "quatre_pentes"
+        ]
+      },
+      "defaut": "tole",
+      "a_confirmer": true,
+      "choix": [
+        {
+          "id": "tole",
+          "libelle": "Tôles",
+          "aide": "Légères et rapides à poser : solution courante et économique."
+        },
+        {
+          "id": "tuile",
+          "libelle": "Tuiles",
+          "aide": "Plus esthétiques et plus fraîches, mais plus lourdes et plus coûteuses."
+        }
+      ]
+    },
+    {
+      "id": "placards",
+      "libelle": "Placards intégrés",
+      "aide": "Rangements construits dans les murs des chambres.",
+      "defaut": "non",
+      "choix": [
+        {
+          "id": "non",
+          "libelle": "Non",
+          "aide": "Les chambres sont livrées sans rangement intégré."
+        },
+        {
+          "id": "oui",
+          "libelle": "Oui",
+          "aide": "Un placard est prévu dans chaque chambre."
+        }
+      ]
+    },
+    {
+      "id": "ventilation_clim",
+      "libelle": "Ventilation et climatisation",
+      "aide": "Prévoir seulement les ventilateurs (brasseurs d'air), ou aussi des emplacements de climatiseurs.",
+      "defaut": "brasseurs",
+      "choix": [
+        {
+          "id": "brasseurs",
+          "libelle": "Brasseurs d'air",
+          "aide": "Ventilateurs de plafond : solution courante et économique."
+        },
+        {
+          "id": "clim",
+          "libelle": "Brasseurs et climatiseurs",
+          "aide": "Prévoit en plus un climatiseur mural dans le salon et les chambres.",
+          "effets": {
+            "electricite": "ajoute emplacements de splits et une ligne dédiée"
+          }
+        }
+      ]
+    },
+    {
+      "id": "gardien",
+      "libelle": "Local gardien",
+      "aide": "Petite pièce séparée pour un gardien, souvent près de l'entrée de la parcelle.",
+      "defaut": "non",
+      "choix": [
+        {
+          "id": "non",
+          "libelle": "Non",
+          "aide": "Pas de local gardien."
+        },
+        {
+          "id": "oui",
+          "libelle": "Oui",
+          "aide": "Ajoute un local gardien avec point d'eau.",
+          "effets": {
+            "ajoute_piece": {
+              "id": "local_gardien",
+              "libelle": "Local gardien",
+              "surface_m2": {
+                "economique": 6,
+                "standard": 9,
+                "confort": 12
+              }
+            },
+            "a_confirmer": true
+          }
+        }
+      ],
+      "source": "plan aménagé fourni"
+    },
+    {
+      "id": "niveaux",
+      "libelle": "Nombre de niveaux",
+      "aide": "Le plan est une maison de plain-pied. Un étage (R+1) avec escalier est prévu pour plus tard.",
+      "defaut": "plain_pied",
+      "choix": [
+        {
+          "id": "plain_pied",
+          "libelle": "Plain-pied",
+          "aide": "Un seul niveau."
+        },
+        {
+          "id": "r_plus_1",
+          "libelle": "Avec un étage (R+1)",
+          "disponible": false,
+          "aide": "Pas encore disponible : demande un agencement sur deux niveaux et un dimensionnement par un professionnel.",
+          "effets": {
+            "ajoute_cage_escalier": true,
+            "structure": "dimensionnement obligatoire par un professionnel"
+          }
+        }
+      ],
+      "a_confirmer": true
+    },
+    {
+      "id": "boutiques",
+      "libelle": "Boutiques en façade",
+      "aide": "Locaux commerciaux à louer, côté rue (Plan_001).",
+      "defaut": "aucune",
+      "choix": [
+        {
+          "id": "aucune",
+          "libelle": "Aucune"
+        },
+        {
+          "id": "une",
+          "libelle": "Une boutique",
+          "effets": {
+            "ajoute_piece": {
+              "id": "boutique",
+              "libelle": "Boutique",
+              "quantite": 1,
+              "surface_m2": {
+                "economique": 12,
+                "standard": 14,
+                "confort": 16
+              }
+            },
+            "a_confirmer": true
+          }
+        },
+        {
+          "id": "deux",
+          "libelle": "Deux boutiques",
+          "effets": {
+            "ajoute_piece": {
+              "id": "boutique",
+              "libelle": "Boutique",
+              "quantite": 2,
+              "surface_m2": {
+                "economique": 12,
+                "standard": 14,
+                "confort": 16
+              }
+            },
+            "a_confirmer": true
+          }
+        }
+      ]
+    }
+  ],
+  "regles_organisation": [
+    "L'entrée donne sur le salon.",
+    "La cuisine est contiguë au salon.",
+    "Les trois chambres sont regroupées côté nuit, desservies par un couloir.",
+    "Douche et WC sont groupés près de la cuisine pour raccourcir la plomberie (hors sanitaires attachés).",
+    "La chambre parentale est la plus grande et, si choisie, reçoit la douche attachée.",
+    "Façade côté rue plus fermée, ouvertures côté cour.",
+    "Les chambres ne donnent pas directement sur les pièces d'eau communes, sauf si des sanitaires attachés sont choisis.",
+    "Un couloir d'environ 1,10 à 1,20 m sépare la zone jour de la zone nuit.",
+    "Sur parcelle étroite : maison au fond, cour devant, annexes (garage, gardien, boutiques) côté rue."
+  ],
+  "variantes": [
+    {
+      "id": "A",
+      "libelle": "Compact",
+      "description": "Rectangle avec couloir central.",
+      "emprise_indicative_m": [
+        9.3,
+        10.4
+      ],
+      "a_confirmer": true
+    },
+    {
+      "id": "B",
+      "libelle": "Avec véranda",
+      "description": "Véranda couverte en façade avant.",
+      "impose_option": {
+        "veranda": "avec"
+      }
+    },
+    {
+      "id": "C",
+      "libelle": "En L",
+      "description": "Pour les terrains larges, cour dans l'angle.",
+      "a_confirmer": true
+    },
+    {
+      "id": "D",
+      "libelle": "Allongé",
+      "description": "Pour les parcelles étroites : pièces alignées le long d'un couloir.",
+      "emprise_indicative_m": [
+        7.35,
+        12.3
+      ],
+      "a_confirmer": true
+    }
+  ],
+  "controles_coherence": [
+    {
+      "id": "tient_dans_terrain",
+      "regle": "emprise + marges de recul <= dimensions du terrain",
+      "marges_reglables": true,
+      "marges_defaut_m": {
+        "avant": null,
+        "lateral": null,
+        "fond": null
+      },
+      "a_renseigner": "retraits selon la commune ou le lotissement ; aucune valeur inventée",
+      "exemple_observe_m": {
+        "lateral": 1.5,
+        "fond": 2.0,
+        "source": "Plan_001",
+        "a_confirmer": true
+      }
+    },
+    {
+      "id": "budget_vs_surface",
+      "regle": "avertir si le budget semble incompatible avec la surface demandée",
+      "a_confirmer": true
+    },
+    {
+      "id": "surface_vs_emprise",
+      "regle": "emprise >= surface des pièces x 1,15 (murs et circulations)",
+      "repere": "F3 standard : 65 m² pour 76 m² d'emprise ; F4 standard : 82 m² pour 94,5 m²",
+      "a_confirmer": true
+    },
+    {
+      "id": "terrasse_etage_futur",
+      "regle": "avertir si toit-terrasse choisi pour un étage futur : poteaux 15 x 15 et dalle par défaut non prévus pour cela",
+      "action": "dimensionnement par un professionnel"
+    }
+  ],
+  "valeurs_techniques_par_defaut": {
+    "epaisseur_murs_cm": 15,
+    "poteaux_cm": [
+      15,
+      15
+    ],
+    "dalle_cm": 20,
+    "semelle_filante_cm": [
+      50,
+      20
+    ],
+    "enrobage_cm": {
+      "elevation": 3,
+      "fondation": 5
+    },
+    "hauteur_sous_plafond_m": 2.8,
+    "portes_largeur_cm": {
+      "entree": 90,
+      "chambre": 80,
+      "sanitaire": 70
+    },
+    "acier_defaut": "HA400",
+    "a_confirmer": [
+      "portes_largeur_cm",
+      "dalle_cm"
+    ],
+    "evacuation_eaux": "fosse septique pour les eaux vannes, puisard pour les eaux usées",
+    "confirme_1_source": {
+      "source": "dossier Parakou (bâtiment public, pas une maison) : à recouper sur des maisons",
+      "valeurs": [
+        "epaisseur_murs_cm",
+        "poteaux_cm",
+        "semelle_filante_cm",
+        "enrobage_cm",
+        "hauteur_sous_plafond_m",
+        "acier_defaut"
+      ]
+    },
+    "notes": [
+      "La coupe du bloc toilettes Parakou indique 10 cm de dalle sous un attique de 40 cm : épaisseur de dalle à vérifier."
+    ],
+    "dallage": {
+      "epaisseur_cm": 10,
+      "treillis": "HA8 maille 20 x 20 cm",
+      "source": "Parakou",
+      "a_confirmer": true
+    },
+    "soubassement": {
+      "niveau_m": -0.6,
+      "niveau_fini_ref_m": 0.0,
+      "source": "plan de coffrage fourni",
+      "a_confirmer": true
+    },
+    "fondation": {
+      "niveau_base_m": -1.15,
+      "semelle_isolee_exemple_cm": [
+        80,
+        80,
+        20
+      ],
+      "profondeur": "dépend de la zone géotechnique de la ville (valeur Parakou donnée à titre de repère)",
+      "a_confirmer": true
+    },
+    "elements_reference_metre": {
+      "poteau_cm": {
+        "P1": [
+          15,
+          15
+        ],
+        "P": [
+          20,
+          20
+        ]
+      },
+      "poutre_cm": {
+        "PP": [
+          15,
+          30
+        ],
+        "poutre_ba": [
+          15,
+          40
+        ]
+      },
+      "usage": "référence pour le métré uniquement ; dimensionnement par un ingénieur",
+      "source": "Parakou",
+      "a_confirmer": true
+    },
+    "escalier": {
+      "hauteur_marche_cm": [
+        15,
+        17.2
+      ],
+      "giron_cm": [
+        30.6,
+        32
+      ],
+      "source": "plan aménagé et plan de laboratoire",
+      "a_confirmer": true
+    },
+    "fenetres_largeur_cm_courantes": {
+      "valeurs": [
+        80,
+        110,
+        140,
+        160
+      ],
+      "source": "lecture approximative d'un plan",
+      "a_confirmer": true
+    },
+    "attique_cm": {
+      "valeur": 40,
+      "usage": "toit-terrasse",
+      "source": "Parakou",
+      "a_confirmer": true
+    },
+    "murs": {
+      "exterieur_cm": 15,
+      "cloison_cm": 12,
+      "observe": "12 cm (2 plans), 15 cm (3 plans), 20 cm (R+2 hors périmètre)",
+      "a_confirmer": true
+    }
+  },
+  "planches": [
+    {
+      "type": "plan_ensemble",
+      "cartouche": "PLAN D'ENSEMBLE",
+      "echelle": "1/100",
+      "generee": true,
+      "section": "plans_architecture",
+      "a_confirmer": true,
+      "contenu": [
+        "implantation sur le terrain",
+        "clôture, accès, cour",
+        "fosse septique et puisards"
+      ]
+    },
+    {
+      "type": "vue_en_plan",
+      "cartouche": "PLAN RDC COTÉ",
+      "echelle": "1/100",
+      "generee": true,
+      "section": "plans_architecture",
+      "contenu": [
+        "chaînes de cotes (total, axes, ouvertures)",
+        "surface de chaque pièce affichée en rouge",
+        "axes, niveaux ±0,000 et TN"
+      ]
+    },
+    {
+      "type": "plan_amene",
+      "cartouche": "PLAN RDC AMÉNAGÉ",
+      "echelle": "1/100",
+      "generee": true,
+      "section": "plans_architecture",
+      "contenu": [
+        "mobilier et appareils sanitaires dessinés"
+      ]
+    },
+    {
+      "type": "facades",
+      "cartouche": "FAÇADES",
+      "echelle": "1/100",
+      "generee": true,
+      "section": "plans_architecture",
+      "a_confirmer": true,
+      "contenu": [
+        "façade principale",
+        "façades latérales",
+        "façade arrière"
+      ]
+    },
+    {
+      "type": "coupe",
+      "cartouche": "COUPE A-A",
+      "echelle": "1/50",
+      "generee": true,
+      "section": "plans_architecture"
+    },
+    {
+      "type": "toiture",
+      "cartouche": "PLAN DE TOITURE",
+      "echelle": "1/100",
+      "generee": true,
+      "contenu": [
+        "pente en % avec flèche de sens d'écoulement",
+        "faîtage",
+        "égout",
+        "débord de toit coté depuis le nu du mur"
+      ],
+      "section": "plans_architecture"
+    },
+    {
+      "type": "electricite",
+      "cartouche": "PLAN ÉLECTRIQUE",
+      "echelle": "1/100",
+      "generee": true,
+      "section": "plans_architecture"
+    },
+    {
+      "type": "climatisation",
+      "cartouche": "PLAN DE CLIMATISATION ET PRISES",
+      "echelle": "1/100",
+      "generee": true,
+      "section": "plans_architecture",
+      "visible_si": {
+        "ventilation_clim": [
+          "clim"
+        ]
+      }
+    },
+    {
+      "type": "plomberie",
+      "cartouche": "PLAN DE PLOMBERIE",
+      "echelle": "1/100",
+      "generee": true,
+      "section": "plans_architecture"
+    },
+    {
+      "type": "fondation",
+      "cartouche": "PLAN DE FONDATION",
+      "echelle": "1/100",
+      "generee": true,
+      "section": "plans_execution"
+    },
+    {
+      "type": "coffrage",
+      "cartouche": "PLAN DE COFFRAGE",
+      "echelle": "1/100",
+      "generee": true,
+      "section": "plans_execution"
+    },
+    {
+      "type": "poutraison",
+      "cartouche": "PLAN DE POUTRAISON",
+      "echelle": "1/100",
+      "generee": true,
+      "section": "plans_execution"
+    },
+    {
+      "type": "ferraillage",
+      "generee": false,
+      "raison": "Relève d'un calcul par un professionnel : dans les dossiers réels, les fiches par élément (acier, coffrage, densité) sortent d'un logiciel de calcul. Le métré utilise ses propres ratios, sans émettre de fiche d'exécution.",
+      "section": "plans_execution"
+    }
+  ],
+  "codification_plans": {
+    "portes": "P1, P2...",
+    "baies": "F1, F2...",
+    "pieces": "nom + surface (ex. Chambre 1 — 12,5 m²)",
+    "axes": "lettres (A, B, C) et chiffres (1, 2, 3)",
+    "mentions": [
+      "TN",
+      "HSP"
+    ],
+    "cotation": {
+      "chaines": [
+        "total",
+        "axes_ou_travees",
+        "ouvertures"
+      ],
+      "a_confirmer": true
+    },
+    "legendes": {
+      "plomberie": [
+        {
+          "id": "EU",
+          "libelle": "Tuyau d'évacuation des eaux usées",
+          "diametre_mm": 110,
+          "couleur": "bleu"
+        },
+        {
+          "id": "EV",
+          "libelle": "Tuyau d'évacuation des eaux vannes",
+          "diametre_mm": 110,
+          "couleur": "rouge"
+        },
+        {
+          "id": "EP",
+          "libelle": "Tuyau d'évacuation des eaux pluviales",
+          "diametre_mm": 125,
+          "couleur": "jaune"
+        },
+        {
+          "id": "R",
+          "libelle": "Regard"
+        },
+        {
+          "id": "P",
+          "libelle": "Puisard"
+        },
+        {
+          "id": "FS",
+          "libelle": "Fosse septique"
+        },
+        {
+          "id": "siphon_sol",
+          "libelle": "Siphon de sol"
+        }
+      ],
+      "electricite": [
+        {
+          "id": "reglette_1_20",
+          "libelle": "Lampe réglette fluorescente de 1,20 m"
+        },
+        {
+          "id": "reglette_etanche_0_60",
+          "libelle": "Lampe réglette fluorescente étanche de 0,60 m"
+        },
+        {
+          "id": "inter_simple",
+          "libelle": "Interrupteur simple allumage"
+        },
+        {
+          "id": "inter_double",
+          "libelle": "Interrupteur double allumage"
+        },
+        {
+          "id": "prise_courant",
+          "libelle": "Prise de courant"
+        },
+        {
+          "id": "prise_tel",
+          "libelle": "Prise téléphonique"
+        },
+        {
+          "id": "applique_sanitaire",
+          "libelle": "Applique sanitaire"
+        },
+        {
+          "id": "brasseur",
+          "libelle": "Brasseur d'air"
+        },
+        {
+          "id": "tableau_divisionnaire",
+          "libelle": "Tableau divisionnaire"
+        }
+      ],
+      "climatisation": [
+        {
+          "id": "split_mural",
+          "libelle": "Climatiseur split mural",
+          "puissances_cv": [
+            1.5,
+            2
+          ]
+        },
+        {
+          "id": "condensateur",
+          "libelle": "Condensateur du split mural"
+        },
+        {
+          "id": "dismatic",
+          "libelle": "Dismatic du split mural"
+        },
+        {
+          "id": "tableau_divisionnaire",
+          "libelle": "Tableau divisionnaire"
+        }
+      ],
+      "source": "dossier Parakou"
+    }
+  },
+  "mention_legale": "Plan indicatif. La validation technique et réglementaire revient à un professionnel qualifié (architecte ou ingénieur).",
+  "pieces_note": "Surfaces utiles indicatives, douche parentale incluse (option par défaut) : environ 61 m² (économique, 58 sans douche), 86 m² (standard), 105 m² (confort, a_confirmer). Économique abaissé en v0.3 pour rester cohérent avec le repère 6 x 11 m (66 m² d'emprise).",
+  "cartouche": {
+    "champs": [
+      "maitre_oeuvre",
+      "maitre_ouvrage",
+      "projet",
+      "titre_plan",
+      "date",
+      "echelle",
+      "format"
+    ],
+    "format_defaut": "auto",
+    "valeurs": {
+      "emetteur": "Arkivio (plan indicatif)",
+      "maitre_ouvrage": "saisi par l'utilisateur",
+      "maitre_oeuvre": "à renseigner par le professionnel qui valide le plan",
+      "projet": "saisi par l'utilisateur (ex. Maison F3, Lokossa)"
+    },
+    "pages_de_garde": [
+      {
+        "section": "plans_architecture",
+        "titre": "Plans d'architecture (plan coté, aménagé, façades)"
+      },
+      {
+        "section": "plans_execution",
+        "titre": "Plans techniques d'exécution"
+      },
+      {
+        "section": "details_techniques",
+        "titre": "Détails techniques",
+        "disponible": false
+      }
+    ],
+    "a_confirmer": true,
+    "mise_en_page": {
+      "formats": [
+        "A5",
+        "A4",
+        "A3",
+        "A2",
+        "A1",
+        "A0"
+      ],
+      "orientation": "auto (portrait ou paysage selon l'emprise)",
+      "echelles_preferees": [
+        "1/50",
+        "1/100",
+        "1/200",
+        "1/500",
+        "1/1000"
+      ],
+      "format_max_par_echelle": {
+        "1/50": "A3",
+        "1/100": "A2",
+        "1/200": "A1",
+        "1/500": "A0",
+        "1/1000": "A0"
+      },
+      "regle": "on prend la plus grande échelle pour laquelle l'emprise (cotes, flèche du nord et échelle graphique compris) tient dans un format autorisé, puis le plus petit format, puis l'orientation la plus adaptée",
+      "forcer": "--format=A3 --echelle=100 --orientation=paysage",
+      "a_confirmer": true
+    },
+    "rangees": [
+      "logo | projet | marque",
+      "plan | standing - variante | date",
+      "phase | échelle | format | planche",
+      "maître d'ouvrage | maître d'œuvre"
+    ]
+  },
+  "regles_equipements": {
+    "brasseur": "1 par chambre et par pièce de vie",
+    "reglette_1_20": "pièces de vie, chambres, couloir",
+    "pieces_d_eau": "1 réglette étanche 0,60 m + 1 applique sanitaire par pièce d'eau",
+    "split_cv": {
+      "jusqu_a_m2": 15,
+      "puissance_cv": 1.5,
+      "au_dela_cv": 2
+    },
+    "reseau_evacuation": {
+      "EV": "vers la fosse septique",
+      "EU": "vers un puisard",
+      "fosse_septique": "reliée à un puisard"
+    },
+    "a_confirmer": true,
+    "source": "dossier Parakou (2 CV pour 18,5 m², 1,5 CV pour 10 à 15 m²)"
+  },
+  "layout": {
+    "statut": "variantes_A_D_definies",
+    "unite": "fractions de l'emprise (x vers l'est, y vers le nord, entrée au sud)",
+    "emprise_m": {
+      "economique": [
+        9.2,
+        7.8
+      ],
+      "standard": [
+        9.3,
+        10.4
+      ],
+      "confort": [
+        9.6,
+        11.3
+      ]
+    },
+    "a_confirmer": true,
+    "convention_t": "mur extérieur : t = fraction de la longueur du mur de la pièce, d'ouest en est ou du sud au nord ; porte/baie 'entre' : t = fraction du segment de mur commun (même lecture que le layout F3-A, à vérifier dans plan-engine.mjs)",
+    "alertes_connues": {
+      "A": {
+        "economique": [],
+        "standard": [],
+        "confort": []
+      },
+      "D": {
+        "standard": [],
+        "confort": []
+      }
+    },
+    "variantes": {
+      "A": {
+        "pieces": [
+          {
+            "id": "salon",
+            "x0": 0,
+            "x1": 0.5914,
+            "y0": 0,
+            "y1": 0.4279
+          },
+          {
+            "id": "cuisine",
+            "x0": 0.5914,
+            "x1": 1,
+            "y0": 0,
+            "y1": 0.2788
+          },
+          {
+            "id": "sanitaires",
+            "x0": 0.5914,
+            "x1": 1,
+            "y0": 0.2788,
+            "y1": 0.4279
+          },
+          {
+            "id": "couloir",
+            "x0": 0.2,
+            "x1": 0.8,
+            "y0": 0.4279,
+            "y1": 0.5385
+          },
+          {
+            "id": "chambre_parentale",
+            "x0": 0,
+            "x1": 0.3441,
+            "y0": 0.5385,
+            "y1": 1
+          },
+          {
+            "id": "chambre_2",
+            "x0": 0.3441,
+            "x1": 0.672,
+            "y0": 0.5385,
+            "y1": 1
+          },
+          {
+            "id": "chambre_3",
+            "x0": 0.672,
+            "x1": 1,
+            "y0": 0.5385,
+            "y1": 1
+          },
+          {
+            "id": "rangement",
+            "x0": 0,
+            "x1": 0.2,
+            "y0": 0.4279,
+            "y1": 0.5385
+          },
+          {
+            "id": "rangement_2",
+            "x0": 0.8,
+            "x1": 1,
+            "y0": 0.4279,
+            "y1": 0.5385
+          }
+        ],
+        "ouvertures": [
+          {
+            "kind": "porte",
+            "piece": "salon",
+            "mur": "S",
+            "t": 0.65,
+            "w": 0.9,
+            "h": 2.1,
+            "sill": 0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "salon",
+            "mur": "S",
+            "t": 0.2,
+            "w": 1.4,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "salon",
+            "mur": "W",
+            "t": 0.5,
+            "w": 1.2,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "cuisine",
+            "mur": "E",
+            "t": 0.5,
+            "w": 1.0,
+            "h": 1.0,
+            "sill": 1.1
+          },
+          {
+            "kind": "fenetre",
+            "piece": "sanitaires",
+            "mur": "E",
+            "t": 0.5,
+            "w": 0.6,
+            "h": 0.6,
+            "sill": 1.5
+          },
+          {
+            "kind": "fenetre",
+            "piece": "chambre_parentale",
+            "mur": "W",
+            "t": 0.5,
+            "w": 1.2,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "chambre_parentale",
+            "mur": "N",
+            "t": 0.5,
+            "w": 1.2,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "chambre_2",
+            "mur": "N",
+            "t": 0.5,
+            "w": 1.2,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "chambre_3",
+            "mur": "E",
+            "t": 0.5,
+            "w": 1.2,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "chambre_3",
+            "mur": "N",
+            "t": 0.5,
+            "w": 1.2,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "salon",
+              "cuisine"
+            ],
+            "t": 0.5,
+            "w": 0.9,
+            "h": 2.1
+          },
+          {
+            "kind": "baie",
+            "entre": [
+              "salon",
+              "couloir"
+            ],
+            "t": 0.5,
+            "w": 0.9,
+            "h": 2.1
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "couloir",
+              "sanitaires"
+            ],
+            "t": 0.5,
+            "w": 0.7,
+            "h": 2.1
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "couloir",
+              "chambre_parentale"
+            ],
+            "t": 0.5,
+            "w": 0.8,
+            "h": 2.1
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "couloir",
+              "chambre_2"
+            ],
+            "t": 0.5,
+            "w": 0.8,
+            "h": 2.1
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "couloir",
+              "chambre_3"
+            ],
+            "t": 0.5,
+            "w": 0.8,
+            "h": 2.1
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "couloir",
+              "rangement"
+            ],
+            "t": 0.5,
+            "w": 0.7,
+            "h": 2.1
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "couloir",
+              "rangement_2"
+            ],
+            "t": 0.5,
+            "w": 0.7,
+            "h": 2.1
+          }
+        ],
+        "surcharges_standing": {
+          "economique": {
+            "emprise_m": [
+              9.2,
+              7.8
+            ],
+            "pieces": [
+              {
+                "id": "salon",
+                "x0": 0.0,
+                "x1": 0.6304,
+                "y0": 0.0,
+                "y1": 0.4487
+              },
+              {
+                "id": "cuisine",
+                "x0": 0.6304,
+                "x1": 1.0,
+                "y0": 0.0,
+                "y1": 0.2564
+              },
+              {
+                "id": "sanitaires",
+                "x0": 0.6304,
+                "x1": 1.0,
+                "y0": 0.2564,
+                "y1": 0.4487
+              },
+              {
+                "id": "couloir",
+                "x0": 0.2,
+                "x1": 0.8,
+                "y0": 0.4487,
+                "y1": 0.5897
+              },
+              {
+                "id": "chambre_parentale",
+                "x0": 0.0,
+                "x1": 0.3478,
+                "y0": 0.5897,
+                "y1": 1.0
+              },
+              {
+                "id": "chambre_2",
+                "x0": 0.3478,
+                "x1": 0.6739,
+                "y0": 0.5897,
+                "y1": 1.0
+              },
+              {
+                "id": "chambre_3",
+                "x0": 0.6739,
+                "x1": 1.0,
+                "y0": 0.5897,
+                "y1": 1.0
+              },
+              {
+                "id": "rangement",
+                "x0": 0,
+                "x1": 0.2,
+                "y0": 0.4487,
+                "y1": 0.5897
+              },
+              {
+                "id": "rangement_2",
+                "x0": 0.8,
+                "x1": 1,
+                "y0": 0.4487,
+                "y1": 0.5897
+              }
+            ],
+            "ouvertures": [
+              {
+                "kind": "porte",
+                "piece": "salon",
+                "mur": "S",
+                "t": 0.65,
+                "w": 0.9,
+                "h": 2.1,
+                "sill": 0
+              },
+              {
+                "kind": "fenetre",
+                "piece": "salon",
+                "mur": "S",
+                "t": 0.2,
+                "w": 1.4,
+                "h": 1.2,
+                "sill": 1.0
+              },
+              {
+                "kind": "fenetre",
+                "piece": "salon",
+                "mur": "W",
+                "t": 0.5,
+                "w": 1.2,
+                "h": 1.2,
+                "sill": 1.0
+              },
+              {
+                "kind": "fenetre",
+                "piece": "cuisine",
+                "mur": "E",
+                "t": 0.5,
+                "w": 1.0,
+                "h": 1.0,
+                "sill": 1.1
+              },
+              {
+                "kind": "fenetre",
+                "piece": "sanitaires",
+                "mur": "E",
+                "t": 0.5,
+                "w": 0.6,
+                "h": 0.6,
+                "sill": 1.5
+              },
+              {
+                "kind": "fenetre",
+                "piece": "chambre_parentale",
+                "mur": "W",
+                "t": 0.5,
+                "w": 1.2,
+                "h": 1.2,
+                "sill": 1.0
+              },
+              {
+                "kind": "fenetre",
+                "piece": "chambre_parentale",
+                "mur": "N",
+                "t": 0.5,
+                "w": 1.2,
+                "h": 1.2,
+                "sill": 1.0
+              },
+              {
+                "kind": "fenetre",
+                "piece": "chambre_2",
+                "mur": "N",
+                "t": 0.5,
+                "w": 1.2,
+                "h": 1.2,
+                "sill": 1.0
+              },
+              {
+                "kind": "fenetre",
+                "piece": "chambre_3",
+                "mur": "E",
+                "t": 0.5,
+                "w": 1.2,
+                "h": 1.2,
+                "sill": 1.0
+              },
+              {
+                "kind": "fenetre",
+                "piece": "chambre_3",
+                "mur": "N",
+                "t": 0.5,
+                "w": 1.2,
+                "h": 1.2,
+                "sill": 1.0
+              },
+              {
+                "kind": "porte",
+                "entre": [
+                  "salon",
+                  "cuisine"
+                ],
+                "t": 0.5,
+                "w": 0.9,
+                "h": 2.1
+              },
+              {
+                "kind": "baie",
+                "entre": [
+                  "salon",
+                  "couloir"
+                ],
+                "t": 0.5,
+                "w": 0.9,
+                "h": 2.1
+              },
+              {
+                "kind": "porte",
+                "entre": [
+                  "couloir",
+                  "sanitaires"
+                ],
+                "t": 0.5,
+                "w": 0.7,
+                "h": 2.1
+              },
+              {
+                "kind": "porte",
+                "entre": [
+                  "couloir",
+                  "chambre_parentale"
+                ],
+                "t": 0.5,
+                "w": 0.8,
+                "h": 2.1
+              },
+              {
+                "kind": "porte",
+                "entre": [
+                  "couloir",
+                  "chambre_2"
+                ],
+                "t": 0.5,
+                "w": 0.8,
+                "h": 2.1
+              },
+              {
+                "kind": "porte",
+                "entre": [
+                  "couloir",
+                  "chambre_3"
+                ],
+                "t": 0.5,
+                "w": 0.8,
+                "h": 2.1
+              },
+              {
+                "kind": "porte",
+                "entre": [
+                  "couloir",
+                  "rangement"
+                ],
+                "t": 0.5,
+                "w": 0.7,
+                "h": 2.1
+              },
+              {
+                "kind": "porte",
+                "entre": [
+                  "couloir",
+                  "rangement_2"
+                ],
+                "t": 0.5,
+                "w": 0.7,
+                "h": 2.1
+              }
+            ]
+          }
+        }
+      },
+      "D": {
+        "emprise_m": {
+          "standard": [
+            7.35,
+            12.3
+          ],
+          "confort": [
+            8.1,
+            13.6
+          ]
+        },
+        "pieces": [
+          {
+            "id": "salon",
+            "x0": 0.0,
+            "x1": 1.0,
+            "y0": 0.0,
+            "y1": 0.2846
+          },
+          {
+            "id": "chambre_parentale",
+            "x0": 0.0,
+            "x1": 0.4082,
+            "y0": 0.2846,
+            "y1": 0.6748
+          },
+          {
+            "id": "chambre_2",
+            "x0": 0.0,
+            "x1": 0.4082,
+            "y0": 0.6748,
+            "y1": 1.0
+          },
+          {
+            "id": "couloir",
+            "x0": 0.4082,
+            "x1": 0.585,
+            "y0": 0.2846,
+            "y1": 0.78
+          },
+          {
+            "id": "cuisine",
+            "x0": 0.585,
+            "x1": 1.0,
+            "y0": 0.2846,
+            "y1": 0.5528
+          },
+          {
+            "id": "sanitaires",
+            "x0": 0.585,
+            "x1": 1.0,
+            "y0": 0.5528,
+            "y1": 0.6829
+          },
+          {
+            "id": "chambre_3",
+            "x0": 0.585,
+            "x1": 1.0,
+            "y0": 0.6829,
+            "y1": 1.0
+          },
+          {
+            "id": "dressing",
+            "x0": 0.4082,
+            "x1": 0.585,
+            "y0": 0.78,
+            "y1": 1
+          }
+        ],
+        "ouvertures": [
+          {
+            "kind": "porte",
+            "piece": "salon",
+            "mur": "S",
+            "t": 0.65,
+            "w": 0.9,
+            "h": 2.1,
+            "sill": 0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "salon",
+            "mur": "S",
+            "t": 0.2,
+            "w": 1.4,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "salon",
+            "mur": "W",
+            "t": 0.5,
+            "w": 1.2,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "chambre_parentale",
+            "mur": "W",
+            "t": 0.5,
+            "w": 1.2,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "chambre_2",
+            "mur": "W",
+            "t": 0.5,
+            "w": 1.2,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "chambre_2",
+            "mur": "N",
+            "t": 0.5,
+            "w": 1.2,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "cuisine",
+            "mur": "E",
+            "t": 0.5,
+            "w": 1.0,
+            "h": 1.0,
+            "sill": 1.1
+          },
+          {
+            "kind": "fenetre",
+            "piece": "sanitaires",
+            "mur": "E",
+            "t": 0.5,
+            "w": 0.6,
+            "h": 0.6,
+            "sill": 1.5
+          },
+          {
+            "kind": "fenetre",
+            "piece": "chambre_3",
+            "mur": "E",
+            "t": 0.5,
+            "w": 1.2,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "fenetre",
+            "piece": "chambre_3",
+            "mur": "N",
+            "t": 0.5,
+            "w": 1.2,
+            "h": 1.2,
+            "sill": 1.0
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "salon",
+              "cuisine"
+            ],
+            "t": 0.5,
+            "w": 0.9,
+            "h": 2.1
+          },
+          {
+            "kind": "baie",
+            "entre": [
+              "salon",
+              "couloir"
+            ],
+            "t": 0.5,
+            "w": 0.9,
+            "h": 2.1
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "couloir",
+              "sanitaires"
+            ],
+            "t": 0.5,
+            "w": 0.7,
+            "h": 2.1
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "couloir",
+              "chambre_parentale"
+            ],
+            "t": 0.5,
+            "w": 0.8,
+            "h": 2.1
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "couloir",
+              "chambre_2"
+            ],
+            "t": 0.5,
+            "w": 0.8,
+            "h": 2.1
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "couloir",
+              "chambre_3"
+            ],
+            "t": 0.5,
+            "w": 0.8,
+            "h": 2.1
+          },
+          {
+            "kind": "porte",
+            "entre": [
+              "couloir",
+              "dressing"
+            ],
+            "t": 0.5,
+            "w": 0.7,
+            "h": 2.1
+          }
+        ],
+        "note": "Parcelle étroite : salon en façade, couloir longitudinal ; la chambre 3 partage un mur avec les sanitaires (sans porte). Économique non viable ici : trois chambres de 3 m + couloir imposent plus de 7 m de large.",
+        "indisponible_standing": {
+          "economique": "trois chambres de 3 m et un couloir imposent plus de 7 m de large"
+        }
+      }
+    },
+    "convention_surcharge": "surcharges_standing.<standing> remplace pieces, ouvertures et emprise_m de la variante pour ce standing ; sinon les fractions de la variante s'appliquent"
+  },
+  "exports": {
+    "source_unique": "mêmes données géométriques pour le plan, le métré (CivilEstimator) et l'IFC",
+    "formats": {
+      "pdf": {
+        "statut": "prototype",
+        "format": "A5 à A0 selon l'emprise, portrait ou paysage (auto)",
+        "echelle": "auto, de 1/50 à 1/1000",
+        "moteur": "plan-engine.mjs (JS sans dépendance)"
+      },
+      "svg": {
+        "statut": "prototype"
+      },
+      "ifc": {
+        "statut": "prototype non validé dans un viewer",
+        "schema": "IFC4",
+        "entites": [
+          "IfcWall",
+          "IfcSlab",
+          "IfcSpace",
+          "IfcDoor",
+          "IfcWindow",
+          "IfcOpeningElement"
+        ],
+        "hors_perimetre": [
+          "toiture inclinée",
+          "fondations",
+          "armatures"
+        ]
+      },
+      "dxf": {
+        "statut": "prévu"
+      }
+    }
+  }
+}
