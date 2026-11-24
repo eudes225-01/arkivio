@@ -73,9 +73,9 @@
       "id": "salon",
       "libelle": "Salon-séjour",
       "surface_m2": {
-        "economique": 16,
-        "standard": 20,
-        "confort": 25
+        "economique": 19.8,
+        "standard": 19.8,
+        "confort": 24
       },
       "largeur_min_m": 3.5
     },
@@ -83,65 +83,65 @@
       "id": "chambre_parentale",
       "libelle": "Chambre parentale",
       "surface_m2": {
-        "economique": 12,
-        "standard": 14,
-        "confort": 16
+        "economique": 13.7,
+        "standard": 13.7,
+        "confort": 16.7
       },
-      "largeur_min_m": 3.0
+      "largeur_min_m": 3
     },
     {
       "id": "chambre_2",
       "libelle": "Chambre 2",
       "surface_m2": {
-        "economique": 10,
+        "economique": 12,
         "standard": 12,
-        "confort": 14
+        "confort": 14.6
       },
-      "largeur_min_m": 3.0
+      "largeur_min_m": 3
     },
     {
       "id": "cuisine",
       "libelle": "Cuisine",
       "surface_m2": {
-        "economique": 6,
-        "standard": 9,
-        "confort": 12
+        "economique": 8.5,
+        "standard": 8.5,
+        "confort": 10.3
       }
     },
     {
       "id": "sanitaires",
       "libelle": "Douche et WC",
       "surface_m2": {
-        "economique": 4,
-        "standard": 5,
-        "confort": 6
+        "economique": 5.8,
+        "standard": 5.8,
+        "confort": 7
       }
     },
     {
       "id": "couloir",
       "libelle": "Couloir",
       "surface_m2": {
-        "economique": 3,
-        "standard": 5,
-        "confort": 6
+        "economique": 4.5,
+        "standard": 4.5,
+        "confort": 5.5
       }
     },
     {
       "id": "rangement",
       "libelle": "Placard",
       "surface_m2": {
-        "economique": 2.4,
-        "standard": 2.8,
-        "confort": 3.3
+        "economique": 2.3,
+        "standard": 2.3,
+        "confort": 2.8
       }
     },
     {
       "id": "rangement_2",
       "libelle": "Placard",
       "surface_m2": {
-        "economique": 1.1,
-        "standard": 1.3,
-        "confort": 1.5
+        "economique": 0.9,
+        "standard": 0.9,
+        "confort": 1.2
       }
     }
   ],
@@ -711,7 +711,7 @@
       "a_renseigner": "retraits selon la commune ou le lotissement ; aucune valeur inventée",
       "exemple_observe_m": {
         "lateral": 1.5,
-        "fond": 2.0,
+        "fond": 2,
         "source": "Plan_001",
         "a_confirmer": true
       }
@@ -782,7 +782,7 @@
     },
     "soubassement": {
       "niveau_m": -0.6,
-      "niveau_fini_ref_m": 0.0,
+      "niveau_fini_ref_m": 0,
       "source": "plan de coffrage fourni",
       "a_confirmer": true
     },
@@ -1187,11 +1187,11 @@
     "unite": "fractions de l'emprise (x vers l'est, y vers le nord, entrée au sud)",
     "emprise_m": {
       "economique": [
-        7.4,
-        8.8
+        8,
+        9.5
       ],
       "standard": [
-        8.0,
+        8,
         9.5
       ],
       "confort": [
@@ -1277,7 +1277,7 @@
             "t": 0.2,
             "w": 1.4,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
@@ -1286,15 +1286,15 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
             "piece": "cuisine",
             "mur": "E",
             "t": 0.5,
-            "w": 1.0,
-            "h": 1.0,
+            "w": 1.8,
+            "h": 1,
             "sill": 1.1
           },
           {
@@ -1302,9 +1302,9 @@
             "piece": "sanitaires",
             "mur": "E",
             "t": 0.5,
-            "w": 0.6,
-            "h": 0.6,
-            "sill": 1.5
+            "w": 1.4,
+            "h": 0.9,
+            "sill": 1.2
           },
           {
             "kind": "fenetre",
@@ -1313,7 +1313,7 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
@@ -1322,7 +1322,7 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
@@ -1331,7 +1331,7 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
@@ -1340,7 +1340,7 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "baie",
@@ -1349,7 +1349,7 @@
               "couloir"
             ],
             "t": 0.5,
-            "w": 1.0,
+            "w": 1,
             "h": 2.1
           },
           {

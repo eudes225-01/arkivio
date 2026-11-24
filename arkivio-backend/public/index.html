@@ -409,6 +409,21 @@ async function genAll(ev){
       const dl=document.createElement("div");dl.className="dl";const nm=`arkivio_${base.gabarit}_${v.id}_${base.standing}`;
       [["PDF",blobUrl(b64(d.pdf),"application/pdf"),".pdf"],["SVG",su,".svg"],["IFC",blobUrl(d.ifc,"application/octet-stream"),".ifc"]].forEach(([n,u,x])=>{const a=document.createElement("a");a.href=u;a.download=nm+x;a.textContent=n;dl.appendChild(a)});
       info.after(dl);
+      const dossierBtn=document.createElement("button");dossierBtn.type="button";dossierBtn.className="btn o";dossierBtn.textContent="Générer le dossier complet";
+      const dossierOut=document.createElement("div");dossierOut.className="dl";
+      dossierBtn.onclick=async()=>{dossierBtn.disabled=true;dossierBtn.textContent="Génération du dossier…";dossierOut.innerHTML="";try{
+        const rr=await fetch(API+"/api/dossier",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...base,variante:v.id})});
+        const pack=await rr.json().catch(()=>({}));if(!rr.ok)throw new Error(pack.erreur||"Échec du dossier ("+rr.status+")");
+        const lien=(label,url,file)=>{const a=document.createElement("a");a.href=url;a.download=file;a.textContent=label;dossierOut.appendChild(a)};
+        const stem=`arkivio_dossier_${base.gabarit}_${v.id}_${base.standing}`;
+        lien("Dossier PDF",blobUrl(b64(pack.pdf),"application/pdf"),stem+".pdf");
+        lien("Modèle IFC",blobUrl(pack.ifc,"application/octet-stream"),stem+".ifc");
+        (pack.planches||[]).forEach(p=>{lien("PDF · "+p.titre,blobUrl(b64(p.pdf),"application/pdf"),stem+"_"+p.type+".pdf");lien("SVG · "+p.titre,blobUrl(p.svg,"image/svg+xml"),stem+"_"+p.type+".svg");lien("Descriptif · "+p.titre,blobUrl(p.descriptif_svg,"image/svg+xml"),stem+"_"+p.type+"_descriptif.svg")});
+        if((pack.non_generees||[]).length){const note=document.createElement("p");note.textContent="Planches non générées : "+pack.non_generees.map(p=>p.type).join(", ");dossierOut.appendChild(note)}
+        dossierBtn.textContent="Dossier généré";
+      }catch(err){dossierBtn.textContent=err.message;dossierBtn.disabled=false}
+      };
+      info.after(dossierBtn);dossierBtn.after(dossierOut);
       if((d.alertes||[]).length){const ul=document.createElement("ul");ul.className="al";d.alertes.forEach(t=>{const li=document.createElement("li");li.textContent=t;ul.appendChild(li)});dl.after(ul)}
     }catch(e){vw.textContent="";info.textContent=e.message;info.style.color="var(--err)"}
   });

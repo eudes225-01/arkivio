@@ -12,6 +12,7 @@ exposer la clé, validation en liste blanche, tests `node:test`, déploiement Re
 | `GET /api/gabarits` | — | `[{ id, libelle, variantes: [{ id, standings: [...] }], … }]` — remplit « Type de maison » / « Standing » et l'indicateur « Serveur connecté » |
 | `POST /api/chat` | `{ messages: [{role, content}], fichiers: [{nom, type, donnees}] }` | `{ reponse, pret, projet? }` — `projet` = `{ gabarit, standing, format?, echelle?, orientation?, projet?, titre?, phase?, planche?, moa?, moe?, resume? }` |
 | `POST /api/plan` | `{ gabarit, standing, variante, format, echelle, orientation, projet, titre, phase, planche, moa, moe, date }` | `{ svg, pdf (base64), ifc, page: { format, orientation, echelle }, alertes: [] }` |
+| `POST /api/dossier` | mêmes champs que `/api/plan` | `{ pdf (base64, dossier multi-planches), planches: [{ type, pdf, svg, descriptif_svg }], ifc, non_generees }` |
 | `GET /api/health` | — | `{ ok: true }` |
 
 Les erreurs sont toujours `{ erreur: "message lisible" }` (clé lue par le frontend), avec un statut HTTP cohérent :
@@ -87,3 +88,11 @@ Sans `ANTHROPIC_API_KEY`, la génération de plans fonctionne ; seul `/api/chat`
 - **Texte du cartouche** : les caractères que le PDF (Helvetica / WinAnsi) ne sait pas écrire sont retirés (emoji, alphabets
   non latins). Le moteur met le nom du projet en majuscules.
 - **Fichier IFC** : il porte le libellé du modèle, pas le texte saisi (une apostrophe casserait la syntaxe du fichier).
+- **Précontrôle réglementaire** : chaque plan généré est vérifié pour les surfaces habitables, les dimensions minimales,
+  la largeur des couloirs et l'éclairage. Les écarts remontent dans `alertes`. Ce contrôle ne vérifie pas la ventilation,
+  l'implantation, la densité, l'assainissement, le stationnement ni la complétude du dossier de permis ; il ne certifie
+  donc pas la conformité à l'arrêté 0169. Faire valider les plans par un professionnel.
+- **Dossier de métré** : `POST /api/dossier` produit un PDF multi-planches, un PDF et un SVG par planche, les descriptifs
+  en SVG et un IFC architectural. Les réseaux et planches de structure sont schématiques, avec des hypothèses non
+  calculées ; le ferraillage reste explicitement non généré. Ces sorties servent à préparer un métré préliminaire,
+  pas à exécuter les travaux ni à établir un devis définitif sans validation.

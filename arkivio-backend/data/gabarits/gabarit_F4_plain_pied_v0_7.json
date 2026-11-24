@@ -78,9 +78,9 @@
       "id": "salon",
       "libelle": "Salon-séjour",
       "surface_m2": {
-        "economique": 16,
-        "standard": 22,
-        "confort": 28
+        "economique": 20.4,
+        "standard": 22.4,
+        "confort": 25.3
       },
       "largeur_min_m": 3.5
     },
@@ -88,75 +88,75 @@
       "id": "chambre_parentale",
       "libelle": "Chambre parentale",
       "surface_m2": {
-        "economique": 11,
-        "standard": 15,
-        "confort": 18
+        "economique": 9.9,
+        "standard": 13.7,
+        "confort": 15.5
       },
-      "largeur_min_m": 3.0
+      "largeur_min_m": 3
     },
     {
       "id": "chambre_2",
       "libelle": "Chambre 2",
       "surface_m2": {
-        "economique": 9,
-        "standard": 12,
-        "confort": 14
+        "economique": 9.5,
+        "standard": 13.4,
+        "confort": 15.2
       },
-      "largeur_min_m": 3.0
+      "largeur_min_m": 3
     },
     {
       "id": "chambre_3",
       "libelle": "Chambre 3",
       "surface_m2": {
-        "economique": 9,
-        "standard": 12,
-        "confort": 14
+        "economique": 9.3,
+        "standard": 13,
+        "confort": 14.7
       },
-      "largeur_min_m": 3.0
+      "largeur_min_m": 3
     },
     {
       "id": "cuisine",
       "libelle": "Cuisine",
       "surface_m2": {
-        "economique": 6,
-        "standard": 10,
-        "confort": 12
+        "economique": 6.4,
+        "standard": 9.7,
+        "confort": 10.9
       }
     },
     {
       "id": "sanitaires",
       "libelle": "Douche et WC",
       "surface_m2": {
-        "economique": 4,
-        "standard": 5,
-        "confort": 6
+        "economique": 4.9,
+        "standard": 5.1,
+        "confort": 5.8
       }
     },
     {
       "id": "couloir",
       "libelle": "Couloir",
       "surface_m2": {
-        "economique": 5,
-        "standard": 6,
-        "confort": 8
+        "economique": 5.9,
+        "standard": 5.6,
+        "confort": 6.4
       }
     },
     {
       "id": "rangement",
       "libelle": "Placard",
       "surface_m2": {
-        "economique": 2.0,
-        "standard": 2.1,
-        "confort": 2.4
+        "economique": 1.8,
+        "standard": 1.7,
+        "confort": 1.9
       }
     },
     {
       "id": "rangement_2",
       "libelle": "Placard",
       "surface_m2": {
-        "economique": 2.0,
-        "standard": 2.1,
-        "confort": 2.4
+        "economique": 1.8,
+        "standard": 1.7,
+        "confort": 1.9
       }
     },
     {
@@ -808,7 +808,7 @@
       "a_renseigner": "retraits selon la commune ou le lotissement ; aucune valeur inventée",
       "exemple_observe_m": {
         "lateral": 1.5,
-        "fond": 2.0,
+        "fond": 2,
         "source": "Plan_001",
         "a_confirmer": true
       }
@@ -879,7 +879,7 @@
     },
     "soubassement": {
       "niveau_m": -0.6,
-      "niveau_fini_ref_m": 0.0,
+      "niveau_fini_ref_m": 0,
       "source": "plan de coffrage fourni",
       "a_confirmer": true
     },
@@ -1394,24 +1394,24 @@
             "t": 0.2,
             "w": 1.4,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
             "piece": "salon",
             "mur": "W",
             "t": 0.5,
-            "w": 1.2,
+            "w": 1.3,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
             "piece": "cuisine",
             "mur": "E",
             "t": 0.5,
-            "w": 1.0,
-            "h": 1.0,
+            "w": 1.9,
+            "h": 1,
             "sill": 1.1
           },
           {
@@ -1419,9 +1419,9 @@
             "piece": "sanitaires",
             "mur": "E",
             "t": 0.5,
-            "w": 0.6,
-            "h": 0.6,
-            "sill": 1.5
+            "w": 1.1,
+            "h": 0.9,
+            "sill": 1.2
           },
           {
             "kind": "fenetre",
@@ -1430,7 +1430,7 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
@@ -1439,16 +1439,16 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
             "piece": "chambre_2",
             "mur": "N",
             "t": 0.5,
-            "w": 1.2,
+            "w": 2.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
@@ -1457,7 +1457,7 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
@@ -1466,7 +1466,7 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "porte",
@@ -1552,28 +1552,28 @@
         "surcharges_standing": {
           "economique": {
             "emprise_m": [
-              9.2,
-              7.8
+              9.65,
+              8.2
             ],
             "pieces": [
               {
                 "id": "salon",
-                "x0": 0.0,
+                "x0": 0,
                 "x1": 0.6304,
-                "y0": 0.0,
+                "y0": 0,
                 "y1": 0.4487
               },
               {
                 "id": "cuisine",
                 "x0": 0.6304,
-                "x1": 1.0,
-                "y0": 0.0,
+                "x1": 1,
+                "y0": 0,
                 "y1": 0.2564
               },
               {
                 "id": "sanitaires",
                 "x0": 0.6304,
-                "x1": 1.0,
+                "x1": 1,
                 "y0": 0.2564,
                 "y1": 0.4487
               },
@@ -1586,24 +1586,24 @@
               },
               {
                 "id": "chambre_parentale",
-                "x0": 0.0,
+                "x0": 0,
                 "x1": 0.3478,
                 "y0": 0.5897,
-                "y1": 1.0
+                "y1": 1
               },
               {
                 "id": "chambre_2",
                 "x0": 0.3478,
                 "x1": 0.6739,
                 "y0": 0.5897,
-                "y1": 1.0
+                "y1": 1
               },
               {
                 "id": "chambre_3",
                 "x0": 0.6739,
-                "x1": 1.0,
+                "x1": 1,
                 "y0": 0.5897,
-                "y1": 1.0
+                "y1": 1
               },
               {
                 "id": "rangement",
@@ -1637,7 +1637,7 @@
                 "t": 0.2,
                 "w": 1.4,
                 "h": 1.2,
-                "sill": 1.0
+                "sill": 1
               },
               {
                 "kind": "fenetre",
@@ -1646,15 +1646,15 @@
                 "t": 0.5,
                 "w": 1.2,
                 "h": 1.2,
-                "sill": 1.0
+                "sill": 1
               },
               {
                 "kind": "fenetre",
                 "piece": "cuisine",
                 "mur": "E",
                 "t": 0.5,
-                "w": 1.0,
-                "h": 1.0,
+                "w": 1.1,
+                "h": 1,
                 "sill": 1.1
               },
               {
@@ -1662,9 +1662,9 @@
                 "piece": "sanitaires",
                 "mur": "E",
                 "t": 0.5,
-                "w": 0.6,
-                "h": 0.6,
-                "sill": 1.5
+                "w": 1.2,
+                "h": 0.9,
+                "sill": 1.2
               },
               {
                 "kind": "fenetre",
@@ -1673,7 +1673,7 @@
                 "t": 0.5,
                 "w": 1.2,
                 "h": 1.2,
-                "sill": 1.0
+                "sill": 1
               },
               {
                 "kind": "fenetre",
@@ -1682,16 +1682,16 @@
                 "t": 0.5,
                 "w": 1.2,
                 "h": 1.2,
-                "sill": 1.0
+                "sill": 1
               },
               {
                 "kind": "fenetre",
                 "piece": "chambre_2",
                 "mur": "N",
                 "t": 0.5,
-                "w": 1.2,
+                "w": 1.4,
                 "h": 1.2,
-                "sill": 1.0
+                "sill": 1
               },
               {
                 "kind": "fenetre",
@@ -1700,7 +1700,7 @@
                 "t": 0.5,
                 "w": 1.2,
                 "h": 1.2,
-                "sill": 1.0
+                "sill": 1
               },
               {
                 "kind": "fenetre",
@@ -1709,7 +1709,7 @@
                 "t": 0.5,
                 "w": 1.2,
                 "h": 1.2,
-                "sill": 1.0
+                "sill": 1
               },
               {
                 "kind": "porte",
@@ -1809,24 +1809,24 @@
         "pieces": [
           {
             "id": "salon",
-            "x0": 0.0,
-            "x1": 1.0,
-            "y0": 0.0,
+            "x0": 0,
+            "x1": 1,
+            "y0": 0,
             "y1": 0.2846
           },
           {
             "id": "chambre_parentale",
-            "x0": 0.0,
+            "x0": 0,
             "x1": 0.4082,
             "y0": 0.2846,
             "y1": 0.6748
           },
           {
             "id": "chambre_2",
-            "x0": 0.0,
+            "x0": 0,
             "x1": 0.4082,
             "y0": 0.6748,
-            "y1": 1.0
+            "y1": 1
           },
           {
             "id": "couloir",
@@ -1838,23 +1838,23 @@
           {
             "id": "cuisine",
             "x0": 0.585,
-            "x1": 1.0,
+            "x1": 1,
             "y0": 0.2846,
             "y1": 0.5528
           },
           {
             "id": "sanitaires",
             "x0": 0.585,
-            "x1": 1.0,
+            "x1": 1,
             "y0": 0.5528,
             "y1": 0.6829
           },
           {
             "id": "chambre_3",
             "x0": 0.585,
-            "x1": 1.0,
+            "x1": 1,
             "y0": 0.6829,
-            "y1": 1.0
+            "y1": 1
           },
           {
             "id": "dressing",
@@ -1879,27 +1879,27 @@
             "piece": "salon",
             "mur": "S",
             "t": 0.2,
-            "w": 1.4,
+            "w": 1.6,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
             "piece": "salon",
             "mur": "W",
             "t": 0.5,
-            "w": 1.2,
+            "w": 1.5,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
             "piece": "chambre_parentale",
             "mur": "W",
             "t": 0.5,
-            "w": 1.2,
+            "w": 2.3,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
@@ -1908,7 +1908,7 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
@@ -1917,15 +1917,15 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
             "piece": "cuisine",
             "mur": "E",
             "t": 0.5,
-            "w": 1.0,
-            "h": 1.0,
+            "w": 1.9,
+            "h": 1,
             "sill": 1.1
           },
           {
@@ -1933,9 +1933,9 @@
             "piece": "sanitaires",
             "mur": "E",
             "t": 0.5,
-            "w": 0.6,
-            "h": 0.6,
-            "sill": 1.5
+            "w": 1.3,
+            "h": 0.9,
+            "sill": 1.2
           },
           {
             "kind": "fenetre",
@@ -1944,7 +1944,7 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "fenetre",
@@ -1953,7 +1953,7 @@
             "t": 0.5,
             "w": 1.2,
             "h": 1.2,
-            "sill": 1.0
+            "sill": 1
           },
           {
             "kind": "porte",

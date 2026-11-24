@@ -1,0 +1,129 @@
+{
+  "meta": {
+    "pays": "Bénin",
+    "version": "0.1",
+    "statut": "brouillon à faire valider par un architecte ou un ingénieur agréé",
+    "sources": {
+      "A169": "Arrêté n°0169 du 24 mai 2024 définissant les prescriptions minimales à observer pour la délivrance du permis de construire",
+      "A170": "Arrêté n°0170 du 24 mai 2024 portant conditions de conception technique et de mise en œuvre des projets de construction (classification des techniciens)",
+      "A174": "Arrêté interministériel n°0174 du 28 mai 2024 portant composition des dossiers de demandes des autorisations d'urbanisme"
+    },
+    "note": "Les valeurs ci-dessous sont des minima nationaux. Des règles d'urbanisme locales peuvent s'appliquer (A169 art. 2, 10, 13)."
+  },
+
+  "pieces_habitables": {
+    "source": "A169 art. 4",
+    "definition_non_habitables": ["cuisine", "salle d'eau", "débarras", "combles", "magasin", "guérite"],
+    "surface_min_m2": 9,
+    "surface_min_chambre_unique_m2": 12,
+    "surface_min_sejour_m2": 16,
+    "hauteur_sous_plafond_min_m": 2.4,
+    "plus_petit_cote_min_m_si_rectangulaire": 2.4,
+    "exclure_du_calcul": ["placards", "penderies", "débarras ouvrant sur la pièce"]
+  },
+
+  "eclairage": {
+    "source": "A169 art. 5",
+    "pieces_concernees": ["pièces habitables", "cuisines", "salles d'eau", "toilettes"],
+    "surface_baies_min_rapport": "1/6 de la surface de la pièce",
+    "baies_comptees": "portes et fenêtres ouvrant sur l'extérieur",
+    "hauteur_non_comptee_sous_m": 0.9
+  },
+
+  "ventilation": {
+    "source": "A169 art. 6",
+    "ventilation_naturelle_directe": "au moins la moitié des pièces habitables",
+    "ventilation_transversale": "à rechercher et favoriser",
+    "ouverture_obligatoire": "toute pièce habitable : au moins une ouverture sur l'extérieur ou sur une circulation principale ouvrant sur l'extérieur",
+    "ventilation_mecanique": "à mentionner au devis descriptif et sur les plans"
+  },
+
+  "circulations": {
+    "source": "A169 art. 7",
+    "couloir_largeur_min_m": 1.0,
+    "escalier": {
+      "largeur_min_m": 1.0,
+      "largeur_min_m_categorie_C_et_ERP": 1.4,
+      "giron_min_cm": 28,
+      "hauteur_marche_cm": { "min": 15, "max": 18 },
+      "garde_corps_hauteur_m": 1.0,
+      "barreaux_ecart_max_cm": 13,
+      "echappee_min_m": 2.0
+    }
+  },
+
+  "implantation": {
+    "source": "A169 art. 10",
+    "distance_limite_separative_min_m": { "batiment_rez_de_chaussee": 1.0, "batiment_avec_etage": 1.5 },
+    "applicable_si": "absence de règles d'urbanisme particulières au territoire",
+    "construction_sur_cloture_ou_a_moins_de_1m": "autorisée sans ouverture chez le voisin",
+    "coefficient_emprise_au_sol": "à respecter dans tous les cas",
+    "a_confirmer": "mesure du retrait par rapport à la rue : règles locales (art. 12)"
+  },
+
+  "densite_maximale": {
+    "source": "A169 art. 13",
+    "unite_cos": "somme des surfaces de planchers constructibles / surface du terrain",
+    "unite_ces": "emprise au sol des bâtiments / surface du terrain",
+    "zones": {
+      "centre_ville_commerce_services_habitat": { "cos_max": 17, "ces_max": 0.80, "niveaux": "R+2 à R+20" },
+      "quartiers_habitat_dense": { "cos_max": 10, "ces_max": 0.85, "niveaux": "R+0 à R+10" },
+      "quartiers_administratifs_affaires_ports_industriels_grands_axes": { "cos_max": 17, "ces_max": 0.80, "niveaux": "R+4 à R+20" },
+      "quartiers_residentiels": { "cos_max": 3, "ces_max": 0.85, "niveaux": "R+0 à R+2" },
+      "zones_balneaires": { "cos_max": 3, "ces_max": 0.70, "niveaux": "R+0 à R+2" },
+      "zones_marecageuses_non_aedificandi": { "cos_max": 0, "ces_max": 0, "niveaux": "construction interdite" }
+    },
+    "note": "La délimitation des zones est précisée par arrêté du maire."
+  },
+
+  "assainissement": {
+    "source": "A169 art. 14 et 15",
+    "fosse_septique": "fond et parois étanches ; dimensions précisées au devis descriptif et sur les plans",
+    "puisards_et_puits_dalle": "recouverts d'une dalle en béton armé amovible",
+    "distance_min_m_puisard_ou_puits_a_source_eau_potable": 15,
+    "puits_en_amont_min_m_des_latrines_puisards_fosses": 15,
+    "puits_protection": "margelle maçonnée et protection amovible sécurisée"
+  },
+
+  "autres": {
+    "stationnement": { "source": "A169 art. 19", "habitation": "au moins 1 place par unité fonctionnelle d'habitation" },
+    "espaces_verts": { "source": "A169 art. 20", "regle": "tout projet de bâtiment prévoit l'aménagement d'espaces verts" },
+    "acces_terrain": { "source": "A169 art. 18", "regle": "terrain desservi par une voie publique ou privée débouchant sur une voie publique" }
+  },
+
+  "categories_permis": {
+    "source": "guide officiel du permis de construire (Cadre de Vie, nov. 2024) et A170",
+    "A": {
+      "description": "bâtiment simple de type RDC à toiture légère, superficie construite inférieure à 150 m²",
+      "architecte_obligatoire": false,
+      "etudes_techniques": "tout technicien en génie civil",
+      "frais_etude_fcfa_par_m2_hors_oeuvre_tous_planchers": 150
+    },
+    "B": {
+      "description": "RDC à R+2 (A170 : RDC à R+1 et R+2 en ligne séparée), surface hors œuvre de 150 à 1 500 m²",
+      "architecte_obligatoire": true,
+      "etudes_techniques": "ingénieur junior en génie civil",
+      "pieces_supplementaires": ["étude de sol signée par un laboratoire spécialisé", "notes de calcul de structures signées par un ingénieur en génie civil"],
+      "frais_etude_fcfa_par_m2_hors_oeuvre_tous_planchers": 250
+    },
+    "C": {
+      "description": "R+3 et plus, ou plus de 1 500 m²",
+      "frais_etude_fcfa_par_m2_hors_oeuvre_tous_planchers": 250,
+      "escalier_largeur_min_m": 1.4
+    },
+    "a_confirmer": "un RDC avec dalle en béton (toit-terrasse) n'a pas de toiture légère : il relèverait de la catégorie B d'après A170, à confirmer auprès du ministère"
+  },
+
+  "dossier_pieces_graphiques": {
+    "source": "A174 art. 3",
+    "pieces": [
+      "plan de situation",
+      "plan de masse avec orientation des vents dominants, limites séparatives, servitudes, reculs",
+      "plan d'implantation (1/200 ou 1/500)",
+      "projet de construction à l'échelle 1/200, 1/100 ou 1/50 : vues en plan de chaque niveau, au moins 2 coupes (dont une par l'escalier s'il existe) et façades",
+      "plan de détail des ouvrages d'assainissement",
+      "plan de détail de structures"
+    ],
+    "pieces_ecrites_utiles_au_devis": "devis descriptif avec matériaux prévus (dont matériaux locaux), mise en œuvre et devis estimatif des travaux"
+  }
+}
