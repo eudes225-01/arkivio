@@ -1,0 +1,4 @@
+node_modules/
+.env
+.cache/
+essai_rendu.pdf

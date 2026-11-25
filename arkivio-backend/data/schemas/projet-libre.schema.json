@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "arkivio-projet-libre-1.0",
+  "title": "Arkivio — projet libre v1.0",
+  "description": "Unités : mètres (_m), centimètres (_cm), pourcentage (_pct). x = est, y = nord, entrée au sud, origine au coin sud-ouest. Les quantités (longueurs de murs, surfaces) ne sont JAMAIS saisies : elles sont calculées depuis la géométrie.",
+  "type": "object",
+  "required": ["format", "version", "variantes"],
+  "properties": {
+    "format": { "const": "arkivio-projet-libre" },
+    "version": { "type": "string", "pattern": "^1\\." },
+    "projet": {
+      "type": "object",
+      "properties": {
+        "titre": { "type": "string" },
+        "standing": { "enum": ["economique", "standard", "confort"] },
+        "terrain": { "type": "object", "properties": { "largeur_m": { "type": "number" }, "profondeur_m": { "type": "number" }, "retraits_m": { "type": "object", "properties": { "avant": { "type": "number" }, "arriere": { "type": "number" }, "gauche": { "type": "number" }, "droite": { "type": "number" } } } } },
+        "hypotheses": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "parametres": { "type": "object", "properties": { "ep_ext_cm": { "type": "number" }, "ep_cloison_cm": { "type": "number" }, "hsp_m": { "type": "number" } } },
+    "variantes": { "type": "array", "minItems": 1, "maxItems": 2, "items": { "$ref": "#/$defs/variante" } }
+  },
+  "$defs": {
+    "point": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 },
+    "polygone": { "type": "array", "items": { "$ref": "#/$defs/point" }, "minItems": 3 },
+    "variante": {
+      "type": "object",
+      "required": ["id", "niveaux", "fondation"],
+      "properties": {
+        "id": { "enum": ["A", "B"] },
+        "libelle": { "type": "string" },
+        "description": { "type": "string" },
+        "structure": { "type": "object", "properties": { "chainage_haut": { "type": "boolean" } } },
+        "niveaux": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/niveau" } },
+        "fondation": {
+          "type": "object", "required": ["type", "niveau_base_m"],
+          "properties": {
+            "type": { "enum": ["filante", "isolees", "radier", "mixte"] },
+            "niveau_base_m": { "type": "number", "exclusiveMaximum": 0 },
+            "prof_fouille_m": { "type": "number" },
+            "semelle_filante": { "type": "object", "properties": { "l_cm": { "type": "number" }, "h_cm": { "type": "number" } } },
+            "semelles_isolees": { "type": "array", "items": { "type": "object", "required": ["id", "poteau", "L_m", "l_m", "h_cm"], "properties": { "id": { "type": "string" }, "poteau": { "type": "string" }, "L_m": { "type": "number" }, "l_m": { "type": "number" }, "h_cm": { "type": "number" } } } },
+            "longrines": { "type": "array", "items": { "type": "object", "required": ["id", "a", "b", "b_cm", "h_cm"], "properties": { "id": { "type": "string" }, "a": { "$ref": "#/$defs/point" }, "b": { "$ref": "#/$defs/point" }, "b_cm": { "type": "number" }, "h_cm": { "type": "number" } } } },
+            "dallage": { "type": "object", "properties": { "ep_cm": { "type": "number" } } }
+          }
+        },
+        "toiture": {
+          "type": "object", "required": ["type"],
+          "properties": {
+            "type": { "enum": ["bac", "tuiles", "shingle", "terrasse"] },
+            "debord_cm": { "type": "number" }, "acrotere_cm": { "type": "number" },
+            "pans": { "type": "array", "items": { "type": "object", "required": ["id", "polygone", "pente_pct"], "properties": { "id": { "type": "string" }, "polygone": { "$ref": "#/$defs/polygone" }, "pente_pct": { "type": "number", "exclusiveMinimum": 0 } } } }
+          }
+        }
+      }
+    },
+    "niveau": {
+      "type": "object",
+      "required": ["id", "nom", "cote_m", "contour"],
+      "properties": {
+        "id": { "type": "string" }, "nom": { "type": "string" }, "cote_m": { "type": "number" }, "hsp_m": { "type": "number" }, "ep_ext_cm": { "type": "number" },
+        "contour": {
+          "description": "Sommets aux axes des murs extérieurs, dans l'ordre. Côté E<i> = sommet i → i+1 ; un coin crée un segment C<i> (pan coupé ou arrondi).",
+          "type": "array", "minItems": 3,
+          "items": { "type": "object", "required": ["x", "y"], "properties": { "x": { "type": "number" }, "y": { "type": "number" },
+            "coin": { "oneOf": [
+              { "type": "object", "required": ["type", "taille_m"], "properties": { "type": { "const": "chanfrein" }, "taille_m": { "type": "number", "exclusiveMinimum": 0 } } },
+              { "type": "object", "required": ["type", "rayon_m"], "properties": { "type": { "const": "arrondi" }, "rayon_m": { "type": "number", "exclusiveMinimum": 0 } } } ] } } }
+        },
+        "murs_int": { "type": "array", "items": { "type": "object", "required": ["id", "a", "b"], "properties": { "id": { "type": "string", "pattern": "^(?![EC]\\d+$).+" }, "a": { "$ref": "#/$defs/point" }, "b": { "$ref": "#/$defs/point" }, "ep_cm": { "type": "number" }, "porteur": { "type": "boolean" } } } },
+        "pieces": { "type": "array", "items": { "type": "object", "required": ["id", "nom", "polygone"], "properties": { "id": { "type": "string" }, "nom": { "type": "string" }, "usage": { "type": "string" }, "polygone": { "$ref": "#/$defs/polygone" } } } },
+        "ouvertures": { "type": "array", "items": { "type": "object", "required": ["id", "type", "mur", "pos_m", "largeur_m", "hauteur_m"], "properties": { "id": { "type": "string", "pattern": "^[PFB]\\d+$" }, "type": { "enum": ["porte", "fenetre"] }, "mur": { "type": "string" }, "pos_m": { "type": "number", "minimum": 0 }, "largeur_m": { "type": "number", "exclusiveMinimum": 0 }, "hauteur_m": { "type": "number", "exclusiveMinimum": 0 }, "allege_m": { "type": "number", "minimum": 0 } } } },
+        "poteaux": { "type": "array", "items": { "type": "object", "required": ["id", "x", "y", "a_cm", "b_cm"], "properties": { "id": { "type": "string", "pattern": "^P\\d+$" }, "x": { "type": "number" }, "y": { "type": "number" }, "a_cm": { "type": "number" }, "b_cm": { "type": "number" }, "forme": { "enum": ["carre", "rect", "rond"] } } } },
+        "poutres": { "type": "array", "items": { "type": "object", "required": ["id", "a", "b", "b_cm", "h_cm"], "properties": { "id": { "type": "string" }, "a": { "$ref": "#/$defs/point" }, "b": { "$ref": "#/$defs/point" }, "b_cm": { "type": "number" }, "h_cm": { "type": "number" } } } },
+        "voiles": { "type": "array", "items": { "type": "object", "required": ["id", "a", "b", "ep_cm"], "properties": { "id": { "type": "string" }, "a": { "$ref": "#/$defs/point" }, "b": { "$ref": "#/$defs/point" }, "ep_cm": { "type": "number" } } } },
+        "chainages_v": { "type": "array", "items": { "type": "object", "required": ["id", "x", "y", "a_cm", "b_cm"], "properties": { "id": { "type": "string" }, "x": { "type": "number" }, "y": { "type": "number" }, "a_cm": { "type": "number" }, "b_cm": { "type": "number" } } } },
+        "dalle": { "type": "object", "properties": { "type": { "enum": ["aucun", "dallePleine", "dalleTP", "hourdis15", "hourdis20", "corpsCreuxApparent", "corpsCreuxPlan", "nervuree"] }, "ep_cm": { "type": "number" } } },
+        "tremies": { "type": "array", "items": { "type": "object", "required": ["id", "polygone"], "properties": { "id": { "type": "string" }, "polygone": { "$ref": "#/$defs/polygone" } } } },
+        "escalier": { "type": "object", "properties": { "id": { "type": "string" }, "polygone": { "$ref": "#/$defs/polygone" } } },
+        "equipements": { "type": "object", "properties": {
+          "plomberie": { "type": "array", "items": { "type": "object", "required": ["id", "type", "x", "y"], "properties": { "id": { "type": "string" }, "type": { "type": "string" }, "x": { "type": "number" }, "y": { "type": "number" } } } },
+          "electricite": { "type": "array", "items": { "type": "object", "required": ["id", "type", "x", "y"], "properties": { "id": { "type": "string" }, "type": { "type": "string" }, "x": { "type": "number" }, "y": { "type": "number" } } } },
+          "regards": { "type": "array", "items": { "type": "object", "required": ["id", "x", "y"], "properties": { "id": { "type": "string" }, "x": { "type": "number" }, "y": { "type": "number" } } } } } }
+      }
+    }
+  }
+}

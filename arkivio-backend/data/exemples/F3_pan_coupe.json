@@ -1,0 +1,1466 @@
+{
+ "format": "arkivio-projet-libre",
+ "version": "1.0",
+ "projet": {
+  "titre": "Maison F3 — exemple",
+  "standing": "standard",
+  "terrain": {
+   "largeur_m": 15,
+   "profondeur_m": 20
+  },
+  "hypotheses": [
+   "Niveau de base -1,15 m repris du gabarit v0.7 (à confirmer)",
+   "Plan indicatif : à valider par un ingénieur"
+  ]
+ },
+ "parametres": {
+  "ep_ext_cm": 15,
+  "ep_cloison_cm": 10,
+  "hsp_m": 2.8
+ },
+ "variantes": [
+  {
+   "id": "A",
+   "libelle": "Compact à pan coupé",
+   "description": "Rectangle 10 × 9 m, pan coupé de 1,5 m au nord-est, couloir transversal.",
+   "niveaux": [
+    {
+     "id": "RDC",
+     "nom": "RDC",
+     "cote_m": 0,
+     "hsp_m": 2.8,
+     "contour": [
+      {
+       "x": 0,
+       "y": 0
+      },
+      {
+       "x": 10,
+       "y": 0
+      },
+      {
+       "x": 10,
+       "y": 9,
+       "coin": {
+        "type": "chanfrein",
+        "taille_m": 1.5
+       }
+      },
+      {
+       "x": 0,
+       "y": 9
+      }
+     ],
+     "murs_int": [
+      {
+       "id": "M1",
+       "a": [
+        0,
+        4
+       ],
+       "b": [
+        10,
+        4
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      },
+      {
+       "id": "M2",
+       "a": [
+        5.5,
+        0
+       ],
+       "b": [
+        5.5,
+        4
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      },
+      {
+       "id": "M3",
+       "a": [
+        0,
+        5.2
+       ],
+       "b": [
+        10,
+        5.2
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      },
+      {
+       "id": "M4",
+       "a": [
+        4,
+        5.2
+       ],
+       "b": [
+        4,
+        9
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      },
+      {
+       "id": "M5",
+       "a": [
+        5.4,
+        5.2
+       ],
+       "b": [
+        5.4,
+        7.4
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      },
+      {
+       "id": "M6",
+       "a": [
+        6.4,
+        5.2
+       ],
+       "b": [
+        6.4,
+        9
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      },
+      {
+       "id": "M7",
+       "a": [
+        4,
+        7.4
+       ],
+       "b": [
+        6.4,
+        7.4
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      }
+     ],
+     "pieces": [
+      {
+       "id": "salon",
+       "nom": "Salon-séjour",
+       "usage": "sejour",
+       "polygone": [
+        [
+         0,
+         0
+        ],
+        [
+         5.5,
+         0
+        ],
+        [
+         5.5,
+         4
+        ],
+        [
+         0,
+         4
+        ]
+       ]
+      },
+      {
+       "id": "cuisine",
+       "nom": "Cuisine",
+       "usage": "cuisine",
+       "polygone": [
+        [
+         5.5,
+         0
+        ],
+        [
+         10,
+         0
+        ],
+        [
+         10,
+         4
+        ],
+        [
+         5.5,
+         4
+        ]
+       ]
+      },
+      {
+       "id": "couloir",
+       "nom": "Couloir",
+       "usage": "circulation",
+       "polygone": [
+        [
+         0,
+         4
+        ],
+        [
+         10,
+         4
+        ],
+        [
+         10,
+         5.2
+        ],
+        [
+         0,
+         5.2
+        ]
+       ]
+      },
+      {
+       "id": "ch1",
+       "nom": "Chambre 1",
+       "usage": "chambre",
+       "polygone": [
+        [
+         0,
+         5.2
+        ],
+        [
+         4,
+         5.2
+        ],
+        [
+         4,
+         9
+        ],
+        [
+         0,
+         9
+        ]
+       ]
+      },
+      {
+       "id": "douche",
+       "nom": "Douche",
+       "usage": "salle_eau",
+       "polygone": [
+        [
+         4,
+         5.2
+        ],
+        [
+         5.4,
+         5.2
+        ],
+        [
+         5.4,
+         7.4
+        ],
+        [
+         4,
+         7.4
+        ]
+       ]
+      },
+      {
+       "id": "wc",
+       "nom": "WC",
+       "usage": "wc",
+       "polygone": [
+        [
+         5.4,
+         5.2
+        ],
+        [
+         6.4,
+         5.2
+        ],
+        [
+         6.4,
+         7.4
+        ],
+        [
+         5.4,
+         7.4
+        ]
+       ]
+      },
+      {
+       "id": "rangement",
+       "nom": "Rangement",
+       "usage": "rangement",
+       "polygone": [
+        [
+         4,
+         7.4
+        ],
+        [
+         6.4,
+         7.4
+        ],
+        [
+         6.4,
+         9
+        ],
+        [
+         4,
+         9
+        ]
+       ]
+      },
+      {
+       "id": "ch2",
+       "nom": "Chambre 2",
+       "usage": "chambre",
+       "polygone": [
+        [
+         6.4,
+         5.2
+        ],
+        [
+         10,
+         5.2
+        ],
+        [
+         10,
+         7.5
+        ],
+        [
+         8.5,
+         9
+        ],
+        [
+         6.4,
+         9
+        ]
+       ]
+      }
+     ],
+     "ouvertures": [
+      {
+       "id": "P1",
+       "type": "porte",
+       "mur": "E1",
+       "pos_m": 1.5,
+       "largeur_m": 0.9,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P2",
+       "type": "porte",
+       "mur": "M2",
+       "pos_m": 1.5,
+       "largeur_m": 0.9,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P3",
+       "type": "porte",
+       "mur": "M1",
+       "pos_m": 2,
+       "largeur_m": 0.9,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P4",
+       "type": "porte",
+       "mur": "M1",
+       "pos_m": 7,
+       "largeur_m": 0.9,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P5",
+       "type": "porte",
+       "mur": "M3",
+       "pos_m": 1.5,
+       "largeur_m": 0.9,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P6",
+       "type": "porte",
+       "mur": "M3",
+       "pos_m": 4.3,
+       "largeur_m": 0.7,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P7",
+       "type": "porte",
+       "mur": "M3",
+       "pos_m": 5.55,
+       "largeur_m": 0.7,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P8",
+       "type": "porte",
+       "mur": "M3",
+       "pos_m": 7,
+       "largeur_m": 0.9,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "F1",
+       "type": "fenetre",
+       "mur": "E1",
+       "pos_m": 3.5,
+       "largeur_m": 1.2,
+       "hauteur_m": 1.2,
+       "allege_m": 1
+      },
+      {
+       "id": "F2",
+       "type": "fenetre",
+       "mur": "E4",
+       "pos_m": 6,
+       "largeur_m": 1.2,
+       "hauteur_m": 1.2,
+       "allege_m": 1
+      },
+      {
+       "id": "F3",
+       "type": "fenetre",
+       "mur": "E1",
+       "pos_m": 7,
+       "largeur_m": 1.2,
+       "hauteur_m": 1.2,
+       "allege_m": 1
+      },
+      {
+       "id": "F4",
+       "type": "fenetre",
+       "mur": "E4",
+       "pos_m": 1.5,
+       "largeur_m": 1.2,
+       "hauteur_m": 1.2,
+       "allege_m": 1
+      },
+      {
+       "id": "F5",
+       "type": "fenetre",
+       "mur": "E2",
+       "pos_m": 5.5,
+       "largeur_m": 1.2,
+       "hauteur_m": 1.2,
+       "allege_m": 1
+      }
+     ],
+     "poteaux": [
+      {
+       "id": "P1",
+       "x": 0,
+       "y": 0,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P2",
+       "x": 5.5,
+       "y": 0,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P3",
+       "x": 10,
+       "y": 0,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P4",
+       "x": 10,
+       "y": 4,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P5",
+       "x": 10,
+       "y": 7.5,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P6",
+       "x": 8.5,
+       "y": 9,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P7",
+       "x": 4,
+       "y": 9,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P8",
+       "x": 0,
+       "y": 9,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P9",
+       "x": 0,
+       "y": 4.5,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      }
+     ],
+     "poutres": [
+      {
+       "id": "1",
+       "a": [
+        0,
+        0
+       ],
+       "b": [
+        5.5,
+        0
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "2",
+       "a": [
+        5.5,
+        0
+       ],
+       "b": [
+        10,
+        0
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "3",
+       "a": [
+        10,
+        0
+       ],
+       "b": [
+        10,
+        4
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "4",
+       "a": [
+        10,
+        4
+       ],
+       "b": [
+        10,
+        7.5
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "5",
+       "a": [
+        10,
+        7.5
+       ],
+       "b": [
+        8.5,
+        9
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "6",
+       "a": [
+        8.5,
+        9
+       ],
+       "b": [
+        4,
+        9
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "7",
+       "a": [
+        4,
+        9
+       ],
+       "b": [
+        0,
+        9
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "8",
+       "a": [
+        0,
+        9
+       ],
+       "b": [
+        0,
+        4.5
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "9",
+       "a": [
+        0,
+        4.5
+       ],
+       "b": [
+        0,
+        0
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      }
+     ],
+     "dalle": {
+      "type": "aucun"
+     },
+     "equipements": {
+      "plomberie": [
+       {
+        "id": "WC1",
+        "type": "wc",
+        "x": 5.9,
+        "y": 6.3
+       },
+       {
+        "id": "DO1",
+        "type": "douche",
+        "x": 4.7,
+        "y": 6.3
+       },
+       {
+        "id": "EV1",
+        "type": "evier",
+        "x": 9.4,
+        "y": 1.5
+       }
+      ],
+      "electricite": [
+       {
+        "id": "L1",
+        "type": "point_lumineux",
+        "x": 2.7,
+        "y": 2
+       },
+       {
+        "id": "L2",
+        "type": "point_lumineux",
+        "x": 7.7,
+        "y": 2
+       },
+       {
+        "id": "T1",
+        "type": "tableau",
+        "x": 0.3,
+        "y": 3.5
+       }
+      ]
+     }
+    }
+   ],
+   "fondation": {
+    "type": "filante",
+    "niveau_base_m": -1.15,
+    "semelle_filante": {
+     "l_cm": 40,
+     "h_cm": 25
+    },
+    "dallage": {
+     "ep_cm": 10
+    }
+   },
+   "toiture": {
+    "type": "bac",
+    "debord_cm": 50,
+    "pans": [
+     {
+      "id": "T1",
+      "polygone": [
+       [
+        -0.5,
+        -0.5
+       ],
+       [
+        10.5,
+        -0.5
+       ],
+       [
+        10.5,
+        4.5
+       ],
+       [
+        -0.5,
+        4.5
+       ]
+      ],
+      "pente_pct": 20
+     },
+     {
+      "id": "T2",
+      "polygone": [
+       [
+        -0.5,
+        4.5
+       ],
+       [
+        10.5,
+        4.5
+       ],
+       [
+        10.5,
+        9.5
+       ],
+       [
+        -0.5,
+        9.5
+       ]
+      ],
+      "pente_pct": 20
+     }
+    ]
+   }
+  },
+  {
+   "id": "B",
+   "libelle": "Compact rectangulaire",
+   "description": "Rectangle 10 × 9 m, couloir transversal.",
+   "niveaux": [
+    {
+     "id": "RDC",
+     "nom": "RDC",
+     "cote_m": 0,
+     "hsp_m": 2.8,
+     "contour": [
+      {
+       "x": 0,
+       "y": 0
+      },
+      {
+       "x": 10,
+       "y": 0
+      },
+      {
+       "x": 10,
+       "y": 9
+      },
+      {
+       "x": 0,
+       "y": 9
+      }
+     ],
+     "murs_int": [
+      {
+       "id": "M1",
+       "a": [
+        0,
+        4
+       ],
+       "b": [
+        10,
+        4
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      },
+      {
+       "id": "M2",
+       "a": [
+        5.5,
+        0
+       ],
+       "b": [
+        5.5,
+        4
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      },
+      {
+       "id": "M3",
+       "a": [
+        0,
+        5.2
+       ],
+       "b": [
+        10,
+        5.2
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      },
+      {
+       "id": "M4",
+       "a": [
+        4,
+        5.2
+       ],
+       "b": [
+        4,
+        9
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      },
+      {
+       "id": "M5",
+       "a": [
+        5.4,
+        5.2
+       ],
+       "b": [
+        5.4,
+        7.4
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      },
+      {
+       "id": "M6",
+       "a": [
+        6.4,
+        5.2
+       ],
+       "b": [
+        6.4,
+        9
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      },
+      {
+       "id": "M7",
+       "a": [
+        4,
+        7.4
+       ],
+       "b": [
+        6.4,
+        7.4
+       ],
+       "ep_cm": 10,
+       "porteur": false
+      }
+     ],
+     "pieces": [
+      {
+       "id": "salon",
+       "nom": "Salon-séjour",
+       "usage": "sejour",
+       "polygone": [
+        [
+         0,
+         0
+        ],
+        [
+         5.5,
+         0
+        ],
+        [
+         5.5,
+         4
+        ],
+        [
+         0,
+         4
+        ]
+       ]
+      },
+      {
+       "id": "cuisine",
+       "nom": "Cuisine",
+       "usage": "cuisine",
+       "polygone": [
+        [
+         5.5,
+         0
+        ],
+        [
+         10,
+         0
+        ],
+        [
+         10,
+         4
+        ],
+        [
+         5.5,
+         4
+        ]
+       ]
+      },
+      {
+       "id": "couloir",
+       "nom": "Couloir",
+       "usage": "circulation",
+       "polygone": [
+        [
+         0,
+         4
+        ],
+        [
+         10,
+         4
+        ],
+        [
+         10,
+         5.2
+        ],
+        [
+         0,
+         5.2
+        ]
+       ]
+      },
+      {
+       "id": "ch1",
+       "nom": "Chambre 1",
+       "usage": "chambre",
+       "polygone": [
+        [
+         0,
+         5.2
+        ],
+        [
+         4,
+         5.2
+        ],
+        [
+         4,
+         9
+        ],
+        [
+         0,
+         9
+        ]
+       ]
+      },
+      {
+       "id": "douche",
+       "nom": "Douche",
+       "usage": "salle_eau",
+       "polygone": [
+        [
+         4,
+         5.2
+        ],
+        [
+         5.4,
+         5.2
+        ],
+        [
+         5.4,
+         7.4
+        ],
+        [
+         4,
+         7.4
+        ]
+       ]
+      },
+      {
+       "id": "wc",
+       "nom": "WC",
+       "usage": "wc",
+       "polygone": [
+        [
+         5.4,
+         5.2
+        ],
+        [
+         6.4,
+         5.2
+        ],
+        [
+         6.4,
+         7.4
+        ],
+        [
+         5.4,
+         7.4
+        ]
+       ]
+      },
+      {
+       "id": "rangement",
+       "nom": "Rangement",
+       "usage": "rangement",
+       "polygone": [
+        [
+         4,
+         7.4
+        ],
+        [
+         6.4,
+         7.4
+        ],
+        [
+         6.4,
+         9
+        ],
+        [
+         4,
+         9
+        ]
+       ]
+      },
+      {
+       "id": "ch2",
+       "nom": "Chambre 2",
+       "usage": "chambre",
+       "polygone": [
+        [
+         6.4,
+         5.2
+        ],
+        [
+         10,
+         5.2
+        ],
+        [
+         10,
+         9
+        ],
+        [
+         6.4,
+         9
+        ]
+       ]
+      }
+     ],
+     "ouvertures": [
+      {
+       "id": "P1",
+       "type": "porte",
+       "mur": "E1",
+       "pos_m": 1.5,
+       "largeur_m": 0.9,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P2",
+       "type": "porte",
+       "mur": "M2",
+       "pos_m": 1.5,
+       "largeur_m": 0.9,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P3",
+       "type": "porte",
+       "mur": "M1",
+       "pos_m": 2,
+       "largeur_m": 0.9,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P4",
+       "type": "porte",
+       "mur": "M1",
+       "pos_m": 7,
+       "largeur_m": 0.9,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P5",
+       "type": "porte",
+       "mur": "M3",
+       "pos_m": 1.5,
+       "largeur_m": 0.9,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P6",
+       "type": "porte",
+       "mur": "M3",
+       "pos_m": 4.3,
+       "largeur_m": 0.7,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P7",
+       "type": "porte",
+       "mur": "M3",
+       "pos_m": 5.55,
+       "largeur_m": 0.7,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "P8",
+       "type": "porte",
+       "mur": "M3",
+       "pos_m": 7,
+       "largeur_m": 0.9,
+       "hauteur_m": 2.1,
+       "allege_m": 0
+      },
+      {
+       "id": "F1",
+       "type": "fenetre",
+       "mur": "E1",
+       "pos_m": 3.5,
+       "largeur_m": 1.2,
+       "hauteur_m": 1.2,
+       "allege_m": 1
+      },
+      {
+       "id": "F2",
+       "type": "fenetre",
+       "mur": "E4",
+       "pos_m": 6,
+       "largeur_m": 1.2,
+       "hauteur_m": 1.2,
+       "allege_m": 1
+      },
+      {
+       "id": "F3",
+       "type": "fenetre",
+       "mur": "E1",
+       "pos_m": 7,
+       "largeur_m": 1.2,
+       "hauteur_m": 1.2,
+       "allege_m": 1
+      },
+      {
+       "id": "F4",
+       "type": "fenetre",
+       "mur": "E4",
+       "pos_m": 1.5,
+       "largeur_m": 1.2,
+       "hauteur_m": 1.2,
+       "allege_m": 1
+      },
+      {
+       "id": "F5",
+       "type": "fenetre",
+       "mur": "E2",
+       "pos_m": 5.5,
+       "largeur_m": 1.2,
+       "hauteur_m": 1.2,
+       "allege_m": 1
+      }
+     ],
+     "poteaux": [
+      {
+       "id": "P1",
+       "x": 0,
+       "y": 0,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P2",
+       "x": 5.5,
+       "y": 0,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P3",
+       "x": 10,
+       "y": 0,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P4",
+       "x": 10,
+       "y": 4.5,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P5",
+       "x": 10,
+       "y": 9,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P6",
+       "x": 4,
+       "y": 9,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P7",
+       "x": 0,
+       "y": 9,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      },
+      {
+       "id": "P8",
+       "x": 0,
+       "y": 4.5,
+       "a_cm": 20,
+       "b_cm": 20,
+       "forme": "carre"
+      }
+     ],
+     "poutres": [
+      {
+       "id": "1",
+       "a": [
+        0,
+        0
+       ],
+       "b": [
+        5.5,
+        0
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "2",
+       "a": [
+        5.5,
+        0
+       ],
+       "b": [
+        10,
+        0
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "3",
+       "a": [
+        10,
+        0
+       ],
+       "b": [
+        10,
+        4.5
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "4",
+       "a": [
+        10,
+        4.5
+       ],
+       "b": [
+        10,
+        9
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "5",
+       "a": [
+        10,
+        9
+       ],
+       "b": [
+        4,
+        9
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "6",
+       "a": [
+        4,
+        9
+       ],
+       "b": [
+        0,
+        9
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "7",
+       "a": [
+        0,
+        9
+       ],
+       "b": [
+        0,
+        4.5
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      },
+      {
+       "id": "8",
+       "a": [
+        0,
+        4.5
+       ],
+       "b": [
+        0,
+        0
+       ],
+       "b_cm": 20,
+       "h_cm": 30
+      }
+     ],
+     "dalle": {
+      "type": "aucun"
+     },
+     "equipements": {
+      "plomberie": [
+       {
+        "id": "WC1",
+        "type": "wc",
+        "x": 5.9,
+        "y": 6.3
+       },
+       {
+        "id": "DO1",
+        "type": "douche",
+        "x": 4.7,
+        "y": 6.3
+       },
+       {
+        "id": "EV1",
+        "type": "evier",
+        "x": 9.4,
+        "y": 1.5
+       }
+      ],
+      "electricite": [
+       {
+        "id": "L1",
+        "type": "point_lumineux",
+        "x": 2.7,
+        "y": 2
+       },
+       {
+        "id": "L2",
+        "type": "point_lumineux",
+        "x": 7.7,
+        "y": 2
+       },
+       {
+        "id": "T1",
+        "type": "tableau",
+        "x": 0.3,
+        "y": 3.5
+       }
+      ]
+     }
+    }
+   ],
+   "fondation": {
+    "type": "filante",
+    "niveau_base_m": -1.15,
+    "semelle_filante": {
+     "l_cm": 40,
+     "h_cm": 25
+    },
+    "dallage": {
+     "ep_cm": 10
+    }
+   },
+   "toiture": {
+    "type": "bac",
+    "debord_cm": 50,
+    "pans": [
+     {
+      "id": "T1",
+      "polygone": [
+       [
+        -0.5,
+        -0.5
+       ],
+       [
+        10.5,
+        -0.5
+       ],
+       [
+        10.5,
+        4.5
+       ],
+       [
+        -0.5,
+        4.5
+       ]
+      ],
+      "pente_pct": 20
+     },
+     {
+      "id": "T2",
+      "polygone": [
+       [
+        -0.5,
+        4.5
+       ],
+       [
+        10.5,
+        4.5
+       ],
+       [
+        10.5,
+        9.5
+       ],
+       [
+        -0.5,
+        9.5
+       ]
+      ],
+      "pente_pct": 20
+     }
+    ]
+   }
+  }
+ ]
+}

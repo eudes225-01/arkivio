@@ -199,6 +199,11 @@ footer{background:rgba(255,255,255,.65);padding:0}.fw{max-width:1180px;margin:0 
 .plus,.chat .send{flex:none;width:46px;height:46px;min-height:46px;padding:0;display:grid;place-items:center;border-radius:50%}
 .plus{border:1px solid var(--ls);background:#fff;color:var(--p);cursor:pointer;transition:background .2s,border-color .2s,transform .2s}.plus:hover{background:var(--ps);border-color:var(--p)}.plus:active{transform:scale(.94)}
 .plus svg,.send svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* Dictée vocale */
+.mic.rec{background:var(--errs);border-color:var(--err);color:var(--err);animation:micp 1.4s ease-in-out infinite}
+@keyframes micp{0%,100%{box-shadow:0 0 0 0 rgba(180,35,24,.35)}50%{box-shadow:0 0 0 8px rgba(180,35,24,0)}}
+.mic[hidden]{display:none}
+
 .atts{display:flex;flex-wrap:wrap;gap:6px;padding:2px 4px 0}.att{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:4px 4px 4px 10px;border-radius:999px;background:var(--ps);color:var(--pd);font:600 12.5px var(--sans)}
 .att img{width:22px;height:22px;border-radius:6px;object-fit:cover}.att button{border:0;background:rgba(12,74,110,.15);color:var(--pd);width:20px;height:20px;border-radius:50%;cursor:pointer;line-height:1;font-size:14px}.att button:hover{background:rgba(12,74,110,.3)}
 .aerr{margin:0;padding:0 6px;font-size:12.5px;color:var(--err)}
@@ -295,7 +300,7 @@ footer{background:rgba(255,255,255,.65);padding:0}.fw{max-width:1180px;margin:0 
     <div class="ready" id="ready" hidden><div><b>Votre projet est cadré.</b><br>Vérifiez les valeurs avant de générer les plans.</div><button class="btn" id="open" type="button">Ouvrir le formulaire</button></div>
     <form class="comp" data-send><div class="atts" id="atts" hidden></div><p class="aerr" id="aerr" role="alert" hidden></p>
       <div class="crow"><button class="plus" type="button" id="plus" aria-label="Joindre un fichier (PDF ou image)" title="Joindre un PDF ou une image"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><input type="file" id="file" accept="application/pdf,image/*" multiple hidden>
-      <textarea id="q2" rows="1" placeholder="Décrivez votre projet…" aria-label="Votre message"></textarea><button class="send" type="submit" aria-label="Envoyer" title="Envoyer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button></div></form>
+      <textarea id="q2" rows="1" placeholder="Décrivez votre projet…" aria-label="Votre message"></textarea><button class="plus mic" type="button" id="mic" aria-label="Dicter un message" aria-pressed="false" title="Dicter un message" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3"/></svg></button><button class="send" type="submit" aria-label="Envoyer" title="Envoyer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button></div></form>
   </section>
 
   <section id="v-form" class="card form" hidden>
@@ -447,6 +452,47 @@ document.querySelectorAll("[data-gl]").forEach(e=>e.innerHTML=GL);
 const io="IntersectionObserver"in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12}):null;
 document.querySelectorAll(".steps li,.feat li,#v-home .cta").forEach((e,i)=>{if(!io)return;e.classList.add("rv");e.style.transitionDelay=(i%4)*70+"ms";io.observe(e)});
 init().finally(()=>window.__hideSplash&&window.__hideSplash());
+</script>
+<script>
+/* Dictée vocale (Web Speech API, fr-FR). Le texte reconnu s'écrit dans la zone de message ;
+   quand vous arrêtez de parler (silence) ou touchez à nouveau le micro, le message part tout seul.
+   ENVOI_AUTO=false : le texte reste dans la zone pour relecture. Échap : annule la dictée. */
+(function(){
+  var ENVOI_AUTO=true,SILENCE_MS=2500;
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition,btn=document.getElementById("mic"),ta=document.getElementById("q2"),err=document.getElementById("aerr");
+  if(!btn||!ta||!SR)return; /* navigateur sans dictée (ex. Firefox) : le bouton reste caché */
+  btn.hidden=false;
+  var rec=null,actif=false,ignore=false,erreur=false,avant="",base="",dernier="",tm=null;
+  var MSG={"not-allowed":"Micro bloqué : autorisez-le dans les réglages du navigateur pour ce site.","service-not-allowed":"Micro bloqué : autorisez-le dans les réglages du navigateur pour ce site.","audio-capture":"Aucun micro détecté.","no-speech":"Aucune voix détectée. Réessayez en parlant plus près du micro.","network":"La dictée demande une connexion internet."};
+  function msg(t){if(!err)return;err.textContent=t||"";err.hidden=!t}
+  function ui(on){actif=on;btn.classList.toggle("rec",on);btn.setAttribute("aria-pressed",on?"true":"false");var l=on?"Arrêter et envoyer":"Dicter un message";btn.title=l;btn.setAttribute("aria-label",l)}
+  function occupe(){return typeof busy!=="undefined"&&busy}
+  function armer(){clearTimeout(tm);tm=setTimeout(function(){if(actif&&rec){try{rec.stop()}catch(e){}}},SILENCE_MS)}
+  function arreter(abandon){clearTimeout(tm);ignore=!!abandon;if(rec){try{abandon?rec.abort():rec.stop()}catch(e){}}if(abandon)ui(false)}
+  btn.addEventListener("click",function(){
+    if(actif){arreter(false);return}
+    if(occupe())return;
+    msg("");ignore=false;erreur=false;dernier="";avant=ta.value;
+    base=ta.value&&!/\s$/.test(ta.value)?ta.value+" ":ta.value;
+    rec=new SR();rec.lang="fr-FR";rec.interimResults=true;rec.continuous=true;rec.maxAlternatives=1;
+    rec.onresult=function(e){
+      if(ignore)return;
+      var t="";for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;
+      dernier=t;ta.value=base+t;ta.dispatchEvent(new Event("input",{bubbles:true}));
+      armer(); /* chaque nouveau mot repousse la fin de dictée */
+    };
+    rec.onerror=function(e){if(e.error==="aborted")return;erreur=true;msg(MSG[e.error]||"La dictée a échoué ("+e.error+").")};
+    rec.onend=function(){
+      clearTimeout(tm);ui(false);
+      if(ENVOI_AUTO&&!ignore&&!erreur&&dernier.trim()&&!occupe()&&ta.form)ta.form.requestSubmit();
+    };
+    try{rec.start();ui(true)}catch(e){msg("Impossible de démarrer la dictée.");ui(false)}
+  });
+  /* Envoi manuel (bouton Envoyer ou Entrée) pendant la dictée : couper AVANT que le formulaire vide la zone */
+  document.addEventListener("submit",function(){if(actif)arreter(true)},true);
+  /* Échap : annule la dictée et rend la zone de saisie telle qu'elle était */
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&actif){arreter(true);ta.value=avant;ta.dispatchEvent(new Event("input",{bubbles:true}))}});
+})();
 </script>
 </body>
 </html>
