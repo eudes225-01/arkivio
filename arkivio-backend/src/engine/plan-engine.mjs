@@ -145,8 +145,21 @@ export function drawPlan(m, g, o = {}) {
     else { T(x, y + tot / 2, s, z, { rot: -90 }); T(x - z * 0.38, y + tot / 2 - w1, '2', z * 0.6, { rot: -90 }); } };
   // cadre
   Rc(fm - 1.6, fm - 1.6, PW - 2 * fm + 3.2, PH - 2 * fm + 3.2, 0.25); Rc(fm, fm, PW - 2 * fm, PH - 2 * fm, 0.9);
-  // murs
-  for (const w of m.walls) Rc(X(w.x0), Y(w.y1), (w.x1 - w.x0) * S, (w.y1 - w.y0) * S, 0, { fill: '#1a1a1a' });
+  // Murs hachurés, comme sur une planche d'architecte : fond blanc, hachures fines et contour net.
+  for (const w of m.walls) {
+    const x0 = X(w.x0), x1 = X(w.x1), y0 = Y(w.y1), y1 = Y(w.y0), ww = x1 - x0, wh = y1 - y0;
+    Rc(x0, y0, ww, wh, 0, { fill: '#ffffff' });
+    const pas = Math.max(0.9, 0.16 * S);
+    for (let c = x0 - y1 + pas; c < x1 - y0; c += pas) {
+      const pts = [];
+      const ajouter = (x, y) => {
+        if (x >= x0 - 1e-6 && x <= x1 + 1e-6 && y >= y0 - 1e-6 && y <= y1 + 1e-6 && !pts.some(p => Math.abs(p[0] - x) < 1e-5 && Math.abs(p[1] - y) < 1e-5)) pts.push([x, y]);
+      };
+      ajouter(x0, x0 - c); ajouter(x1, x1 - c); ajouter(c + y0, y0); ajouter(c + y1, y1);
+      if (pts.length >= 2) Ln(pts[0][0], pts[0][1], pts[1][0], pts[1][1], 0.12, { color: '#777777' });
+    }
+    Rc(x0, y0, ww, wh, w.int ? 0.28 : 0.48);
+  }
   // ouvertures
   const tg = 1.7 * k;
   for (const q of m.ops) {
@@ -207,8 +220,17 @@ export function drawPlan(m, g, o = {}) {
     }
     if (!done) { const sz = 1.5 * k; T(cx0, cy0, clip(r.libelle, sz, ix1 - ix0 - 1, true), sz, { anchor: 'middle', bold: true }); M2(cx0, cy0 + 1.3 * sz, area, sz * 0.85, false); m.warnings.push('libellé trop grand pour la pièce : ' + r.libelle); }
   }
-  // chaînes de cotes (textes décalés sur 2 niveaux quand le segment est trop court)
-  const dz = 2.0 * k, bp = a => [...new Set(m.rooms.flatMap(r => [r[a + '0'], r[a + '1']]).map(q => +q.toFixed(3)))].sort((p, q) => p - q);
+  // Chaînes de cotes en centimètres : angles, cloisons et bords d'ouvertures.
+  // Les points sont ramenés au cm avant dédoublonnage pour que les segments s'additionnent exactement au total affiché.
+  const dz = 2.0 * k, bp = a => {
+    const max = a === 'x' ? m.W : m.D;
+    const points = [0, max, ...m.rooms.flatMap(r => [r[a + '0'], r[a + '1']])];
+    for (const q of m.ops) if (q.axis === a) {
+      const c = a === 'x' ? q.cx : q.cy;
+      points.push(c - q.w / 2, c + q.w / 2);
+    }
+    return [...new Set(points.map(q => Math.round(q * 100)))].sort((p, q) => p - q).map(q => q / 100);
+  };
   const tick = (x, y) => Ln(x - 0.8, y + 0.8, x + 0.8, y - 0.8, 0.35);
   const chain = (pts, vertical, lineAt, size, bold) => {
     const P = pts.map(p => vertical ? Y(p) : X(p)), rows = [[], []];
@@ -216,7 +238,7 @@ export function drawPlan(m, g, o = {}) {
     vertical ? Ln(lineAt, P[0], lineAt, P[P.length - 1], 0.3) : Ln(P[0], lineAt, P[P.length - 1], lineAt, 0.3);
     P.forEach(p => { ext(p); vertical ? tick(lineAt, p) : tick(p, lineAt); });
     for (let i = 0; i < P.length - 1; i++) {
-      const c = (P[i] + P[i + 1]) / 2, len = pts[i + 1] - pts[i], s = f2(len), w = textW(s, size, bold) + 0.8; let row = w > Math.abs(P[i + 1] - P[i]) + 0.5 ? 1 : 0;
+      const c = (P[i] + P[i + 1]) / 2, len = pts[i + 1] - pts[i], s = String(Math.round(len * 100)), w = textW(s, size, bold) + 0.8; let row = w > Math.abs(P[i + 1] - P[i]) + 0.5 ? 1 : 0;
       if (len < 0.15) m.warnings.push(`cote très courte (${s} m) : décalage de cloisons à vérifier`);
       while (row < 1 && rows[row].some(iv => c - w / 2 < iv[1] && c + w / 2 > iv[0])) row++;
       rows[row].push([c - w / 2, c + w / 2]);
@@ -241,7 +263,7 @@ export function drawPlan(m, g, o = {}) {
   // titre du dessin (plus grand que les textes des pièces) + sous-titre
   const titre = o.titre || 'PLAN RDC COTÉ', tsz = fitSize(titre, 7 * k, Wf - 10, true, 4), cxm = fm + Wf / 2, ty = areaB - 10 * k, tw = textW(titre, tsz, true);
   T(cxm, ty, titre, tsz, { anchor: 'middle', bold: true }); Ln(cxm - tw / 2, ty + 1.7 * k, cxm + tw / 2, ty + 1.7 * k, 0.7 * k); Ln(cxm - tw / 2, ty + 3.1 * k, cxm + tw / 2, ty + 3.1 * k, 0.25 * k, { color: ORANGE });
-  const sub = `${g.meta.libelle} - standing ${m.standing} - variante ${m.variante} - échelle 1/${den} - cotes en mètres`;
+  const sub = `${g.meta.libelle} - standing ${m.standing} - variante ${m.variante} - murs ext. ${Math.round(m.tE * 100)} cm / cloisons ${Math.round(m.tI * 100)} cm - cotes en cm - échelle 1/${den}`;
   T(cxm, areaB - 2.6 * k, clip(sub, 3 * k, Wf - 10, false), fitSize(sub, 3 * k, Wf - 10, false, 2), { anchor: 'middle' });
   // ---------------- cartouche ----------------
   const cx = fm, cy = PH - fm - hC, hs = 2 * k, rh = [18 * k, 12 * k, 9 * k, 9 * k], sw = 0.4;
