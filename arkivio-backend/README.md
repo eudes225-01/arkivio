@@ -1,7 +1,6 @@
 # Arkivio — backend (v1.1)
 
-API Express d'Arkivio : un assistant (Claude) qui cadre le projet, puis le moteur de plans (`plan-engine.mjs` v0.7)
-qui génère les plans en **PDF, SVG et IFC**. Le backend sert aussi le frontend (`public/index.html`, une seule origine).
+API Express d'Arkivio : Claude cadre un projet de maison libre, le validateur contrôle sa géométrie et le moteur met en page ses plans en **PDF Chromium, SVG et IFC**. Le backend sert aussi le frontend (`public/index.html`, une seule origine).
 
 Même architecture que le backend CivilEstimateur : `createApp()` séparé de `server.js`, `config/env.js`, helmet + CORS +
 limites de débit, relais Anthropic sans exposer la clé, validation en liste blanche, tests `node:test`, déploiement Render.
@@ -13,11 +12,12 @@ limites de débit, relais Anthropic sans exposer la clé, validation en liste bl
 | Nouveauté | Où | État |
 |---|---|---|
 | **Dictée vocale** dans le chat (bouton micro, envoi automatique après un silence) | `public/index.html` | Prête. Testée sur une fausse reconnaissance vocale ; **à essayer sur Chrome / Safari après déploiement** |
-| **Format de projet libre v1.0** (géométrie libre : plusieurs niveaux, pans coupés, arrondis, 2 variantes) + validateur + convertisseur vers CivilEstimator | `src/projet-libre/`, `data/schemas/`, `data/exemples/`, `docs/FORMAT_PROJET_LIBRE.md` | Prêt, **non branché** sur `/api/chat` (étape suivante) |
+| **Génération libre avec Claude** (géométrie personnalisée, variantes et niveaux) + boucle de correction des erreurs géométriques | `src/services/assistant.js`, `src/projet-libre/` | Reliée à `/api/chat` ; les sorties invalides sont renvoyées à Claude pour correction |
+| **Dossier libre** : PDF Chromium, SVG, IFC, source JSON, métré JSON et descriptif Markdown regroupés en ZIP | `src/projet-libre/rendu.mjs`, `src/projet-libre/ifc.mjs`, `src/routes/projet-libre.js` | Généré par `/api/projet-libre/plans` pour chaque variante et niveau |
 | **Rendu Chromium** (SVG/HTML → PDF vectoriel, polices Inter embarquées) | `src/services/pdf/`, `src/services/plans.js`, `.puppeteerrc.cjs`, `outils/essai_rendu.mjs` | Utilisé par `/api/plan` ; essai de rendu réussi sur Render |
 | `package.json`, `.env.example`, `.gitignore`, `.node-version` | racine | Mis à jour / ajoutés |
 
-Le contrat des routes reste le même. `/api/plan` produit maintenant son PDF depuis le SVG du plan via Chromium ; le SVG et l'IFC sont inchangés.
+La route de catalogue et `/api/plan` restent disponibles pour compatibilité. Le frontend utilise le flux libre Claude → validation → `/api/projet-libre/plans`.
 
 ---
 
@@ -28,6 +28,7 @@ Le contrat des routes reste le même. `/api/plan` produit maintenant son PDF dep
 | `GET /api/gabarits` | — | `[{ id, libelle, variantes: [{ id, standings: [...] }], … }]` — remplit « Type de maison » / « Standing » et l'indicateur « Serveur connecté » |
 | `POST /api/chat` | `{ messages: [{role, content}], fichiers: [{nom, type, donnees}] }` | `{ reponse, pret, projet? }` |
 | `POST /api/plan` | `{ gabarit, standing, variante, format, echelle, orientation, projet, titre, phase, planche, moa, moe, date }` | `{ svg, pdf (base64), ifc, page: { format, orientation, echelle }, alertes: [] }` |
+| `POST /api/projet-libre/plans` | `{ projet: <arkivio-projet-libre v1.0>, options? }` | Toutes les planches PDF/SVG, IFC par variante, métré dérivé, projet JSON, descriptif et archive ZIP complète |
 | `GET /api/health` | — | `{ ok: true }` |
 
 Les erreurs sont toujours `{ erreur: "message lisible" }`, avec un statut HTTP cohérent :
@@ -123,11 +124,11 @@ src/
   services/
     catalogue.js     charge data/gabarits/*.json ; calcule variantes × standings réellement disponibles
     saisie.js        validation/nettoyage de /api/plan et de la sortie de l'assistant
-    plans.js         gabarit → modèle → SVG + PDF + IFC
-    assistant.js     prompt (dérivé du catalogue), outil projet_pret, appel Anthropic, mapping d'erreurs
+    plans.js         gabarit → modèle → SVG + PDF + IFC (ancienne route)
+    assistant.js     Claude → projet libre → validation et correction géométrique
     validerChat.js   validation en liste blanche de /api/chat
     pdf/             rendu.js (Chromium)  fonts.js (Inter, Space Grotesk en data-URI)        ← nouveau
-  projet-libre/      geometrie  modele  valider  versCivilEstimator  index  (.mjs)           ← nouveau
+  projet-libre/      géométrie, modèle, validation, cotation, IFC et conversion métré (.mjs)
   engine/plan-engine.mjs
 data/
   gabarits/          F2, F3, F4 plain-pied (v0.7)
@@ -230,11 +231,11 @@ Node ≥ 22.12 est requis (comme CivilEstimator) ; `.node-version` vaut 24.22.1.
 | # | Tâche | État |
 |---|---|---|
 | 1 | Format de projet libre aligné sur CivilEstimator | **Fait** (v1.0, § 4) |
-| 2 | Service Claude qui propose le projet (2 variantes), sans limite F2/F3/F4, avec boucle de correction | À faire : brancher `schema.json` comme outil dans `assistant.js` + boucle `validerProjet` |
+| 2 | Service Claude qui propose le projet libre, sans limite F2/F3/F4, avec boucle de correction | **Implémenté** ; vérifier après déploiement avec des demandes variées |
 | 3 | Fichier de règles : arrêtés 169, 170, 0174 (2024), loi 2022-30 ; valeurs « à confirmer » des gabarits | À faire : **il faut les PDF** |
-| 4 | Moteur de dessin Node des 9 planches (codes du registre CivilEstimator), cotation complète, portrait/paysage | À faire — s'appuiera sur le rendu Chromium (§ 6) ; première cible : coupe enrichie avec cartouche |
+| 4 | Plans de niveaux libres avec cotes extérieures, dimensions des pièces et ouvertures | **Implémenté en première version** ; les 9 planches techniques restent à faire |
 | 5 | Ferraillage par ratios avec nomenclature (« à valider par un ingénieur ») | À faire |
-| 6 | ZIP du dossier complet avec sommaire ; planches regroupées par type dans l'interface | À faire |
+| 6 | ZIP du dossier libre (plans, IFC, source, métré et descriptif) | **Implémenté** ; pas encore les 9 planches techniques |
 | 7 | Transfert vers CivilEstimator (étape 1 : ZIP nommé + redirection ; étape 2 : lien temporaire) | À faire |
 | 8 | Authentification, crédits, paiement, relecture juridique des conditions, planche de présentation client, rendus réalistes | Plus tard |
 | — | Dictée vocale dans le chat | **Fait** (§ 3) |

@@ -245,14 +245,14 @@ footer{background:rgba(255,255,255,.65);padding:0}.fw{max-width:1180px;margin:0 
       <div class="dst"><span>1 · Décrire</span><span>2 · Ajuster</span><span>3 · Exporter</span></div>
       <div class="dbody">
         <div class="dsc">
-          <div class="m u dm">Une maison F3 de plain-pied pour quatre personnes.</div>
+          <div class="m u dm">Une maison pour quatre personnes, avec trois chambres et une grande terrasse.</div>
           <div class="m a dm"><span class="av" data-gl></span><span class="tx">Très bien. Souhaitez-vous un standing standard ou confort ?</span><span class="th">Arkivio réfléchit…</span></div>
           <div class="m u dm">Confort, avec une grande cuisine.</div>
           <div class="m a dm"><span class="av" data-gl></span><span class="tx">Parfait, j’ai ce qu’il faut. Vérifiez les valeurs, puis je génère vos plans.</span><span class="th">Arkivio réfléchit…</span></div>
         </div>
         <div class="dsc">
           <b class="dt">Vérifiez votre projet</b>
-          <div class="dfr"><small>Type de maison</small><span>F3 plain-pied</span></div>
+          <div class="dfr"><small>Programme</small><span>Sur mesure · 3 chambres</span></div>
           <div class="dfr"><small>Standing</small><span>Confort</span></div>
           <div class="dfr"><small>Format · Échelle</small><span>Automatique</span></div>
           <div class="dbtn">Valider et générer les plans</div>
@@ -307,9 +307,7 @@ footer{background:rgba(255,255,255,.65);padding:0}.fw{max-width:1180px;margin:0 
     <h2>Vérifiez votre projet</h2><p>Ajustez les valeurs, puis validez pour générer les plans.</p>
     <p class="note" id="resume" hidden></p>
     <form id="f" novalidate>
-      <fieldset><legend>Maison</legend><div class="row">
-        <div><label for="gabarit">Type de maison</label><select id="gabarit"></select></div>
-        <div><label for="standing">Standing</label><select id="standing"></select></div></div></fieldset>
+      <fieldset><legend>Maison sur mesure</legend><p class="note" id="programme">Le programme défini avec Arkivio sera dessiné depuis sa géométrie propre : aucun modèle F1/F2/F3 imposé.</p></fieldset>
       <fieldset><legend>Mise en page</legend><div class="row">
         <div><label for="format">Format</label><select id="format"><option value="auto">Automatique</option><option>A5</option><option>A4</option><option>A3</option><option>A2</option><option>A1</option><option>A0</option></select></div>
         <div><label for="echelle">Échelle</label><select id="echelle"><option value="auto">Automatique</option><option value="50">1/50</option><option value="100">1/100</option><option value="200">1/200</option><option value="500">1/500</option><option value="1000">1/1000</option></select></div>
@@ -338,7 +336,7 @@ footer{background:rgba(255,255,255,.65);padding:0}.fw{max-width:1180px;margin:0 
 <div class="modal" id="terms" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="tt">
   <div class="dh"><h2 id="tt">Conditions d’utilisation</h2><p>Version 1.0 · mise à jour le 21 novembre 2026</p></div>
   <div class="db">
-    <h3>1. Le service</h3><p>Arkivio est un assistant qui vous aide à définir un projet de maison, puis génère des plans à partir de modèles prédéfinis.</p>
+    <h3>1. Le service</h3><p>Arkivio vous aide à définir un projet de maison, puis Claude construit des plans sur mesure que le serveur dessine et met en page en PDF avec Chromium.</p>
     <h3>2. Plans indicatifs</h3><p>Les plans sont des documents indicatifs, non contractuels. Ils ne remplacent ni l’étude d’un architecte ou d’un bureau d’études, ni les autorisations nécessaires. Faites-les valider par un professionnel avant toute construction.</p>
     <h3>3. Assistant IA</h3><p>Les réponses sont produites par une intelligence artificielle (Claude, d’Anthropic) et peuvent comporter des erreurs. Vérifiez les valeurs proposées dans le formulaire avant de valider.</p>
     <h3>4. Vos données</h3><p>Vos messages et les informations du cartouche sont transmis à un service d’intelligence artificielle pour produire les réponses et les plans. N’y saisissez pas d’informations sensibles (pièces d’identité, coordonnées bancaires).</p>
@@ -362,8 +360,8 @@ function standings(g){const o=[];(g?g.variantes:[]).forEach(v=>v.standings.forEa
 
 async function init(){
   $("civil").href=window.CIVILESTIMATOR_URL;$("date").value=new Date().toISOString().slice(0,10);
-  ["Une maison F3 de plain-pied, standing standard","Un plan F4 confort pour une famille de cinq personnes","Je ne sais pas encore : j’ai besoin de conseils"].forEach(t=>{const b=document.createElement("button");b.type="button";b.textContent=t;b.onclick=()=>send(t);$("ex").appendChild(b)});
-  try{const r=await fetch(API+"/api/gabarits");if(!r.ok)throw 0;cat=await r.json();if(!cat.length)throw 0;setSt("ok","Serveur connecté")}
+  ["Une maison de plain-pied avec trois chambres, deux salles d’eau et une terrasse","Une maison à deux niveaux sur un terrain de 12 × 20 m, avec quatre chambres","Je ne sais pas encore : aidez-moi à définir le programme"].forEach(t=>{const b=document.createElement("button");b.type="button";b.textContent=t;b.onclick=()=>send(t);$("ex").appendChild(b)});
+  try{const r=await fetch(API+"/api/health");if(!r.ok)throw 0;setSt("ok","Serveur connecté")}
   catch(e){setSt("err","Serveur injoignable")}
 }
 
@@ -385,38 +383,37 @@ document.querySelectorAll("[data-send]").forEach(f=>f.addEventListener("submit",
 document.querySelectorAll(".comp textarea").forEach(t=>t.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();t.form.requestSubmit()}}));
 
 function openForm(){
-  if(!cat.length){alert("Le serveur ne répond pas : impossible d’ouvrir le formulaire.");return}
-  fill($("gabarit"),cat.map(g=>({v:g.id,t:g.libelle})),proj.gabarit);onG(proj.standing);
-  ["projet","titre","phase","planche","moa","moe"].forEach(k=>{if(proj[k])$(k).value=proj[k]});
-  ["format","echelle","orientation"].forEach(k=>{if(proj[k])$(k).value=String(proj[k])});
+  if(!proj.projetLibre){alert("Décrivez d’abord votre maison dans la discussion pour que Claude construise son plan.");return}
+  const p=proj.projetLibre, titre=p.projet?.titre||"Maison sur mesure";
+  $("projet").value=titre;$("titre").value="";
+  $("programme").textContent=(proj.resume||"")+" · "+p.variantes.map(v=>`${v.libelle||"Variante "+v.id} : ${v.niveaux.map(n=>n.nom||n.id).join(", ")}`).join(" ; ");
   $("resume").hidden=!proj.resume;$("resume").textContent=proj.resume||"";show("v-form")
 }
-function onG(val){const g=cat.find(x=>x.id===$("gabarit").value);fill($("standing"),standings(g).map(s=>({v:s,t:cap(s)})),val)}
-$("gabarit").addEventListener("change",()=>onG());
 $("open").onclick=openForm;$("edit").onclick=()=>show("v-form");$("back").onclick=()=>show("v-chat");
 
 function blobUrl(d,t){const u=URL.createObjectURL(new Blob([d],{type:t}));urls.push(u);return u}
 function b64(b){const s=atob(b),a=new Uint8Array(s.length);for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i);return a}
 async function genAll(ev){
   ev.preventDefault();urls.forEach(URL.revokeObjectURL);urls=[];
-  const base={};["gabarit","standing","format","echelle","orientation","projet","titre","phase","planche","moa","moe","date"].forEach(k=>{const v=$(k).value.trim();if(v)base[k]=v});
-  const g=cat.find(x=>x.id===base.gabarit),vars=(g?g.variantes:[]).filter(v=>v.standings.includes(base.standing));
-  $("rsub").textContent=`${g?g.libelle:""}, standing ${base.standing} : ${vars.length} plan${vars.length>1?"s":""}`;
-  const box=$("plans");box.innerHTML="";show("v-res");
-  vars.forEach(async v=>{
-    const c=document.createElement("article");c.className="card plan";c.innerHTML=`<div class="v"><span class="spin"></span></div><div class="t"><h3>Variante ${v.id}</h3><p class="i">Génération…</p></div>`;box.appendChild(c);
-    const vw=c.querySelector(".v"),info=c.querySelector(".i");
-    try{
-      const r=await fetch(API+"/api/plan",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...base,variante:v.id})});
-      const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.erreur||"Échec ("+r.status+")");
-      const su=blobUrl(d.svg,"image/svg+xml"),img=new Image();img.src=su;img.alt="Plan variante "+v.id;vw.innerHTML="";vw.appendChild(img);
-      info.textContent=`${d.page.format} ${d.page.orientation}, échelle 1/${d.page.echelle}`;
-      const dl=document.createElement("div");dl.className="dl";const nm=`arkivio_${base.gabarit}_${v.id}_${base.standing}`;
-      [["PDF",blobUrl(b64(d.pdf),"application/pdf"),".pdf"],["SVG",su,".svg"],["IFC",blobUrl(d.ifc,"application/octet-stream"),".ifc"]].forEach(([n,u,x])=>{const a=document.createElement("a");a.href=u;a.download=nm+x;a.textContent=n;dl.appendChild(a)});
-      info.after(dl);
-      if((d.alertes||[]).length){const ul=document.createElement("ul");ul.className="al";d.alertes.forEach(t=>{const li=document.createElement("li");li.textContent=t;ul.appendChild(li)});dl.after(ul)}
-    }catch(e){vw.textContent="";info.textContent=e.message;info.style.color="var(--err)"}
-  });
+  const box=$("plans");box.innerHTML="";$("rsub").textContent="Préparation de toutes les variantes et de tous les niveaux…";show("v-res");
+  try{
+    const opts={};["format","echelle","orientation","projet","titre","phase","planche","moa","moe","date"].forEach(k=>{const v=$(k).value.trim();if(v)opts[k]=v});
+    const r=await fetch(API+"/api/projet-libre/plans",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({projet:proj.projetLibre,options:opts})});
+    const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.erreur||"Échec ("+r.status+")");
+    $("rsub").textContent=`${d.sorties.length} planche(s) générée(s) depuis votre projet libre. Vérifiez toutes les cotes et surfaces avant usage.`;
+    if((d.avertissements||[]).length){const w=document.createElement("ul");w.className="al";d.avertissements.forEach(x=>{const li=document.createElement("li");li.textContent=x.message;w.appendChild(li)});box.appendChild(w)}
+    for(const s of d.sorties){
+      const c=document.createElement("article");c.className="card plan";c.innerHTML=`<div class="v"></div><div class="t"><h3></h3><p class="i"></p><div class="dl"></div></div>`;box.appendChild(c);
+      const vw=c.querySelector(".v"),info=c.querySelector(".i"),dl=c.querySelector(".dl");
+      const su=blobUrl(s.svg,"image/svg+xml"),img=new Image();img.src=su;img.alt=`Plan ${s.nom}, variante ${s.variante}`;vw.appendChild(img);
+      c.querySelector("h3").textContent=`${s.nom} · variante ${s.variante}`;info.textContent=`${s.surface_m2.toLocaleString("fr-FR")} m² · ${s.page.format} ${s.page.orientation} · 1/${s.page.echelle}`;
+      [["PDF",blobUrl(b64(s.pdf),"application/pdf"),`.pdf`],["SVG",su,`.svg`]].forEach(([n,u,x])=>{const a=document.createElement("a");a.href=u;a.download=`arkivio_${s.variante}_${s.nom}${x}`;a.textContent=n;dl.appendChild(a)});
+      const ifc=(d.ifc||[]).find(x=>x.variante===s.variante);if(ifc){const a=document.createElement("a");a.href=blobUrl(atob(ifc.donnees),"application/x-step");a.download=`arkivio_variante_${s.variante}.ifc`;a.textContent="IFC";dl.appendChild(a)}
+    }
+    const fichiers=[["Projet JSON",blobUrl(d.projet,"application/json"),"arkivio_projet.json"],["Descriptif",blobUrl(d.descriptif,"text/markdown"),"arkivio_descriptif.md"],["Métré · CivilEstimator",blobUrl(JSON.stringify(d.metrage,null,2),"application/json"),"arkivio_metrage.json"],["Dossier complet · ZIP",blobUrl(b64(d.dossierZip),"application/zip"),"arkivio_dossier.zip"]];
+    const pack=document.createElement("article");pack.className="card plan";pack.innerHTML="<div class='t'><h3>Dossier projet et métré</h3><p class='i'>Géométrie source et données structurées pour le devis.</p><div class='dl'></div></div>";
+    fichiers.forEach(([n,u,name])=>{const a=document.createElement("a");a.href=u;a.download=name;a.textContent=n;pack.querySelector(".dl").appendChild(a)});box.appendChild(pack);
+  }catch(e){const p=document.createElement("p");p.className="bad";p.textContent=e.message;box.appendChild(p)}
 }
 $("f").addEventListener("submit",genAll);
 const CGU="1.0";

@@ -11,6 +11,7 @@ import { healthRouter } from './routes/health.js'
 import { gabaritsRouter } from './routes/gabarits.js'
 import { planRouter } from './routes/plan.js'
 import { chatRouter } from './routes/chat.js'
+import { projetLibreRouter } from './routes/projet-libre.js'
 import { dialoguerAvecClaude } from './services/assistant.js'
 
 /** @param {{ dialoguer?: Function }} [options] `dialoguer` : remplaçable dans les tests pour ne jamais appeler Anthropic. */
@@ -46,6 +47,7 @@ export function createApp({ dialoguer = dialoguerAvecClaude } = {}) {
   app.use('/api', healthRouter)
   app.use('/api', gabaritsRouter)
   app.use('/api', planRouter)
+  app.use('/api', projetLibreRouter)
   app.use('/api', chatRouter(dialoguer))
   app.use('/api', (_req, res) => res.status(404).json({ erreur: 'Route inconnue.' }))
 

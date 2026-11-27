@@ -69,9 +69,11 @@ function validerVariante(v, base, projet, P, S, add) {
     if (new Set(idsMurs).size !== idsMurs.length) add('MUR_ID_DUPLIQUE', 'erreur', `${ch}.murs_int`, 'Deux murs intérieurs portent le même id.')
     // Pièces
     const pieces = nv.pieces || []
+    if (!pieces.length) add('PIECES_ABSENTES', 'erreur', `${ch}.pieces`, 'Le niveau doit contenir les pièces de la maison (polygones et noms).')
     pieces.forEach((p, j) => {
       const cp = `${ch}.pieces[${p?.id ?? j}]`
       if (!Array.isArray(p?.polygone) || p.polygone.length < 3 || !p.polygone.every(estPoint)) return add('PIECE_POLYGONE', 'erreur', cp, 'Polygone de pièce invalide (≥ 3 points [x,y]).')
+      if (autoIntersection(p.polygone)) add('PIECE_AUTO_INTERSECTION', 'erreur', cp, `Le contour de la pièce « ${p.nom || p.id} » se croise.`)
       if (!p.polygone.every((q) => pointDansPoly(q, poly, S.tol_m))) add('PIECE_HORS_CONTOUR', 'erreur', cp, `La pièce « ${p.nom || p.id} » sort du contour du bâtiment.`)
     })
     const valides = pieces.filter((p) => Array.isArray(p?.polygone) && p.polygone.length >= 3 && p.polygone.every(estPoint))
