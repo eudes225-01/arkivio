@@ -225,7 +225,7 @@ export function drawPlan(m, g, o = {}) {
   const dz = 2.0 * k, bp = a => {
     const max = a === 'x' ? m.W : m.D;
     const points = [0, max, ...m.rooms.flatMap(r => [r[a + '0'], r[a + '1']])];
-    for (const q of m.ops) if (q.axis === a) {
+    for (const q of m.ops) if (q.axis === a && q.wall < 4) {
       const c = a === 'x' ? q.cx : q.cy;
       points.push(c - q.w / 2, c + q.w / 2);
     }
@@ -233,14 +233,15 @@ export function drawPlan(m, g, o = {}) {
   };
   const tick = (x, y) => Ln(x - 0.8, y + 0.8, x + 0.8, y - 0.8, 0.35);
   const chain = (pts, vertical, lineAt, size, bold) => {
-    const P = pts.map(p => vertical ? Y(p) : X(p)), rows = [[], []];
+    const P = pts.map(p => vertical ? Y(p) : X(p)), rows = Array.from({ length: 6 }, () => []);
     const ext = vertical ? (a => Ln(ox - 1, a, lineAt - 1.2, a, 0.12)) : (a => Ln(a, oy - 1, a, lineAt - 1.2, 0.12));
     vertical ? Ln(lineAt, P[0], lineAt, P[P.length - 1], 0.3) : Ln(P[0], lineAt, P[P.length - 1], lineAt, 0.3);
     P.forEach(p => { ext(p); vertical ? tick(lineAt, p) : tick(p, lineAt); });
     for (let i = 0; i < P.length - 1; i++) {
       const c = (P[i] + P[i + 1]) / 2, len = pts[i + 1] - pts[i], s = String(Math.round(len * 100)), w = textW(s, size, bold) + 0.8; let row = w > Math.abs(P[i + 1] - P[i]) + 0.5 ? 1 : 0;
       if (len < 0.15) m.warnings.push(`cote très courte (${s} cm) : décalage de cloisons à vérifier`);
-      while (row < 1 && rows[row].some(iv => c - w / 2 < iv[1] && c + w / 2 > iv[0])) row++;
+      while (row < rows.length && rows[row].some(iv => c - w / 2 < iv[1] && c + w / 2 > iv[0])) row++;
+      if (row === rows.length) row--;
       rows[row].push([c - w / 2, c + w / 2]);
       const base = (vertical ? lineAt : lineAt) - (0.9 * k + row * 2.7 * k) * (vertical ? 1 : 1);
       if (vertical) { T(base, c, s, size, { anchor: 'middle', rot: -90, bold }); if (row) Ln(lineAt, c, base + 0.3, c, 0.1); }
@@ -248,8 +249,8 @@ export function drawPlan(m, g, o = {}) {
     }
   };
   const bx = bp('x'), by = bp('y');
-  chain(bx, false, oy - 7 * k, dz, false); chain([0, m.W], false, oy - 14 * k, 2.6 * k, true);
-  chain(by, true, ox - 7 * k, dz, false); chain([0, m.D], true, ox - 14 * k, 2.6 * k, true);
+  chain(bx, false, oy - 7 * k, dz, false); chain([0, m.W], false, oy - 28 * k, 2.6 * k, true);
+  chain(by, true, ox - 7 * k, dz, false); chain([0, m.D], true, ox - 28 * k, 2.6 * k, true);
   // entrée, échelle graphique, flèche du nord
   const pb = oy + planH, ex = X(m.W / 2);
   d.push({ t: 'poly', pts: [[ex, pb + 2 * k], [ex - 1.6 * k, pb + 4.4 * k], [ex + 1.6 * k, pb + 4.4 * k]], fill: NOIR, close: true, sw: 0.1 });
