@@ -3,7 +3,7 @@ export function presenterErreursProjet(erreurs = [], { correctionEchouee = false
   const categories = new Set()
   for (const e of erreurs) {
     const code = String(e?.code || '').toUpperCase()
-    if (/^(FORMAT|VERSION|VARIANTE|NIVEAUX_)/.test(code)) categories.add('La description générale du projet est incomplète.')
+    if (/^(FORMAT|VERSION|VARIANTE|NIVEAUX_|SORTIE_INCOMPLETE)/.test(code)) categories.add('La description générale du projet est incomplète.')
     else if (/^(CONTOUR|MUR_|PIECE|PIECES_)/.test(code)) categories.add('Le tracé de la maison ou la disposition de certaines pièces doit être repris.')
     else if (/^OUVERTURE/.test(code)) categories.add('La position ou les dimensions de certaines portes ou fenêtres sont à revoir.')
     else if (/^(COTE_|ESCALIER_)/.test(code)) categories.add('La cohérence entre les niveaux doit être vérifiée.')

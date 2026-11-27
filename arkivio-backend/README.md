@@ -215,7 +215,7 @@ Node ≥ 22.12 est requis (comme CivilEstimator) ; `.node-version` vaut 24.22.1.
 
 ## 9. Points à connaître
 
-- **Modèle** : `ANTHROPIC_MODEL` vaut `claude-sonnet-4-6` par défaut ; modifiable sans toucher au code. Réponses courtes : `ANTHROPIC_MAX_TOKENS=1024`.
+- **Modèle** : `ANTHROPIC_MODEL` vaut `claude-sonnet-4-6` par défaut ; modifiable sans toucher au code. Le budget de sortie est au minimum de 8192 tokens pour laisser la place au JSON géométrique complet.
 - **Alerte connue** : F4 variante D (standard et confort) signale « cote très courte (0,10 m) » — décalage de cloisons dans le gabarit, déjà noté dans le README du moteur. Elle remonte dans `alertes`.
 - **CSP** : le frontend est un fichier unique avec scripts et styles intégrés, d'où `'unsafe-inline'`. Si tu le sépares en fichiers `.js`/`.css`, retire-le dans `src/app.js`.
 - **Limites** : `/api/chat` 40 messages / 15 min / IP ; `/api/plan` 80 / 15 min / IP. Fichiers joints : PDF, JPEG, PNG, WebP (HEIC refusé avec un message clair), 16 Mo au total.
