@@ -239,7 +239,7 @@ export function drawPlan(m, g, o = {}) {
     P.forEach(p => { ext(p); vertical ? tick(lineAt, p) : tick(p, lineAt); });
     for (let i = 0; i < P.length - 1; i++) {
       const c = (P[i] + P[i + 1]) / 2, len = pts[i + 1] - pts[i], s = String(Math.round(len * 100)), w = textW(s, size, bold) + 0.8; let row = w > Math.abs(P[i + 1] - P[i]) + 0.5 ? 1 : 0;
-      if (len < 0.15) m.warnings.push(`cote très courte (${s} m) : décalage de cloisons à vérifier`);
+      if (len < 0.15) m.warnings.push(`cote très courte (${s} cm) : décalage de cloisons à vérifier`);
       while (row < 1 && rows[row].some(iv => c - w / 2 < iv[1] && c + w / 2 > iv[0])) row++;
       rows[row].push([c - w / 2, c + w / 2]);
       const base = (vertical ? lineAt : lineAt) - (0.9 * k + row * 2.7 * k) * (vertical ? 1 : 1);
