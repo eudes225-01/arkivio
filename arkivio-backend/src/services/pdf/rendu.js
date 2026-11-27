@@ -78,6 +78,7 @@ export async function genererPdfDepuisHtml(html, options = {}) {
 export async function svgVersPdf(svg, { largeurMm, hauteurMm, fontFaceCss = '' }) {
   const html = `<!doctype html><html><head><meta charset="utf-8"><style>
     ${fontFaceCss}
+    svg text{font-family:Inter,Arial,sans-serif!important}
     @page{size:${largeurMm}mm ${hauteurMm}mm;margin:0}
     html,body{margin:0;padding:0}
     svg{display:block;width:${largeurMm}mm;height:${hauteurMm}mm}

@@ -8,7 +8,7 @@ import { SaisieInvalide, validerDemandePlan } from '../services/saisie.js'
 
 export const planRouter = Router()
 
-planRouter.post('/plan', planLimiter, (req, res) => {
+planRouter.post('/plan', planLimiter, async (req, res) => {
   let demande
   try {
     demande = validerDemandePlan(req.body)
@@ -17,7 +17,7 @@ planRouter.post('/plan', planLimiter, (req, res) => {
     throw e
   }
   try {
-    res.json(genererPlan(demande))
+    res.json(await genererPlan(demande))
   } catch (e) {
     console.error('[plan]', demande.entree.id, demande.variante, demande.standing, e)
     res.status(500).json({ erreur: 'Impossible de générer ce plan. Essayez avec « Automatique » pour le format et l’échelle.' })

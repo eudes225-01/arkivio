@@ -14,11 +14,10 @@ limites de débit, relais Anthropic sans exposer la clé, validation en liste bl
 |---|---|---|
 | **Dictée vocale** dans le chat (bouton micro, envoi automatique après un silence) | `public/index.html` | Prête. Testée sur une fausse reconnaissance vocale ; **à essayer sur Chrome / Safari après déploiement** |
 | **Format de projet libre v1.0** (géométrie libre : plusieurs niveaux, pans coupés, arrondis, 2 variantes) + validateur + convertisseur vers CivilEstimator | `src/projet-libre/`, `data/schemas/`, `data/exemples/`, `docs/FORMAT_PROJET_LIBRE.md` | Prêt, **non branché** sur `/api/chat` (étape suivante) |
-| **Rendu Chromium** (SVG/HTML → PDF vectoriel, polices Inter et Space Grotesk embarquées) | `src/services/pdf/`, `.puppeteerrc.cjs`, `outils/essai_rendu.mjs` | Code prêt ; **à valider sur Render** (voir § 6) |
+| **Rendu Chromium** (SVG/HTML → PDF vectoriel, polices Inter embarquées) | `src/services/pdf/`, `src/services/plans.js`, `.puppeteerrc.cjs`, `outils/essai_rendu.mjs` | Utilisé par `/api/plan` ; essai de rendu réussi sur Render |
 | `package.json`, `.env.example`, `.gitignore`, `.node-version` | racine | Mis à jour / ajoutés |
 
-**Rien n'a changé** dans `app.js`, les routes, `assistant.js`, `plans.js`, le moteur de plans et les gabarits :
-`/api/gabarits`, `/api/chat`, `/api/plan`, `/api/health` se comportent exactement comme avant.
+Le contrat des routes reste le même. `/api/plan` produit maintenant son PDF depuis le SVG du plan via Chromium ; le SVG et l'IFC sont inchangés.
 
 ---
 
@@ -152,7 +151,7 @@ validation et dans le prompt de l'assistant.
 
 ## 6. Rendu Chromium (planches PDF vectorielles)
 
-Repris de CivilEstimator (`puppeteer` 25.17.0, même `.puppeteerrc.cjs`, mêmes polices). Il servira aux 9 planches du devis et à la planche de présentation.
+Le PDF de chaque plan envoyé par `/api/plan` est rendu depuis son SVG par Chromium (`puppeteer` 25.17.0). Le même moteur peut aussi servir aux planches de devis et de présentation.
 
 - `src/services/pdf/rendu.js` : navigateur lancé à la première demande, réutilisé, fermé après 2 min d'inactivité ; **une planche à la fois** (file de 6 au maximum, erreur `ServeurOccupe` au-delà) ; **aucune requête sortante** (seules les data-URI passent : polices, logo, images embarquées).
   - `svgVersPdf(svg, { largeurMm, hauteurMm, fontFaceCss })` : SVG → PDF vectoriel, une page au format de la planche.
@@ -161,14 +160,14 @@ Repris de CivilEstimator (`puppeteer` 25.17.0, même `.puppeteerrc.cjs`, mêmes 
 - `src/services/pdf/fonts.js` : Inter et Space Grotesk embarquées (paquets `@fontsource-variable/*`).
 - `.puppeteerrc.cjs` : place Chrome dans `.cache/puppeteer`, seul dossier conservé par Render entre le build et le démarrage.
 
-**Essai** (à lancer dès que le build est passé) :
+**Essai** (réussi sur Render ; à relancer après changement de dépendances ou de configuration) :
 ```bash
 npm install && npx puppeteer browsers install chrome
 npm run essai:rendu        # écrit essai_rendu.pdf, affiche durée et mémoire RSS
 ```
 Si la mémoire dépasse environ 450 Mo sur ton instance Render, il faudra une offre plus grande avant les grandes planches (A1/A0).
 
-> **Statut honnête** : ce module a été écrit et vérifié (syntaxe) hors ligne, sans pouvoir télécharger Chromium. Le premier vrai rendu aura lieu chez toi ou sur Render.
+> **Statut** : `npm run essai:rendu` a produit un PDF sur Render. Le premier rendu d'une requête `/api/plan` utilise aussi Chromium et peut prendre quelques secondes pendant le démarrage du navigateur.
 
 ---
 
