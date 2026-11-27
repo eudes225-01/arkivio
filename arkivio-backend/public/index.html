@@ -57,6 +57,7 @@ h1,h2,h3{font-family:var(--disp);letter-spacing:-.01em;margin:0}
 main{flex:1}.app{padding:28px 0 48px}
 .m{max-width:85%;padding:10px 14px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere}.m.u{align-self:flex-end;background:var(--p);color:#fff;border-bottom-right-radius:4px}
 .m.a{align-self:flex-start;background:var(--mbg);border-bottom-left-radius:4px}.m.bad{background:var(--errs);color:var(--err)}.m.wait{color:var(--muted);font-style:italic}
+.issue{margin-top:10px;padding:12px 14px;border:1px solid var(--line);border-left:4px solid var(--amb);border-radius:10px;background:#fff;color:var(--ink);white-space:normal;font-size:13.5px}.issue strong{display:block;margin-bottom:5px;color:var(--pd);font-family:var(--disp);font-size:15px}.issue p{margin:4px 0;color:var(--muted)}.issue ul{margin:7px 0;padding-left:20px}.issue li{margin:3px 0}.issue .ia{margin-top:8px;color:var(--pd)}
 .ready{margin:0 20px 8px;padding:14px;border-radius:12px;background:var(--ls2);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}.ready b{font-family:var(--disp);color:var(--ld)}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 20px;border:0;border-radius:11px;color:#fff;font:700 14.5px var(--sans);cursor:pointer;text-decoration:none;background:linear-gradient(135deg,var(--p),var(--ld));box-shadow:0 14px 30px -14px rgba(12,74,110,.6)}.btn:hover{filter:brightness(1.1)}.btn[disabled]{opacity:.5}
 .btn.o{background:#fff;color:var(--ink);border:1px solid var(--ls);box-shadow:none}.btn.o:hover{border-color:var(--p);color:var(--p);filter:none}
@@ -367,6 +368,7 @@ async function init(){
 
 const GL='<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M17 47 32 15l15 32" fill="none" stroke="#fff" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/><g stroke="#8ff5e2" stroke-width="2.2" stroke-linecap="round"><path class="ln" d="M25 41h14"/><path class="t1" d="M25 37.5v7"/><path class="t2" d="M39 37.5v7"/></g></svg>';
 function addMsg(c,t){const d=document.createElement("div");d.className="m "+c;if(c[0]==="a")d.innerHTML=`<span class="av">${GL}</span><span class="tx"></span>`;else d.innerHTML='<span class="tx"></span>';d.lastChild.textContent=t;$("msgs").appendChild(d);d.scrollIntoView({block:"end",behavior:"smooth"});return d}
+function afficherProbleme(parent,p){const box=document.createElement("section");box.className="issue";box.setAttribute("role","status");const title=document.createElement("strong");title.textContent=p.titre||"Le plan n’a pas pu être finalisé";box.appendChild(title);const intro=document.createElement("p");intro.textContent=p.introduction||"La génération a rencontré un problème.";box.appendChild(intro);if(Array.isArray(p.points)&&p.points.length){const ul=document.createElement("ul");p.points.forEach(x=>{const li=document.createElement("li");li.textContent=x;ul.appendChild(li)});box.appendChild(ul)}if(p.action){const action=document.createElement("p");action.className="ia";action.textContent=p.action;box.appendChild(action)}parent.appendChild(box)}
 async function send(text,files){
   text=(text||"").trim();files=files||[];if((!text&&!files.length)||busy)return;busy=true;$("ready").hidden=true;$("welcome").hidden=true;show("v-chat");
   const um=addMsg("u",text);if(files.length){const c=document.createElement("div");c.className="fl";files.forEach(f=>{const x=document.createElement("span");x.textContent=(f.type==="application/pdf"?"PDF · ":"Image · ")+f.name;c.appendChild(x)});um.appendChild(c)}hist.push({role:"user",content:text||"Voici mes fichiers."});const th=addMsg("a wait","Arkivio réfléchit…");
@@ -374,7 +376,7 @@ async function send(text,files){
   try{
     const enc=await Promise.all(files.map(b64f));const r=await fetch(API+"/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:hist,fichiers:enc})});
     const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.erreur||"L’assistant est indisponible (code "+r.status+").");
-    th.className="m a";th.lastChild.textContent=d.reponse;hist.push({role:"assistant",content:d.reponse});
+    th.className="m a";if(d.probleme)afficherProbleme(th,d.probleme);else th.lastChild.textContent=d.reponse;hist.push({role:"assistant",content:d.reponse});
     if(d.pret&&d.projet){proj=d.projet;$("ready").hidden=false;$("ready").scrollIntoView({block:"end",behavior:"smooth"})}
   }catch(e){th.className="m bad";th.textContent=/fetch|network/i.test(e.message)?"Connexion au serveur impossible. Réessayez dans un instant.":e.message;hist.pop()}
   finally{busy=false;document.querySelectorAll(".send").forEach(b=>b.disabled=false);$("q2").focus()}
@@ -399,7 +401,7 @@ async function genAll(ev){
   try{
     const opts={};["format","echelle","orientation","projet","titre","phase","planche","moa","moe","date"].forEach(k=>{const v=$(k).value.trim();if(v)opts[k]=v});
     const r=await fetch(API+"/api/projet-libre/plans",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({projet:proj.projetLibre,options:opts})});
-    const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.erreur||"Échec ("+r.status+")");
+    const d=await r.json().catch(()=>({}));if(!r.ok){if(d.probleme){afficherProbleme(box,d.probleme);return}throw new Error(d.erreur||"Échec ("+r.status+")")}
     $("rsub").textContent=`${d.sorties.length} planche(s) générée(s) depuis votre projet libre. Vérifiez toutes les cotes et surfaces avant usage.`;
     if((d.avertissements||[]).length){const w=document.createElement("ul");w.className="al";d.avertissements.forEach(x=>{const li=document.createElement("li");li.textContent=x.message;w.appendChild(li)});box.appendChild(w)}
     for(const s of d.sorties){

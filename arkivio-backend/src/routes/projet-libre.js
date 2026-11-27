@@ -8,14 +8,15 @@ import { aire, boite } from '../projet-libre/geometrie.mjs'
 import { svgVersPdf } from '../services/pdf/rendu.js'
 import { fontFaceCss } from '../services/pdf/fonts.js'
 import { creerZip } from '../services/zip.js'
+import { presenterErreursProjet } from '../projet-libre/erreurs-client.mjs'
 
 export const projetLibreRouter = Router()
 
 projetLibreRouter.post('/projet-libre/plans', planLimiter, async (req, res) => {
   const projet = req.body?.projet
   let controle
-  try { controle = validerProjet(projet) } catch (e) { return res.status(400).json({ erreur: `Projet libre illisible : ${e.message}` }) }
-  if (!controle.ok) return res.status(422).json({ erreur: 'Claude n’a pas réussi à produire une géométrie valide. Relancez la demande pour qu’il corrige le plan.', erreurs: controle.erreurs })
+  try { controle = validerProjet(projet) } catch { const probleme=presenterErreursProjet([{code:'FORMAT'}]);return res.status(400).json({erreur:probleme.introduction,probleme}) }
+  if (!controle.ok) {const probleme=presenterErreursProjet(controle.erreurs);return res.status(422).json({erreur:probleme.introduction,probleme})}
   if (projet.variantes.reduce((n,v)=>n+v.niveaux.length,0)>12) return res.status(400).json({ erreur: 'La génération est limitée à 12 planches par dossier.' })
   try {
     const options = req.body?.options || {}

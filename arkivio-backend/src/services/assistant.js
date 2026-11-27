@@ -8,6 +8,7 @@
 //        { reponse: string, pret: boolean, projet?: { projetLibre, resume } }
 import { env } from '../config/env.js'
 import { validerProjet } from '../projet-libre/valider.mjs'
+import { presenterErreursProjet, texteErreurProjet } from '../projet-libre/erreurs-client.mjs'
 import { TYPES_FICHIERS } from './validerChat.js'
 
 export class ErreurAssistant extends Error {
@@ -123,20 +124,26 @@ export async function dialoguerAvecClaude(donnees, { fetchImpl = globalThis.fetc
   }
   let data = await appeler(base)
   const messages = [...base.messages]
+  let erreursRejetees = null
   // Boucle courte et bornée : Claude reçoit les violations vérifiables et peut réparer sa géométrie.
   for (let tentative = 0; tentative < 2; tentative++) {
     const resultat = interpreterReponse(data)
-    if (resultat.pret || !resultat.erreurs?.length) return resultat
+    if (resultat.pret) return resultat
+    if (!resultat.erreurs?.length) return erreursRejetees ? reponseErreur(erreursRejetees) : resultat
+    erreursRejetees = resultat.erreurs
     const appel = data?.content?.find((b) => b.type === 'tool_use' && b.name === OUTIL)
-    if (!appel) return resultat
+    if (!appel) return reponseErreur(erreursRejetees)
     const erreurs = resultat.erreurs.map(e => `${e.chemin}: ${e.message}${e.suggestion ? ` Suggestion: ${e.suggestion}` : ''}`).join('\n')
     messages.push({ role: 'assistant', content: data.content })
     messages.push({ role: 'user', content: [{ type: 'tool_result', tool_use_id: appel.id, is_error: true, content: `Validation Arkivio refusée. Corrige le projet complet en tenant compte de ces erreurs, sans ignorer les exigences utilisateur :\n${erreurs}` }] })
     data = await appeler({ ...base, messages })
   }
   const final = interpreterReponse(data)
-  if (!final.pret && final.erreurs?.length) {
-    final.reponse = `Le plan doit encore être corrigé : ${final.erreurs.slice(0, 3).map(e => `${e.chemin} — ${e.message}`).join(' ; ')}`
-  }
-  return final
+  if (final.pret) return final
+  return reponseErreur(final.erreurs?.length ? final.erreurs : erreursRejetees || [])
+}
+
+function reponseErreur(erreurs) {
+  const probleme = presenterErreursProjet(erreurs, { correctionEchouee: true })
+  return { reponse: texteErreurProjet(probleme), pret: false, probleme }
 }
