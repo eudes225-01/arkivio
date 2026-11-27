@@ -20,7 +20,36 @@ function niveauSvg(projet, variante, niveau, options = {}) {
   const b = boite(contour), W = b.x1 - b.x0, H = b.y1 - b.y0
   const page = choisirMiseEnPage(W, H, { format: options.format || 'auto', echelle: options.echelle || 'auto', orientation: options.orientation || 'auto' })
   const [pw, ph] = FORMATS[page.f], PW = page.o === 'portrait' ? pw : ph, PH = page.o === 'portrait' ? ph : pw
-  const margin = 22, cartH = 28, dimPad = 48, availW = PW - 2 * margin - dimPad, availH = PH - 2 * margin - cartH - dimPad
+  const ouvertures = niveau.ouvertures || []
+  const lignesPieces = []
+  let lignePieces = 'PIÈCES :'
+  for (const p of niveau.pieces || []) {
+    const entree = `${p.nom || p.id} ${fmt(aire(p.polygone))} m²`
+    if (lignePieces.length > 8 && lignePieces.length + entree.length + 3 > 112) {
+      lignesPieces.push(lignePieces)
+      lignePieces = '  '
+    }
+    lignePieces += `${lignePieces === 'PIÈCES :' ? ' ' : lignePieces.trim() ? ' · ' : ''}${entree}`
+  }
+  lignesPieces.push(lignePieces)
+  const lignesOuvertures = []
+  for (const [type, titre] of [['porte', 'PORTES'], ['fenetre', 'BAIES']]) {
+    const elements = ouvertures.filter(o => o.type === type)
+    if (!elements.length) continue
+    const prefix = `${titre} :`
+    let ligne = prefix
+    for (const o of elements) {
+      const taille = `${o.id} ${fmt(o.largeur_m * 100)} × ${fmt(o.hauteur_m * 100)} cm${type === 'fenetre' && o.allege_m ? ` (allège ${fmt(o.allege_m * 100)} cm)` : ''}`
+      if (ligne.length > titre.length + 2 && ligne.length + taille.length + 3 > 118) {
+        lignesOuvertures.push(ligne)
+        ligne = '  '
+      }
+      ligne += `${ligne === prefix ? ' ' : ligne.trim() ? ' · ' : ''}${taille}`
+    }
+    lignesOuvertures.push(ligne)
+  }
+  const lignesCartouche = [...lignesPieces, ...lignesOuvertures]
+  const margin = 22, cartH = 24 + lignesCartouche.length * 3.2, dimPad = 48, availW = PW - 2 * margin - dimPad, availH = PH - 2 * margin - cartH - dimPad
   const scale = Math.min(availW / W, availH / H, 1000 / page.den), den = Math.round(1000 / scale), planW = W * scale, planH = H * scale
   const ox = margin + dimPad + (availW - planW) / 2, oy = margin + dimPad + (availH - planH) / 2
   const X = x => ox + (x - b.x0) * scale, Y = y => oy + (b.y1 - y) * scale
@@ -53,25 +82,33 @@ function niveauSvg(projet, variante, niveau, options = {}) {
   }
   for (const m of niveau.murs_int||[]) wallStroke(m.a,m.b,(m.ep_cm||P.ep_cloison_cm)/100)
 
-  // Ouvertures repérées et cotées en largeur × hauteur.
-  for (const o of niveau.ouvertures||[]) {
+  // Ouvertures : on retire toute l'épaisseur du mur, puis on dessine les cadres.
+  const sensContour = aireSignee(contour) >= 0 ? 1 : -1
+  for (const o of ouvertures) {
     const mur=M.murs.get(o.mur); if(!mur||mur.kind==='arc') continue
-    const L=mur.longueur, t=Math.max(.08,o.largeur_m/L), p=o.pos_m/L, q=Math.min(1,p+t), a=[mur.a[0]+(mur.b[0]-mur.a[0])*p,mur.a[1]+(mur.b[1]-mur.a[1])*p], c=[mur.a[0]+(mur.b[0]-mur.a[0])*q,mur.a[1]+(mur.b[1]-mur.a[1])*q]
-    ln(X(a[0]),Y(a[1]),X(c[0]),Y(c[1]),Math.max(1.1,scale*.055),'#fff')
+    const L=mur.longueur, t=o.largeur_m/L, p=o.pos_m/L, q=Math.min(1,p+t), a=[mur.a[0]+(mur.b[0]-mur.a[0])*p,mur.a[1]+(mur.b[1]-mur.a[1])*p], c=[mur.a[0]+(mur.b[0]-mur.a[0])*q,mur.a[1]+(mur.b[1]-mur.a[1])*q]
     const ux=(mur.b[0]-mur.a[0])/L,uy=(mur.b[1]-mur.a[1])/L
+    const epMur=(mur.ep_cm||((mur.exterieur?P.ep_ext_cm:P.ep_cloison_cm)))/100
+    const eraseWidth=epMur*scale+.55
+    lines.push(`<line x1="${X(a[0])}" y1="${Y(a[1])}" x2="${X(c[0])}" y2="${Y(c[1])}" stroke="white" stroke-width="${eraseWidth}" stroke-linecap="square"/>`)
+    const nx=-uy,ny=ux,coteEtiquette=mur.exterieur?sensContour:1
     if(o.type==='fenetre'){
-      const nx=-uy*(o.ep_cm||P.ep_cloison_cm)/200,ny=ux*(o.ep_cm||P.ep_cloison_cm)/200
-      for(const s of [-1,1])ln(X(a[0]+nx*s),Y(a[1]+ny*s),X(c[0]+nx*s),Y(c[1]+ny*s),.24,'#175a73')
+      const demi=epMur/2
+      for(const s of [-1,1])ln(X(a[0]+nx*demi*s),Y(a[1]+ny*demi*s),X(c[0]+nx*demi*s),Y(c[1]+ny*demi*s),.28,'#175a73')
+      for(const e of [a,c])ln(X(e[0]-nx*demi),Y(e[1]-ny*demi),X(e[0]+nx*demi),Y(e[1]+ny*demi),.25,'#175a73')
     } else {
-      const px=X(a[0]),py=Y(a[1]),ex=X(a[0]-uy*o.largeur_m),ey=Y(a[1]+ux*o.largeur_m),cx=X(c[0]),cy=Y(c[1]),rad=o.largeur_m*scale
-      ln(px,py,ex,ey,.28,'#175a73');paths.push(`<path d="M ${ex} ${ey} A ${rad} ${rad} 0 0 0 ${cx} ${cy}" fill="none" stroke="#175a73" stroke-width=".2"/>`)
+      const px=X(a[0]),py=Y(a[1]),ex=X(a[0]+nx*o.largeur_m*coteEtiquette),ey=Y(a[1]+ny*o.largeur_m*coteEtiquette),cx=X(c[0]),cy=Y(c[1]),rad=o.largeur_m*scale
+      ln(px,py,ex,ey,.28,'#175a73')
+      const cross=(ex-px)*(cy-py)-(ey-py)*(cx-px),sweep=cross>=0?1:0
+      paths.push(`<path d="M ${ex} ${ey} A ${rad} ${rad} 0 0 ${sweep} ${cx} ${cy}" fill="none" stroke="#175a73" stroke-width=".22"/>`)
     }
     const mx=(a[0]+c[0])/2,my=(a[1]+c[1])/2
-    txt(X(mx),Y(my)-2,`${o.id} ${cm(o.largeur_m)} × ${cm(o.hauteur_m)}`,1.75,'middle',0,false)
+    const decal=epMur/2+.18,tx=X(mx+nx*coteEtiquette*decal),ty=Y(my+ny*coteEtiquette*decal)
+    texts.push(`<text x="${tx}" y="${ty}" text-anchor="middle" font-size="1.9" font-family="Inter,Arial,sans-serif" font-weight="700" fill="#12485b" paint-order="stroke" stroke="white" stroke-width="1.2" stroke-linejoin="round">${esc(o.id)}</text>`)
   }
 
   // Cotes exhaustives du contour, cotes intérieures des pièces et cotes des ouvertures.
-  const offset=6, tick=(x,y)=>ln(x-1,y+1,x+1,y-1,.22), sens=aireSignee(contour)>=0?1:-1
+  const offset=6, tick=(x,y)=>ln(x-1,y+1,x+1,y-1,.22), sens=sensContour
   for(const side of M.dev.segments){
     const a=side.a,c=side.b,dx=c[0]-a[0],dy=c[1]-a[1],L=side.longueur||dist(a,c)
     const nx=sens*dy/L,ny=-sens*dx/L
@@ -90,11 +127,11 @@ function niveauSvg(projet, variante, niveau, options = {}) {
   ln(ox,oy-13,ox+planW,oy-13,.22);ln(ox,oy-15,ox,oy-11,.22);ln(ox+planW,oy-15,ox+planW,oy-11,.22);txt(ox+planW/2,oy-14,`Hors tout ${cm(W)}`,2.3,'middle',0,true)
   ln(ox-13,oy,ox-13,oy+planH,.22);ln(ox-15,oy,ox-11,oy,.22);ln(ox-15,oy+planH,ox-11,oy+planH,.22);txt(ox-14,oy+planH/2,`Hors tout ${cm(H)}`,2.3,'middle',-90,true)
   const title=options.titre||`PLAN ${niveau.nom||niveau.id} COTÉ`, project=options.projet||projet.projet?.titre||'Maison sur mesure'
-  const summary=(niveau.pieces||[]).map(p=>`${p.nom||p.id}: ${fmt(aire(p.polygone))} m²`).join(' · ')
   const date=options.date||new Date().toISOString().slice(0,10),phase=options.phase||'Avant-projet indicatif',planche=options.planche||`${variante.id}-${niveau.id}`
   const moa=options.maitre_ouvrage||options.moa||'—',moe=options.maitre_oeuvre||options.moe||'—'
   const cartY=PH-margin-cartH
-  const svg=`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${PW}mm" height="${PH}mm" viewBox="0 0 ${PW} ${PH}"><rect width="${PW}" height="${PH}" fill="white"/><rect x="${margin}" y="${margin}" width="${PW-2*margin}" height="${PH-2*margin}" fill="none" stroke="#222" stroke-width=".5"/><text x="${margin+4}" y="${margin+7}" font-family="Inter,Arial,sans-serif" font-size="4" font-weight="700">${esc(title)}</text><text x="${PW-margin-4}" y="${margin+7}" text-anchor="end" font-family="Inter,Arial,sans-serif" font-size="2.5">${esc(project)} · Variante ${esc(variante.id)} · Échelle 1/${den}</text>${polys.join('')}${lines.join('')}${paths.join('')}<rect x="${margin}" y="${cartY}" width="${PW-2*margin}" height="${cartH}" fill="white" stroke="#222" stroke-width=".45"/><text x="${margin+4}" y="${cartY+6}" font-family="Inter,Arial,sans-serif" font-size="3" font-weight="700">${esc(project)} — ${esc(variante.libelle||variante.id)} — ${esc(niveau.nom||niveau.id)}</text><text x="${margin+4}" y="${cartY+11}" font-family="Inter,Arial,sans-serif" font-size="2">Emprise ${fmt(M.aire)} m² · Murs ext. ${P.ep_ext_cm} cm · Cloisons ${P.ep_cloison_cm} cm · HSP ${niveau.hsp_m||P.hsp_m} m · Cotes en cm</text><text x="${margin+4}" y="${cartY+16}" font-family="Inter,Arial,sans-serif" font-size="1.7">${esc(summary.slice(0,160))}</text><text x="${margin+4}" y="${cartY+21}" font-family="Inter,Arial,sans-serif" font-size="1.7">Phase ${esc(phase)} · Planche ${esc(planche)} · ${esc(date)} · MOA ${esc(String(moa).slice(0,40))} · MOE ${esc(String(moe).slice(0,40))}</text><text x="${PW-margin-4}" y="${cartY+26}" text-anchor="end" font-family="Inter,Arial,sans-serif" font-size="1.7">Plan indicatif — validation professionnelle requise</text>${texts.join('')}</svg>`
+  const lignesCartoucheSvg=lignesCartouche.map((ligne,i)=>`<text x="${margin+4}" y="${cartY+21+i*3.2}" font-family="Inter,Arial,sans-serif" font-size="1.9">${esc(ligne)}</text>`).join('')
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${PW}mm" height="${PH}mm" viewBox="0 0 ${PW} ${PH}"><rect width="${PW}" height="${PH}" fill="white"/><rect x="${margin}" y="${margin}" width="${PW-2*margin}" height="${PH-2*margin}" fill="none" stroke="#222" stroke-width=".5"/><text x="${margin+4}" y="${margin+7}" font-family="Inter,Arial,sans-serif" font-size="4" font-weight="700">${esc(title)}</text><text x="${PW-margin-4}" y="${margin+7}" text-anchor="end" font-family="Inter,Arial,sans-serif" font-size="2.5">${esc(project)} · Variante ${esc(variante.id)} · Échelle 1/${den}</text>${polys.join('')}${lines.join('')}${paths.join('')}<rect x="${margin}" y="${cartY}" width="${PW-2*margin}" height="${cartH}" fill="white" stroke="#222" stroke-width=".45"/><text x="${margin+4}" y="${cartY+6}" font-family="Inter,Arial,sans-serif" font-size="3" font-weight="700">${esc(project)} — ${esc(variante.libelle||variante.id)} — ${esc(niveau.nom||niveau.id)}</text><text x="${margin+4}" y="${cartY+11}" font-family="Inter,Arial,sans-serif" font-size="2">Emprise ${fmt(M.aire)} m² · Murs ext. ${P.ep_ext_cm} cm · Cloisons ${P.ep_cloison_cm} cm · HSP ${niveau.hsp_m||P.hsp_m} m · Cotes en cm</text><text x="${margin+4}" y="${cartY+16}" font-family="Inter,Arial,sans-serif" font-size="1.8">Phase ${esc(phase)} · Planche ${esc(planche)} · ${esc(date)} · MOA ${esc(String(moa).slice(0,40))} · MOE ${esc(String(moe).slice(0,40))}</text>${lignesCartoucheSvg}<text x="${PW-margin-4}" y="${cartY+cartH-1.5}" text-anchor="end" font-family="Inter,Arial,sans-serif" font-size="1.6">Plan indicatif — validation professionnelle requise</text>${texts.join('')}</svg>`
   return { svg, page:{format:page.f,orientation:page.o,echelle:den,PW,PH,tient:true}, surface_m2:M.aire, nom:niveau.nom||niveau.id, variante:variante.id }
 }
 
